@@ -15,14 +15,16 @@
   align-content: center;
   align-items: center;
   justify-content: center;
-  padding: 10px;
   border-radius: 10px;
+  overflow: hidden;
 }
 .left, .right{
-  margin: 10px 20px;
   text-align: center;
   position: relative;
   display: block;
+}
+.right{
+  margin: 0 70px;
 }
 .login_btn{
   padding: 10px 30px;
@@ -49,6 +51,6 @@
   border-radius: 0;
 }
 img{
-  width: 200px;
-  max-width: 90vw;
+  width: 300px;
+  max-width: 95vw;
 }

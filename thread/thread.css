@@ -62,6 +62,15 @@
 .ans_impression > *{
   margin: 0 10px;
 }
+.reply_to_ans,
+.clapIcon{
+    text-decoration: none;
+    color: inherit;
+}
+.reply_to_ans:after{
+  content: ' Reply';
+  font-family: Rubik, sans-serif;
+}
 .clapIcon{
   width: var(--fontPrimary);
   border: 1px solid;
@@ -82,12 +91,4 @@
 }
 .clap_count:after{
   content: ' Claps';
-}
-.reply_to_ans{
-    text-decoration: none;
-    color: inherit;
-}
-.reply_to_ans:after{
-  content: ' Reply';
-  font-family: Rubik, sans-serif;
 }

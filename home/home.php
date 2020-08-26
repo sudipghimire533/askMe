@@ -40,12 +40,12 @@
                         <a href='#' class='tag'>Compiler</a herf='#'>
                         <a href='#' class='tag'>University</a herf='#'>
                     </div>
-                    <div class='asking_user'>
+                    <!--div class='asking_user'>
                         <span>Asked By</span>
                         <a href='#' class='asker_name hv_border'>Sudip Ghimire</a>
                         <span> on </span>
                         <div class='asked_date'>2020-07-34</div>
-                    </div>
+                    </div-->
                 </div>
             </div>
         </div>
