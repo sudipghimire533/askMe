@@ -29,7 +29,7 @@
 }
 
 body {
-    background: var(--Black);
+    background: #343434;
     color: var(--White);
     margin: 0;
     padding: 0;

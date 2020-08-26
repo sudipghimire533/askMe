@@ -92,3 +92,6 @@
 .clap_count:after{
   content: ' Claps';
 }
+.Question{
+  border-bottom: 2px solid var(--LightDark);
+}

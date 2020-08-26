@@ -1,5 +1,4 @@
 .Question{
-  border-bottom: 2px solid var(--LightDark);
   padding: 2vw;
 }
 .description{
@@ -38,6 +37,9 @@
   display: inline-block;
   border: 1px solid var(--LightDark);
   background: var(--LightDark);
+  color: var(--White);
+  text-decoration: none;
+  cursor: pointer;
   border: 1px solid var(--LightDark);
   margin: 3px;
   padding: 2px 10px;
