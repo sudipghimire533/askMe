@@ -1,3 +1,9 @@
+<?php
+require_once('../server/get_feed.php');
+
+$feedFetcher = new Getfeed;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,15 +16,17 @@
     <link href='./home.css' type="text/css" rel="stylesheet" />
     <link href='../thread/question_entity.css' type='text/css' rel='stylesheet' />
     <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
+
+    <script type='text/javascript' src='home.js'></script>
 </head>
 
-<body>
+<body onload='Ready();'>
     <div id='Main'>
         <div class='QuestionFeed'>
             <div class='Question'>
                 <div class='questionTitle'>
                     <i class='qn_status fab fa-gripfire' title='Trending'></i>
-                    <a href='#'>How to force c++ Compiler to perform stack unwinding after the uncaught exception</a>
+                    <a href='#' class='titleText'></a>
                     <span class='quickAction'>
                         <i class='fas fa-bookmark'></i>
                         <i class='fas fa-star'></i>
@@ -26,19 +34,11 @@
                     </span>
                 </div>
                 <div class='description'>
-                    <span>
-                        I am working with a sample program under Linux specifically Deban buster with the default gcc
-                        compiler of version 10. case it is very important to do so . What is
-                        you idon for this...
-                    </span>
+                    <span></span>
                 </div>
                 <div class='questionInfo'>
                     <div class='tagContainer'>
-                        <a href='#' class='tag'>C++</a herf='#'>
-                        <a href='#' class='tag'>Linux</a herf='#'>
-                        <a href='#' class='tag'>Technical</a herf='#'>
-                        <a href='#' class='tag'>Compiler</a herf='#'>
-                        <a href='#' class='tag'>University</a herf='#'>
+                        <a href='#' class='tag'></a herf='#'>
                     </div>
                     <!--div class='asking_user'>
                         <span>Asked By</span>
@@ -52,15 +52,20 @@
     </div>
 </body>
 
-</html>
-
-
-
-<!--START Temporary Code-->
 <script>
-    let parent = document.querySelector('.QuestionFeed');
-    for (let i = 0; i < 15; i++) {
-        parent.appendChild(document.getElementsByClassName('Question')[0].cloneNode(true));
+    function Ready() {
+        sample_question = document.getElementsByClassName('Question')[0];
+        feed_container = sample_question.parentElement;
+
+        let response = <?php $feedFetcher->Recent(); ?>;
+        //Temp Code
+        res = response;
+        ///////////
+        response.forEach(obj => {
+            createQuestion(obj);
+        });
+
     }
 </script>
-<!--END Temporray Code-->
+
+</html>
