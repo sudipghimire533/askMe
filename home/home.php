@@ -56,11 +56,10 @@ $feedFetcher = new Getfeed;
     function Ready() {
         sample_question = document.getElementsByClassName('Question')[0];
         feed_container = sample_question.parentElement;
+        sample_tag_element = sample_question.getElementsByClassName('tagContainer')[0].firstElementChild;
 
         let response = <?php $feedFetcher->Recent(); ?>;
-        //Temp Code
-        res = response;
-        ///////////
+
         response.forEach(obj => {
             createQuestion(obj);
         });
