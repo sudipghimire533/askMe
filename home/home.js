@@ -18,9 +18,9 @@ function createQuestion(question) {
 
     target.getElementsByClassName('description')[0].firstElementChild.textContent = question.info + '...';
 
-    for (let i = 0, tags = question.tag.split(' '); i < tags.length; i++) {
+    for (let i = 0, tags = question.tag.split(','); i < tags.length; i++) {
         let tag = sample_tag_element.cloneNode(true);
-        tag.setAttribute('herf', '/taggedfor/' + tags[i]);
+        tag.setAttribute('href', '/taggedfor/' + tags[i]);
         tag.textContent = tags[i];
         target.getElementsByClassName('tagContainer')[0].appendChild(tag);
     }
