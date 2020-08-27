@@ -16,8 +16,7 @@
 <body onload='Ready()'>
     <div id='Main'>
         <div class='topInform'>
-            <i class='fas fa-cross' onclick='this.parentElement.remove()'
-                style='cursor: pointer;position: absolute;right: 20px;'></i>
+            <i class='fas fa-cross' onclick='this.parentElement.remove()' style='cursor: pointer;position: absolute;right: 20px;'></i>
             <h2>Ask A Question</h2>
             <h3>
                 Ask a Question with full information and easy to understand language by all. As you write your question
@@ -40,20 +39,18 @@
                 <li>While writing also keep previewing to avoid any typo or unintentional mistake.</li>
             </ul>
         </div>
-        <div class='AskQuestion'>
+        <form class='AskQuestion' method='POST' action='/server/post_question.php'>
             <div class='WriterContainer'>
                 <div class='inputContainer'>
-                    <input type='text' name='title' placeholder='Write Question Title Here..' id='QuestionTitle'
-                        onkeyup='titlePreview(this.value);' />
+                    <input type='text' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' onkeyup='titlePreview(this.value);' required='' minlength='10' maxlength='200' />
                 </div>
-                <div class='inputContainer'>
+                <div class=' inputContainer'>
                     <div class='toolbar'>ToolBar</div>
-                    <textarea name="description" placeholder='Write Question Description Here..'
-                        onkeyup='bodyPreview(this.value)' id='QuestionBody'></textarea>
+                    <textarea name="description" placeholder='Write Question Description Here..' onkeyup='bodyPreview(this.value)' id='QuestionBody' required='' minlength='20'></textarea>
                 </div>
                 <div class='tagComposer'>
                     <div class='inputContainer'>
-                        <input type='text' name='tags' placeholder='Tags' id='QuestionTags' />
+                        <input type='text' name='tags' placeholder='Tags' id='QuestionTags' required='' />
                     </div>
                     <i class='fas fa-corss addTagBtn'></i>
                 </div>
@@ -62,14 +59,12 @@
                 <div class='prev_title'></div>
                 <p class='prev_body'></p>
                 <div class='prev_tagContainer'>
-                    <span class='tag'>Programming</span>
-                    <span class='tag'>test</span>
                 </div>
             </div>
             <div class='inputContainer'>
-                <input type='button' name='submit' value='Post Question' id='QuestionSubmit' />
+                <input type='submit' name='submit' value='Post Question' id='QuestionSubmit' />
             </div>
-        </div>
+        </form>
     </div>
 </body>
 

@@ -41,13 +41,18 @@ textarea{
   padding: 15px 20px;
   border-radius: 10px;
   font-size: var(--fontSmall);
+  letter-spacing: 1px;
   letter-spacing: 1.3px;
   line-height: calc(var(--fontSmall) * 1.3);
   outline: none;
   box-sizing: border-box;
 }
+textarea,
+.prev_body{
+  white-space: pre-wrap;
+}
 #QuestionTitle{
-  font-weight: bold;
+  font-weight: 700;
 }
 .toolbar{
   background: var(--LightDark);
@@ -80,12 +85,13 @@ textarea{
   text-transform: lowercase;
 }
 #QuestionSubmit{
-  background: var(--SandTan);
+  background: var(--Niagara);
+  border-color: var(--Niagara);
   font-weight: bold;
   font-size: var(--fontPrimary);
   cursor: pointer;
   transition: background .5s;
-  max-width: 300px;
+  max-width: 220px;
 }
 #QuestionSubmit:hover,
 #QuestionSubmit:focus{
