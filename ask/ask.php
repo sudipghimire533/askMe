@@ -42,11 +42,11 @@
         <form class='AskQuestion' method='POST' action='/server/post_question.php'>
             <div class='WriterContainer'>
                 <div class='inputContainer'>
-                    <input type='text' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' onkeyup='titlePreview(this.value);' required='' minlength='10' maxlength='200' />
+                    <input type='text' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' />
                 </div>
                 <div class=' inputContainer'>
                     <div class='toolbar'>ToolBar</div>
-                    <textarea name="description" placeholder='Write Question Description Here..' onkeyup='bodyPreview(this.value)' id='QuestionBody' required='' minlength='20'></textarea>
+                    <textarea name="description" placeholder='Write Question Description Here..' id='QuestionBody' required='' minlength='20'></textarea>
                 </div>
                 <div class='tagComposer'>
                     <div class='inputContainer'>
@@ -59,6 +59,7 @@
                 <div class='prev_title'></div>
                 <p class='prev_body'></p>
                 <div class='prev_tagContainer'>
+                    <span class='prev_tag'></span>
                 </div>
             </div>
             <div class='inputContainer'>

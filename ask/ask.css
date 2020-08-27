@@ -70,9 +70,11 @@ textarea{
 }
 #QuestionPreview{
   font-size: var(--fontPrimary);
+  overflow: auto;
 }
 #QuestionPreview > *{
   margin: 10px 0;
+  word-break: break-all;
 }
 .tag{
   font-size: var(--fontSmall);
@@ -102,7 +104,19 @@ textarea{
 }
 .prev_body{
   font-size: 16px;
-  line-height: 21px;
+  letter-spacing: 1.2px;
+  word-spacing: 2px;
+  line-height: 24px;
   letter-spacing: 1px;
   margin-left: 10px !important;
+}
+.prev_tag:first-of-type{
+  display: none;
+}
+.prev_tag{
+  background-color: var(--LightDark);
+  margin: 5px;
+  padding: 3px 10px;
+  font-size: var(--fontSmall);;
+  border-radius: 5px;
 }

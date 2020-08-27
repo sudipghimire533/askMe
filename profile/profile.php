@@ -1,20 +1,23 @@
 <?php
 require_once("../server/global.php");
 
-$conn = get_conection();
+$conn = get_connection();
 
 $UserId = 1;
 
 /* Fetch Personal data.. */
 $res = $conn->query("SELECT
-    CONCAT(user.Firstname, ' ', user.LastName) AS fullname,
-    user.Email AS email,
-    user.Phone AS phone,
-    user.Location As location,
-    user.Bio AS bio,
-    user.Intro AS intro,
-    user.UserName AS userName
-    FROM User AS user WHere user.Id=$UserId;");
+            CONCAT(user.Firstname, ' ', user.LastName) AS fullname,
+            user.Email AS email,
+            user.Phone AS phone,
+            user.Location As location,
+            user.Bio AS bio,
+            user.Intro AS intro,
+            user.UserName AS userName
+            FROM User AS user
+            WHere user.Id=$UserId
+        ;");
+
 $row = $res->fetch_assoc();
 $UserEmail = $row['email'];
 $UserPhone = $row['phone'];
@@ -143,7 +146,7 @@ $conn->close();
                     <div>
                         <i class='fas fa-phone'></i>
                         <a href='#' id='Phone' class='hv_border'>
-                            <?php echo $UserEmail; ?>
+                            <?php echo $UserPhone; ?>
                         </a>
                     </div>
                     <div>
