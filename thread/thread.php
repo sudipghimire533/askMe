@@ -108,6 +108,12 @@ $AnswerInformation = $response;
     console.log(allAnswers);
     function Ready() {
         fillQuestion();
+        sampleAnswer = document.getElementsByClassName('Answer')[0];
+        allAnswers.forEach(function(ans, index){
+            fillAnswer(index);
+        });
+        allAnswers = null;
+        thisQuestion = null;
     }
 </script>
 

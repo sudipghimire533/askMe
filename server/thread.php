@@ -49,7 +49,7 @@ class showQuestion
         }
         $response = json_encode($response);
     }
-    public function getAnswerFor($id, &$response){
+    public function getAnswerFor($id, &$response, $offset=0, $count=3){
         $id = $this->conn->real_escape_string($id);
         $res = $this->conn->query("SELECT
                     CONCAT(user.FirstName,' ', user.LastName) AS authorName,
@@ -64,6 +64,7 @@ class showQuestion
                     LEFT JOIN
                     User user On ans.Author=user.Id
                     WHERE ans.WrittenFor=$id
+                    LIMIT $offset,$count
                 ;") or die($this->conn->error);
         if($res->num_rows == 0){
             $response = 0;
