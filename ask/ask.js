@@ -1,40 +1,49 @@
 let previewTitle, previewBody, previewtags;
 let sample_prev_tag;
+let converter;
+
+let focuson;
 
 function titlePreview(elem) {
     previewTitle.textContent = elem.value.trim();
-    setTimeout(titlePreview, 1 * 1000, elem);
+    setTimeout(titlePreview, 2 * 1000, elem);
 }
+let prev_length = 0;
 function bodyPreview(elem) {
-    previewBody.textContent = elem.value.trim();
-    setTimeout(bodyPreview, 1 * 1000, elem);
+    content = elem.value.trim();
+
+    if (!(content.length - prev_length > 5)) { return; }
+
+    prev_length = content.length;
+    previewBody.innerHTML = converter.makeHtml(content);
+    setTimeout(bodyPreview, 5 * 1000, elem);
 }
 function tagPreview(elem) {
-    if (!elem.value.endsWith(',')) { return; }
-
+    previewtags.innerHTML = "";
     let tags = elem.value.split(',');
-    tags.forEach(function (tag) {
+    tags.forEach(function (tag, i) {
         tag = tag.trim();
-        if (tag.length < 3) {
+        if (tag.length < 1) {
             return;
         }
         let target = sample_prev_tag.cloneNode();
         target.textContent = tag;
-        sample_prev_tag.parentElement.appendChild(target);
+        previewtags.appendChild(target);
     });
-    setTimeout(tagPreview, 1 * 1000, elem);
+    setTimeout(tagPreview, 2 * 1000, elem);
 }
 function Ready() {
-    // Initilize the containers for previewing...
-    {
-        let previewArea = document.getElementById('QuestionPreview');
-        previewTitle = previewArea.getElementsByClassName('prev_title')[0];
-        previewBody = previewArea.getElementsByClassName('prev_body')[0];
-        previewtags = previewArea.getElementsByClassName('prev_tagContainer')[0];
-        sample_prev_tag = previewArea.getElementsByClassName('prev_tag')[0];
+    converter = new showdown.Converter();
 
-        titlePreview(document.getElementById('QuestionTitle'));
-        bodyPreview(document.getElementById('QuestionBody'));
-        tagPreview(document.getElementById('QuestionTags'));
-    }
+    let previewArea = document.getElementById('QuestionPreview');
+    previewTitle = previewArea.getElementsByClassName('prev_title')[0];
+    previewBody = previewArea.getElementsByClassName('prev_body')[0];
+    previewtags = previewArea.getElementsByClassName('prev_tagContainer')[0];
+
+    sample_prev_tag = document.createElement('span');
+    sample_prev_tag.classList.add('prev_tag');
+
+    titlePreview(document.getElementById('QuestionTitle'));
+    bodyPreview(document.getElementById('QuestionBody'));
+    tagPreview(document.getElementById('QuestionTags'));
 }

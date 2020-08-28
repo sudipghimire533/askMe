@@ -22,14 +22,8 @@ body {
 .topInform a{
   color: inherit;
 }
-
-.AskQuestion,
-.WriterContainer{
-  position: relative;
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0 20px;
+form{
+  max-width: 930px;
 }
 input,
 textarea{
@@ -55,12 +49,12 @@ textarea,
   font-weight: 700;
 }
 .toolbar{
-  background: var(--LightDark);
   display: block;
   padding: 5px 10px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   margin-top: 15px;
+  border: 1px solid var(--LightDark);
 }
 textarea{
   height: 250px;
@@ -109,9 +103,6 @@ textarea{
   line-height: 24px;
   letter-spacing: 1px;
   margin-left: 10px !important;
-}
-.prev_tag:first-of-type{
-  display: none;
 }
 .prev_tag{
   background-color: var(--LightDark);

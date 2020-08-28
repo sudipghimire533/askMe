@@ -10,6 +10,7 @@
     <link href='./ask.css' type="text/css" rel="stylesheet" />
     <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
 
+    <script src='../global/js/showdown.min.js' type='text/javascript'></script>
     <script src='./ask.js' type='text/javascript'></script>
 </head>
 
@@ -50,7 +51,7 @@
                 </div>
                 <div class='tagComposer'>
                     <div class='inputContainer'>
-                        <input type='text' name='tags' placeholder='Tags' id='QuestionTags' required='' />
+                        <input type='text' name='tags' placeholder='Tags' id='QuestionTags' required='' " />
                     </div>
                     <i class='fas fa-corss addTagBtn'></i>
                 </div>
@@ -59,7 +60,6 @@
                 <div class='prev_title'></div>
                 <p class='prev_body'></p>
                 <div class='prev_tagContainer'>
-                    <span class='prev_tag'></span>
                 </div>
             </div>
             <div class='inputContainer'>
