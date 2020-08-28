@@ -19,9 +19,13 @@ function fillQuestion() {
     nameContainer.setAttribute('href', '/profile/id?=' + thisQuestion.authorId);
     nameContainer.textContent = thisQuestion.authorName;
 
-    Question.getElementsByClassName('added_on')[0].textContent = thisQuestion.addedOn;
-    Question.getElementsByClassName('updated_on')[0].textContent = thisQuestion.updatedOn;
+    Question.getElementsByClassName('added_on')[0].textContent = thisQuestion.addedOn.split(' ')[0];//do not need time after space
+    Question.getElementsByClassName('updated_on')[0].textContent = thisQuestion.updatedOn.split(' ')[0];
     Question.getElementsByClassName('visited_for')[0].textContent = thisQuestion.visit;
 
-    // thisQuestion = null;
+    thisQuestion = null;
+}
+
+let sampleAnswer;
+function fillAnswers() {
 }

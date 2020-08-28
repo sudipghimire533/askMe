@@ -14,10 +14,14 @@ require_once("../server/thread.php");
 $id = trim($_GET['id']);
 
 $response = "No response from server";
-$human = new showQuestion;
+$handler = new showQuestion;
 
-$human->getQuestionById($id, $response);
+$handler->getQuestionById($id, $response);
 
+$QuestionInformation = $response;
+
+$handler->getAnswerFor($id, $response);
+$AnswerInformation = $response;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,28 +42,6 @@ $human->getQuestionById($id, $response);
 <body onload='Ready();'>
     <div id='Main'>
         <div class='threadSection'>
-            <!--div class='Question'>
-                <div class='questionTitle'>
-                    <i class='qn_status fab fa-gripfire' title='Trending'></i>
-                    <span class='titleText'></span>
-                    <span class='quickAction'>
-                        <i class='fas fa-bookmark'></i>
-                        <i class='fas fa-star'></i>
-                        <a href='#' class='fas fa-reply'></a>
-                    </span>
-                </div>
-                <div class='description'>
-                    <p></p>
-                </div>
-                <div class='questionInfo'>
-                    <div class='tagContainer'>
-                    </div>
-                    <div class='asking_user'>
-                        <a href='#' class='asker_name hv_border'></a>
-                        <br/>
-                    </div>
-                </div>
-            </div-->
             <div class='Question'>
                 <div class='questionTitle'>
                     <i class='qn_status fab fa-gripfire' title='Trending'></i>
@@ -78,7 +60,7 @@ $human->getQuestionById($id, $response);
                     <div class='tagContainer'> </div>
                     <span class='meta'>
                         <span class='label'>Posted by:</span>
-                        <a href='#' class='asker_name hv_border meta'></a>
+                        <a href='#' class='asker_name meta'></a>
                     </span>
                     <span class='meta'>
                         <span class='label'>Added on:</span>
@@ -94,12 +76,36 @@ $human->getQuestionById($id, $response);
                     </span>
                 </div>
             </div>
+            <div class='Answer'>
+                <i class='fas fa-tick'></i>
+                <div class='author'>
+                    <span class='avatarContainer'>
+                        <img src='' alt='' title='' class='avatar' />
+                    </span>
+                    <span class='authorAbout'>
+                        <a href='#' class='authorName hv_border'></a><br />
+                        <span class='authorIntro'></span>
+                    </span>
+                </div>
+                <div class='ans_content'></div>
+                <div class='impression'>
+                    <span class='meta'>
+                        <span class='label'>Added on:</span>
+                        <span class='added_on'></span>
+                    </span>
+                    <span class='meta'>
+                        <span class='label'>Updated on:</span>
+                        <span class='updated_on'></span>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 <script>
-    var thisQuestion = <?php echo $response; ?>[0];
-
+    var thisQuestion = <?php echo $QuestionInformation; ?>[0];
+    var allAnswers = <?php echo $AnswerInformation; ?>;
+    console.log(allAnswers);
     function Ready() {
         fillQuestion();
     }

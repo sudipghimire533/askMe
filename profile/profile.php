@@ -1,7 +1,18 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once("../server/global.php");
 
 $conn = get_connection();
+
+function fail($err, $line=0){
+    global $conn;
+    echo "<i style='color:red'>".__FILE__." in line ".$line.". Error: ".$err."</i>";
+    $conn->close();
+    exit;
+}
 
 $UserId = 1;
 
@@ -12,60 +23,62 @@ $res = $conn->query("SELECT
             user.Phone AS phone,
             user.Location As location,
             user.Intro AS intro,
-            user.UserName AS userName
+            user.UserName AS userName,
+            COUNT(qn.Id) AS questionCount,
+            COUNT(ans.Id) AS answerCount,
+            SUM(ans.ClapsCount) AS clapCount
             FROM User AS user
+            LEFT JOIN
+            Answer ans ON ans.Author=user.Id
+            LEFT JOIN
+            Question  qn ON qn.Author=user.Id
             WHere user.Id=$UserId
-        ;");
+        ;") or fail($conn->error);
+
+
 
 $row = $res->fetch_assoc();
-$UserEmail = $row['email'];
-$UserPhone = $row['phone'];
 $UserName = $row['fullname'];
-$UserIntro = $row['intro'];
-$UserLocation = $row['location'];
 
-
-/* Get Progress Data */
-$res = $conn->query("SELECT
-    COUNT(Id) AS answerCount,
-    SUM(ClapsCount) AS clapCount
-    FROM Answers WHERE Author=$UserId;
-");
-$row = $res->fetch_assoc();
-$AnswerCount = $row['answerCount'];
-$ClapsCount = $row['clapCount'];
-if (!($ClapsCount > 0)) {
-    $ClapsCount = 0;
+if($UserName == null){
+    fail("We cannot get that User...");
 }
 
-$res = $conn->query("SELECT
-    COUNT(Id) FROM Question WHERE Author=$UserId;
-");
-$QuestionCount = $res->fetch_array()[0];
+$UserEmail = $row['email'];
+$UserPhone = $row['phone'];
+$UserIntro = $row['intro'];
+$UserLocation = $row['location'];
+$AnswerCount = $row['answerCount'];
+$ClapsCount = $row['clapCount'];
+// if user hasn't answered anything then it will be null so switch to 0
+$ClapsCount = ($ClapsCount == null)? 0 : $ClapsCount;
+$QuestionCount = $row['questionCount'];
+
 
 $res = $conn->query("SELECT
-    COUNT(FollowedBy)
-    FROM UserFollow
-    WHERE FollowedBy = $UserId;
-");
+    COUNT(uf1.FollowedBy)
+    FROM UserFollow uf1
+    WHERE FollowedBy = $UserId
+;") or fail($conn->error, __LINE__);
 $FollowingCount = $res->fetch_array()[0];
 
 $res = $conn->query("SELECT 
     COUNT(FollowedTo)
     FROM UserFollow WHERE
     FollowedTo = $UserId;
-");
+") or fail($conn->error, __LINE__);
 $FollowersCount = $res->fetch_array()[0];
 
-$res = $conn->query("SELECT DISTINCT
-    Name FROM Tags AS Tags
-    CROSS JOIN UserTag AS UserTag WHERE UserTag.User=$UserId;");
-$UserTags = array();
 
-while ($row = $res->fetch_assoc()) {
-    $UserTags[] = $row["Name"];
-}
 
+$res = $conn->query("SELECT
+            GROUP_CONCAT(tg.Name)
+            FROM Tags tg
+            LEFT JOIN
+            UserTag ut ON ut.Tag=tg.Id
+            WHERE ut.User=$UserId
+;") or fail($conn->error, __LINE__);
+$UserTags = explode(',', $res->fetch_row()[0]);
 
 $conn->close();
 ?>
@@ -87,36 +100,36 @@ $conn->close();
 <body>
     <div id='Main'>
         <div class='impressionContainer'>
-            <span class='questionCount impr'>
+            <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>"class='questionCount impr hv_border'>
                 <b class='count'>
                     <?php echo $QuestionCount; ?>
                 </b>
                 <span>Questions</span>
-            </span>
-            <span class='followingCount impr'>
+            </a>
+            <a href='/user/user.php?followedby=<?php echo $UserId; ?>' class='followingCount impr hv_border'>
                 <b class='count'>
                     <?php echo $FollowingCount; ?>
                 </b>
                 <span>Following</span>
-            </span>
-            <span class='clapCount impr'>
+            </a>
+            <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
                 <b class='count'>
                     <?php echo $ClapsCount; ?>
                 </b>
                 <span>Claps</span>
-            </span>
-            <span class='followersCount impr'>
+            </a>
+            <a href="/user/user.php?followersof=<?php echo $UserId; ?>" class='followersCount impr hv_border'>
                 <b class='count'>
                     <?php echo $FollowersCount;  ?>
                 </b>
                 <span>Followers</span>
-            </span>
-            <span class='answerCount impr'>
+            </a>
+            <a href="/thread/thread.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
                 <b class='count'>
                     <?php echo $AnswerCount; ?>
                 </b>
                 <span>Answers</span>
-            </span>
+            </a>
         </div>
         <div class='moreInfo'>
             <div class='infoBlock' id='intrestedIn'>
@@ -126,8 +139,10 @@ $conn->close();
                     <a href='#' class='tag'>Programming</a>
                     -->
                     <?php
-                    foreach ($UserTags as $tag) {
-                        echo "<a href='../questions/taggedfor/$tag[2]' class='tag'>$tag</a>";
+                    foreach ($UserTags as &$tag) {
+                        $tag = trim($tag);
+                        if(strlen($tag) == 0) continue;
+                        echo "<a href='../questions/taggedfor/$tag' class='tag'>$tag</a>";
                     }
                     ?>
                 </div>
@@ -137,7 +152,7 @@ $conn->close();
                 <div class='innerBlock'>
                     <div>
                         <i class='fas fa-envelope'></i>
-                        <a href='#' id='Email' class='hv_border'>
+                        <a href="mailto:<?php echo $UserEmail; ?>" id='Email' class='hv_border'>
                             <?php echo $UserEmail; ?>
                         </a>
                     </div>

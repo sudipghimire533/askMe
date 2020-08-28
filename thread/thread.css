@@ -96,3 +96,6 @@
 .tagContainer{
   margin-bottom: 15px;
 }
+.asker_name{
+  text-decoration: underline !important;
+}

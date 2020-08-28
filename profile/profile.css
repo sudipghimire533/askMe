@@ -21,6 +21,7 @@ body {
 }
 .impr{
   margin: 10px 15px;
+  position: relative;
   padding: 15px 30px;
   display: inline-flex;
   cursor: pointer;
@@ -29,12 +30,22 @@ body {
   border-radius: 5px;
   flex: 1;
   text-align: center;
+  text-decoration: none;
+  color: var(--color);
+}
+.impr:after{
+  width: 0;
+  background: var(--color);
+}
+.impr:hover:after,
+.impr:focus:after{
+  width: 100%;
 }
 .questionCount,
-.followersCount{ color: #FE2C55; }
+.followersCount{ --color: #FE2C55; }
 .answerCount,
-.followingCount{color: #FF9200;}
-.clapCount{color: #03A87C;}
+.followingCount{--color: #FF9200;}
+.clapCount{--color: #03A87C;}
 
 .impr > .count{
   color: inherit;

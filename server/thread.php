@@ -49,6 +49,28 @@ class showQuestion
         }
         $response = json_encode($response);
     }
+    public function getAnswerFor($id, &$response){
+        $id = $this->conn->real_escape_string($id);
+        $res = $this->conn->query("SELECT
+                    CONCAT(user.FirstName,' ', user.LastName) AS authorName,
+                    user.Id AS authorId,
+                    user.Intro AS authorIntro,
+                    ans.Description AS info,
+                    ans.ClapsCount AS clap,
+                    ans.AddedOn AS addedOn,
+                    ans.ModifiedOn As updatedOn
+                    FROM
+                    Answer ans
+                    LEFT JOIN
+                    User user On ans.Author=user.Id
+                    WHERE ans.WrittenFor=$id
+                ;") or die($this->conn->error);
+        if($res->num_rows == 0){
+            $response = 0;
+            return;
+        }
+        $response = json_encode($res->fetch_all(MYSQLI_ASSOC));
+    }
 };
 
 
