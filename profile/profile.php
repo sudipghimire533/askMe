@@ -11,7 +11,6 @@ $res = $conn->query("SELECT
             user.Email AS email,
             user.Phone AS phone,
             user.Location As location,
-            user.Bio AS bio,
             user.Intro AS intro,
             user.UserName AS userName
             FROM User AS user
@@ -22,7 +21,6 @@ $row = $res->fetch_assoc();
 $UserEmail = $row['email'];
 $UserPhone = $row['phone'];
 $UserName = $row['fullname'];
-$userBio = $row['bio'];
 $UserIntro = $row['intro'];
 $UserLocation = $row['location'];
 

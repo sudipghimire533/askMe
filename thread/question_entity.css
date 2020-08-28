@@ -25,12 +25,8 @@
 }
 .questionInfo{
   font-size: var(--fontTiny);
-  display: inline-flex;
-  flex-flow: row wrap;
   position: relative;
   width: 100%;
-  justify-content: space-between;
-  align-items: center;
 }
 .tag{
   position: relative;
@@ -48,10 +44,6 @@
 }
 .tag:hover, .tag:focus{
   opacity: 0.8;
-}
-.asker_name{
-  font-size: var(--fontSmall);
-  letter-spacing: 1px;
 }
 .quickAction{
   float: right;

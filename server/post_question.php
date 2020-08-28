@@ -30,6 +30,7 @@ function fail($err)
 }
 function sucess()
 {
+    global $conn;
     global $URLTitle;
     echo "<h1>Question registerd at: </h1><a href='/thread/$URLTitle'>/threads/$URLTitle</a>";
 
