@@ -47,6 +47,7 @@ class showQuestion
             $response = "That Question or related information not found";
             return false;
         }
+        $response[0]['info'] = htmlspecialchars_decode($response[0]['info']);
         $response = json_encode($response);
     }
     public function getAnswerFor($id, &$response, $offset=0, $count=3){

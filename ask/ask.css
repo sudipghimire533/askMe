@@ -41,10 +41,6 @@ textarea{
   outline: none;
   box-sizing: border-box;
 }
-textarea,
-.prev_body{
-  white-space: pre-wrap;
-}
 #QuestionTitle{
   font-weight: 700;
 }
@@ -68,7 +64,6 @@ textarea{
 }
 #QuestionPreview > *{
   margin: 10px 0;
-  word-break: break-all;
 }
 .tag{
   font-size: var(--fontSmall);

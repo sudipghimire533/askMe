@@ -12,10 +12,11 @@ let prev_length = 0;
 function bodyPreview(elem) {
     content = elem.value.trim();
 
-    if (!(content.length - prev_length > 5)) { return; }
+    // if (!(content.length - prev_length < 5)) { return; }
 
     prev_length = content.length;
-    previewBody.innerHTML = converter.makeHtml(content);
+    /* Do not need to sanitaze everuthing here because php will*/
+    previewBody.innerHTML = converter.makeHtml(content.replaceAll('<', '&lt;'));
     setTimeout(bodyPreview, 5 * 1000, elem);
 }
 function tagPreview(elem) {
@@ -32,6 +33,9 @@ function tagPreview(elem) {
     });
     setTimeout(tagPreview, 2 * 1000, elem);
 }
+function submitForm(event) {
+
+}
 function Ready() {
     converter = new showdown.Converter();
 
@@ -46,4 +50,9 @@ function Ready() {
     titlePreview(document.getElementById('QuestionTitle'));
     bodyPreview(document.getElementById('QuestionBody'));
     tagPreview(document.getElementById('QuestionTags'));
+
+    document.getElementsByClassName('AskQuestion')[0].onsubmit = function (ev) {
+        document.getElementById('QuestionBodyReal').value =
+            converter.makeHtml(document.getElementById('QuestionBody').value);
+    }
 }

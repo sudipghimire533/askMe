@@ -2,14 +2,12 @@
 
 require_once('global.php');
 
-echo "<div style='white-space:pre-wrap'>";
-
 if (
     !(isset($_POST['title'])) ||
     !(isset($_POST['description'])) ||
     !(isset($_POST['tags']))
 ) {
-    echo "This is the form Reciving page";
+    echo "This is the form Receiving page";
 
     if (!(isset($_GET['test']))) {
         exit;
@@ -28,11 +26,11 @@ function fail($err)
 
     exit;
 }
-function sucess()
+function sucess($QuestionId)
 {
     global $conn;
     global $URLTitle;
-    echo "<h1>Question registerd at: </h1><a href='/thread/$URLTitle'>/threads/$URLTitle</a>";
+    echo "<h1>Question registerd at: </h1><a href='/thread/thread.php?id=$QuestionId'>/threads/$URLTitle</a>";
 
     $conn->close();
     exit;
@@ -123,7 +121,8 @@ function insertQuestion()
             Question (Title, URLTitle, Author, Description)
             VALUES('$Title', '$URLTitle', '$Author', '$Description')
         ;") or fail("Cannot insert Data into Database Double check your Input and read the docs. Error: " . $conn->error);
-    $QuestionId = 2;
+
+    $QuestionId = $conn->insert_id;
 
     $linkTag = $conn->prepare("INSERT INTO
             QuestionTag (Question, Tag)
@@ -145,7 +144,7 @@ function insertQuestion()
     $linkTag->close();
     $updateCount->close();
 
-    sucess();
+    sucess($QuestionId);
 }
 
 if (!(validateTitle($Title) &&
@@ -158,6 +157,8 @@ if (!(validateTitle($Title) &&
 
 echo "All input considered valid<hr>";
 
+
 insertQuestion();
 
 $conn->close();
+exit;

@@ -4,7 +4,7 @@ function fillQuestion() {
     let title = Question.getElementsByClassName('titleText')[0];
     title.textContent = thisQuestion.title;
 
-    Question.getElementsByClassName('description')[0].firstElementChild.textContent = thisQuestion.info;
+    Question.getElementsByClassName('description')[0].firstElementChild.innerHTML = thisQuestion.info;
 
     let tagContainer = Question.getElementsByClassName('tagContainer')[0];
     for (let i = 0, tags = thisQuestion.tag.split(','); i < tags.length; i++) {
@@ -28,7 +28,7 @@ let sampleAnswer;
 function fillAnswer(index) {
     let Answer = sampleAnswer.cloneNode(true);
 
-    Answer.getElementsByClassName('ans_content')[0].textContent = allAnswers[index].info;
+    Answer.getElementsByClassName('description')[0].firstElementChild.textContent = allAnswers[index].info;
 
     let nameContainer = Answer.getElementsByClassName('authorName')[0];
     nameContainer.setAttribute('href', '/profile/id?=' + allAnswers[index].authorId);
@@ -47,4 +47,20 @@ function fillAnswer(index) {
     sampleAnswer.parentElement.appendChild(Answer);
 
     allAnswers[index] = null;
+}
+
+let previewContainer;
+let prev_loop;
+let stop = true;
+function startPreview(elem, st = stop){
+    if(st == true){return;}
+    content = elem.value.trim();
+
+    previewContainer.innerHTML = converter.makeHtml(content.replaceAll('<', '&lt;'));
+    prev_loop = setTimeout(startPreview, 4 * 1000, elem, false);
+}
+function endPreview(elem){
+    stop = true;
+    clearTimeout(prev_loop);
+    prev_loop = null;
 }

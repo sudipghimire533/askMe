@@ -12,7 +12,6 @@ if (!isset($_GET['id'])) {
 require_once("../server/thread.php");
 
 $id = trim($_GET['id']);
-
 $response = "No response from server";
 $handler = new showQuestion;
 
@@ -22,6 +21,7 @@ $QuestionInformation = $response;
 
 $handler->getAnswerFor($id, $response);
 $AnswerInformation = $response;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +36,7 @@ $AnswerInformation = $response;
     <link href='./question_entity.css' type="text/css" rel="stylesheet" />
     <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
 
+    <script src='../global/js/showdown.min.js' type='text/javascript'></script>
     <script src='./thread.js' type='text/javascript'></script>
 </head>
 
@@ -87,7 +88,9 @@ $AnswerInformation = $response;
                         <span class='authorIntro'></span>
                     </span>
                 </div>
-                <div class='ans_content'></div>
+                <div class='description'>
+                    <p></p>
+                </div>
                 <div class='impression'>
                     <span class='meta'>
                         <span class='label'>Added on:</span>
@@ -99,21 +102,41 @@ $AnswerInformation = $response;
                     </span>
                 </div>
             </div>
+            <form class='writerSection' method='POST'>
+            <div class=' inputContainer'>
+                <div class='toolbar'>ToolBar</div>
+                <textarea placeholder='Write Question Description Here..' id='PostBody' required='' minlength='20' onfocus='startPreview(this,false);'onblur='endPreview()'></textarea>
+                <textarea name='description' id='PostBodyReal' style='display:none;'value=''></textarea>
+            </div>
+            <div class='Answer'>
+                <p id='PostPreview'>
+                </p>
+            </div>
+            <div class='inputContainer'>
+                <input type="button" name="submit"value='Post' id='PostSubmit'/>
+            </div>
+        </form>
         </div>
     </div>
 </body>
 <script>
     var thisQuestion = <?php echo $QuestionInformation; ?>[0];
-    var allAnswers = <?php echo $AnswerInformation; ?>;
-    console.log(allAnswers);
+    var allAnswers;
+    var comverter;
     function Ready() {
+        converter = new showdown.Converter();
         fillQuestion();
+        allAnswers = <?php echo $AnswerInformation; ?>;
         sampleAnswer = document.getElementsByClassName('Answer')[0];
-        allAnswers.forEach(function(ans, index){
-            fillAnswer(index);
-        });
+        if(allAnswers){
+            allAnswers.forEach(function(ans, index){
+                fillAnswer(index);
+            });
+        }
         allAnswers = null;
         thisQuestion = null;
+
+        previewContainer = document.getElementById('PostPreview');
     }
 </script>
 

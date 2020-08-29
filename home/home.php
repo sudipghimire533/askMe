@@ -59,7 +59,6 @@ $feedFetcher = new Getfeed;
         sample_tag_element = sample_question.getElementsByClassName('tagContainer')[0].firstElementChild;
 
         let response = <?php $feedFetcher->Recent(); ?>;
-
         response.forEach(obj => {
             createQuestion(obj);
         });

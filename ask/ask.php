@@ -47,11 +47,12 @@
                 </div>
                 <div class=' inputContainer'>
                     <div class='toolbar'>ToolBar</div>
-                    <textarea name="description" placeholder='Write Question Description Here..' id='QuestionBody' required='' minlength='20'></textarea>
+                    <textarea placeholder='Write Question Description Here..' id='QuestionBody' required='' minlength='20'></textarea>
+                    <textarea name='description' id='QuestionBodyReal' style='display:none;'value=''></textarea>
                 </div>
                 <div class='tagComposer'>
                     <div class='inputContainer'>
-                        <input type='text' name='tags' placeholder='Tags' id='QuestionTags' required='' " />
+                        <input type='text' name='tags' placeholder='Tags' id='QuestionTags' required='' />
                     </div>
                     <i class='fas fa-corss addTagBtn'></i>
                 </div>
@@ -63,7 +64,7 @@
                 </div>
             </div>
             <div class='inputContainer'>
-                <input type='submit' name='submit' value='Post Question' id='QuestionSubmit' />
+                <input type='submit' name='submit' value='Post Question' id='QuestionSubmit'/>
             </div>
         </form>
     </div>
