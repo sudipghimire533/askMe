@@ -3,11 +3,9 @@
 require_once('global.php');
 
 if (
-    !(
-        isset($_POST['title']) &&
+    !(isset($_POST['title']) &&
         isset($_POST['description'])) &&
-        isset($_POST['tags'])
-    )
+    isset($_POST['tags'])
 ) {
     echo "This is the form Receiving page";
 
@@ -104,6 +102,7 @@ function insertQuestion()
 {
     global $conn, $Title, $Description, $Tags, $Author, $UserId, $URLTitle;
 
+    $conn->autocommit(false);
     /*get Url title*/
     $URLTitle = str_replace(" ", "-", strtolower($Title));
     $URLTitle  = preg_replace("/[^A-Za-z0-9\-]/", '', $URLTitle);
@@ -117,8 +116,6 @@ function insertQuestion()
         }
     }
 
-
-
     $res = $conn->query("INSERT INTO
             Question (Title, URLTitle, Author, Description)
             VALUES('$Title', '$URLTitle', '$Author', '$Description')
@@ -130,6 +127,8 @@ function insertQuestion()
             QuestionTag (Question, Tag)
             VALUES ($QuestionId, ?)
         ;") or fail($linkTag->error);
+
+    $conn->commit();
 
     $tag = "";
     $updateCount = $conn->prepare("UPDATE 
