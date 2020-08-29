@@ -3,9 +3,11 @@
 require_once('global.php');
 
 if (
-    !(isset($_POST['title'])) ||
-    !(isset($_POST['description'])) ||
-    !(isset($_POST['tags']))
+    !(
+        isset($_POST['title']) &&
+        isset($_POST['description'])) &&
+        isset($_POST['tags'])
+    )
 ) {
     echo "This is the form Receiving page";
 

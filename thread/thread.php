@@ -53,12 +53,9 @@ $AnswerInformation = $response;
                         <a href='#' class='fas fa-reply'></a>
                     </span>
                 </div>
-                <div class='description'>
-                    <p>
-                    </p>
-                </div>
+                <div class='description'><p></p></div>
                 <div class='questionInfo'>
-                    <div class='tagContainer'> </div>
+                    <div class='tagContainer'></div>
                     <span class='meta'>
                         <span class='label'>Posted by:</span>
                         <a href='#' class='asker_name meta'></a>
@@ -102,20 +99,19 @@ $AnswerInformation = $response;
                     </span>
                 </div>
             </div>
-            <form class='writerSection' method='POST'>
-            <div class=' inputContainer'>
-                <div class='toolbar'>ToolBar</div>
-                <textarea placeholder='Write Question Description Here..' id='PostBody' required='' minlength='20' onfocus='startPreview(this,false);'onblur='endPreview()'></textarea>
-                <textarea name='description' id='PostBodyReal' style='display:none;'value=''></textarea>
-            </div>
-            <div class='Answer'>
-                <p id='PostPreview'>
-                </p>
-            </div>
-            <div class='inputContainer'>
-                <input type="button" name="submit"value='Post' id='PostSubmit'/>
-            </div>
-        </form>
+            <form class='writerSection' method='POST' action='/server/post_answer.php'>
+                <div class=' inputContainer'>
+                    <div class='toolbar'>ToolBar</div>
+                    <textarea placeholder='Write Question Description Here..' id='PostBody' required='' minlength='20' onfocus='startPreview(this,false);'onblur='endPreview()'></textarea>
+                    <textarea name='description' id='PostBodyReal' style='display:none;'value=''></textarea>
+                </div>
+                <div id='PostPreview' class='Answer description' tabindex='0'>
+                </div>
+                <input type='text' name='QuestionId' value='<?php echo $id; ?>' style='display: none;'/>
+                <div class='inputContainer'>
+                    <input type="submit" name="submit"value='Post' id='PostSubmit'/>
+                </div>
+            </form>
         </div>
     </div>
 </body>
@@ -137,6 +133,10 @@ $AnswerInformation = $response;
         thisQuestion = null;
 
         previewContainer = document.getElementById('PostPreview');
+        document.getElementsByTagName('form')[0].onsubmit = function(ev){
+            document.getElementById('PostBodyReal').value =
+            converter.makeHtml(document.getElementById('PostBody').value);
+        };
     }
 </script>
 

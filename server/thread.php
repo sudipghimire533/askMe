@@ -71,7 +71,11 @@ class showQuestion
             $response = 0;
             return;
         }
-        $response = json_encode($res->fetch_all(MYSQLI_ASSOC));
+        $response =$res->fetch_all(MYSQLI_ASSOC);
+        foreach ($response as &$row) {
+            $row['info'] = htmlspecialchars_decode($row['info']);
+        }
+        $response = json_encode($response);
     }
 };
 
