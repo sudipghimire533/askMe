@@ -16,6 +16,7 @@ $feedFetcher = new Getfeed;
     <link href='./home.css' type="text/css" rel="stylesheet" />
     <link href='../thread/question_entity.css' type='text/css' rel='stylesheet' />
     <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
+    <script type='text/javascript' src='../global/global.js'></script>
 
     <script type='text/javascript' src='home.js'></script>
 </head>
@@ -28,9 +29,9 @@ $feedFetcher = new Getfeed;
                     <i class='qn_status fab fa-gripfire' title='Trending'></i>
                     <a href='#' class='titleText'></a>
                     <span class='quickAction'>
-                        <i class='fas fa-bookmark'></i>
+                        <i class='fas fa-bookmark' title='Bookmark this question to visit later..'onclick='bookmark(this)'></i>
                         <i class='fas fa-star'></i>
-                        <a href='#' class='fas fa-reply'></a>
+                        <a href='#' class='fas fa-reply' title='Give answer to this Question...'></a>
                     </span>
                 </div>
                 <div class='description'>
@@ -49,21 +50,33 @@ $feedFetcher = new Getfeed;
                 </div>
             </div>
         </div>
+        <div class='ShowTags'>
+            <div class='label'>Be Smart. The Smart way</div>
+            <div class='label'><a href='#' style='color: var(--Yellow);'>See all Tag</a>
+        </div>
+
+<div class='notifyCenter'>
+    <div class='notify'style='display: none;'>This is apple that notify someone for someting with some action</div>
+</div>
     </div>
 </body>
 
 <script>
+    let response;
+    var showTags;
     function Ready() {
         sample_question = document.getElementsByClassName('Question')[0];
         feed_container = sample_question.parentElement;
+        showTags = document.getElementsByClassName('ShowTags')[0];
         sample_tag_element = sample_question.getElementsByClassName('tagContainer')[0].firstElementChild;
 
-        let response = <?php $feedFetcher->Recent(); ?>;
+        response = <?php $feedFetcher->Recent(); ?>;
         response.forEach(obj => {
             createQuestion(obj);
         });
 
     }
+    notification = document.getElementsByClassName('notify')[0];
 </script>
 
 </html>
