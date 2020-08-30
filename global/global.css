@@ -64,3 +64,33 @@ img{
 .hv_border:focus:after{
   width: 100%;
 }
+@keyframes notify{
+  0%{
+    transform: translateY(50px);
+    opacity: 0;
+  }10% {
+    transform: translateX(0);
+    opacity: 1;
+  }80%{
+    transform: translateY(0);
+    opacity: 1;
+  }100%{
+    transform: translateY(50px);
+    opacity: 0;
+  }
+}
+.notify{
+  bottom: 0;
+  text-align: center;
+  background: var(--Niagara);
+  padding: 10px 20px;
+  border-radius: 50px;
+  margin: 10px 0;
+  border: 1px solid rgba(255,255,255,0.5);
+  box-sizing: border-box;
+  animation: notify 3s;
+  opacity: 0;
+  transform: translateY(100px);
+}
+.notify.error{ background-color: var(--Red); }
+.notify.warning{ background-color: var(--Yellow); }
