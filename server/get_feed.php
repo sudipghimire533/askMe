@@ -35,6 +35,10 @@ class Getfeed
 
         $response = $res->fetch_all(MYSQLI_ASSOC);
 
+        foreach ($response as &$row) {
+            $row['info'] = html_entity_decode($row['info']);
+        }
+
         $response = json_encode($response);
 
         echo $response;

@@ -27,7 +27,7 @@ $Description = trim($conn->real_escape_string(htmlspecialchars($_POST['descripti
 
 function fail($err, $lineno = __LINE__)
 {
-	global $conn;
+	global $conn, $QuestionId;
 	$conn->close();
 	echo "<i style='color:red;'>" . $err . ". At line no " . $lineno . "</i>";
 
@@ -36,13 +36,8 @@ function fail($err, $lineno = __LINE__)
 function sucess()
 {
 	global $QuestionId;
-	echo "Everything is done...";
-	/* TODO
-	 * Set the Post variable hasPosted = true
-	 * redirect the user to question page
-	 * In question page check $_POST['hasPosted'] ans make user sure that s/he really
-	 * want to post another answer again.
-	*/
+	echo "<br>Everything is done...";
+	header("Location: /thread/thread.php?id=".$QuestionId);
 	exit;
 }
 
@@ -59,7 +54,6 @@ $res = $conn->query("
 //TO DO:
 // UPDATE Question SET LastActive=NOW() WHERE Id=$QuestionId;
 
-echo "Your Answer has Been posted...<br>Now redirecting to the question...";
 sucess();
 
 

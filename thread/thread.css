@@ -77,8 +77,9 @@
   color: var(--White);
   transition: color .5s;
 }
-.Question{
-  border-bottom: 2px solid var(--LightDark);
+.questionTitle{
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--LightDark);
 }
 .description{
   margin-top: 15px;
@@ -143,4 +144,11 @@ textarea{
 #PostSubmit:hover,
 #PostSubmit:focus{
   background: transparent;
+}
+
+.description code{
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--LightDark);
+  display: inline-block;
 }

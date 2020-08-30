@@ -22,6 +22,7 @@ $QuestionInformation = $response;
 $handler->getAnswerFor($id, $response);
 $AnswerInformation = $response;
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
