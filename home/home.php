@@ -29,7 +29,7 @@ $feedFetcher = new Getfeed;
                     <i class='qn_status fab fa-gripfire' title='Trending'></i>
                     <a href='#' class='titleText'></a>
                     <span class='quickAction'>
-                        <i class='fas fa-bookmark' title='Bookmark this question to visit later..'onclick='bookmark(this)'></i>
+                        <i class='fas fa-bookmark' title='Bookmark this question to visit later..' onclick='bookmark(this)'></i>
                         <i class='fas fa-star'></i>
                         <a href='#' class='fas fa-reply' title='Give answer to this Question...'></a>
                     </span>
@@ -51,21 +51,22 @@ $feedFetcher = new Getfeed;
             </div>
         </div>
         <div class='ShowTags'>
-            <div class='label'>Be Smart. The Smart way</div>
+            <h2 class='label'>Be Smart. The Smart way</h2>
             <div class='label'>
                 <a href='#' style='color: var(--Yellow);'>See all Tag</a>
             </div>
         </div>
 
-<div class='notifyCenter'>
-    <div class='notify'style='display: none;'>This is apple that notify someone for someting with some action</div>
-</div>
+        <div class='notifyCenter'>
+            <div class='notify' style='display: none;'></div>
+        </div>
     </div>
 </body>
 
 <script>
     let response;
     var showTags;
+
     function Ready() {
         sample_question = document.getElementsByClassName('Question')[0];
         feed_container = sample_question.parentElement;

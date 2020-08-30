@@ -4,8 +4,6 @@ var sample_tag_element;
 
 var appended_questions = new Map;
 var feeded_tags = new Map;
-
-var notification;
 /*
  * TODO:
  * While storing the direct html in the database
@@ -32,8 +30,8 @@ function createQuestion(question) {
         tag.setAttribute('href', '/taggedfor/' + tags[i]);
         tag.textContent = tags[i];
         target.getElementsByClassName('tagContainer')[0].appendChild(tag);
-        if(!feeded_tags.has(tags[i])) {
-            // don't push directly becase single element can;t be chld of 2 so clone it
+        if (!feeded_tags.has(tags[i])) {
+            // don't push directly becase single element can't be chld of 2 so clone it
             showTags.appendChild(tag.cloneNode(true));
             feeded_tags.set(tags[i], true);
         }
@@ -42,6 +40,6 @@ function createQuestion(question) {
     appended_questions.set(question.url, true);
 }
 
-function bookmark(question){
+function bookmark(question) {
     notify("Question Has been Boorkarked. You can visit your profile to see all your bookmarked questions", 0)
 }

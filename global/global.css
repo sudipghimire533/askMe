@@ -83,6 +83,7 @@ img{
 .notifyCenter{
   position: fixed;
   bottom: 0;
+  right: 0;
   text-align: center;
   margin: 20px;
   z-index: 3;
@@ -98,7 +99,7 @@ img{
   animation: notify 3s;
   opacity: 0;
   transform: translateY(100px);
-  font-size: 24px;
+  font-size: var(--fontSmall);
 }
 .notify.error{ background-color: var(--Red); }
 .notify.warning{ background-color: var(--Yellow); }

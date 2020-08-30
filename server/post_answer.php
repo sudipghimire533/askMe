@@ -37,7 +37,8 @@ function sucess()
 {
 	global $QuestionId;
 	echo "<br>Everything is done...";
-	header("Location: /thread/thread.php?id=".$QuestionId);
+
+	header("Location: /thread/thread.php?id=$QuestionId&answerPosted=1");
 	exit;
 }
 
