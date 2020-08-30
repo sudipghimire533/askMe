@@ -43,5 +43,5 @@ function createQuestion(question) {
 }
 
 function bookmark(question){
-    notify('This is notification to notify about a href apple', 0)
+    notify("Question Has been Boorkarked. You can visit your profile to see all your bookmarked questions", 0)
 }

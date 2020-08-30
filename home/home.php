@@ -52,7 +52,9 @@ $feedFetcher = new Getfeed;
         </div>
         <div class='ShowTags'>
             <div class='label'>Be Smart. The Smart way</div>
-            <div class='label'><a href='#' style='color: var(--Yellow);'>See all Tag</a>
+            <div class='label'>
+                <a href='#' style='color: var(--Yellow);'>See all Tag</a>
+            </div>
         </div>
 
 <div class='notifyCenter'>

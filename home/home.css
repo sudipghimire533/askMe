@@ -49,10 +49,3 @@
 .ShowTags .label{
   margin-bottom: 10px;
 }
-
-.notifyCenter{
-  position: fixed;
-  bottom: 0;
-  display: block;
-  margin: 20px;
-}

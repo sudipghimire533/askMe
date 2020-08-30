@@ -79,9 +79,16 @@ img{
     opacity: 0;
   }
 }
-.notify{
+
+.notifyCenter{
+  position: fixed;
   bottom: 0;
   text-align: center;
+  margin: 20px;
+  z-index: 3;
+}
+.notify{
+  bottom: 0;
   background: var(--Niagara);
   padding: 10px 20px;
   border-radius: 50px;
@@ -91,6 +98,7 @@ img{
   animation: notify 3s;
   opacity: 0;
   transform: translateY(100px);
+  font-size: 24px;
 }
 .notify.error{ background-color: var(--Red); }
 .notify.warning{ background-color: var(--Yellow); }
