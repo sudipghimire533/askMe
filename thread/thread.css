@@ -150,4 +150,7 @@ textarea{
   border-radius: 10px;
   border: 1px solid var(--LightDark);
   display: inline-block;
+  overflow: auto;
+  max-width: 97%;
+  max-height: 400px;
 }

@@ -5,6 +5,11 @@ error_reporting(E_ALL);
 
 require_once("global.php");
 
+function fail($err, $lineno = __LINE__)
+{
+    echo "<i style='color:red;'>" . $err . ". At line no " . $lineno . "</i>";
+    exit;
+}
 
 class Getfeed
 {
@@ -18,7 +23,7 @@ class Getfeed
     {
         $this->conn->close();
     }
-    public function Recent()
+    public function Recent(&$response)
     {
         $res = $this->conn->query("SELECT DISTINCT
                     qn.Title AS title,
@@ -31,7 +36,7 @@ class Getfeed
                     Tags tg ON qt.Tag=tg.Id
                     GROUP BY qn.Id ORDER BY qn.LastActive DESC
                     LIMIT 10
-                ;");
+                ;") or fail($this->conn->error, __LINE__);
 
         $response = $res->fetch_all(MYSQLI_ASSOC);
 
@@ -40,16 +45,13 @@ class Getfeed
         }
 
         $response = json_encode($response);
-
-        echo $response;
+    }
+    public function searchQuery($query, &$response)
+    {
+        $query = trim(urldecode($this->conn->real_escape_string($query)));
+        if (!strlen($query) > 0) { // empty query
+            $this->Recent($response);
+            return 1;
+        }
     }
 };
-
-
-/*
-    temp code below
-    */
-if (isset($_GET['test'])) {
-    $g = new Getfeed;
-    $g->Recent();
-}

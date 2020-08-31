@@ -7,9 +7,10 @@ require_once("../server/global.php");
 
 $conn = get_connection();
 
-function fail($err, $line=0){
+function fail($err, $line = 0)
+{
     global $conn;
-    echo "<i style='color:red'>".__FILE__." in line ".$line.". Error: ".$err."</i>";
+    echo "<i style='color:red'>" . __FILE__ . " in line " . $line . ". Error: " . $err . "</i>";
     $conn->close();
     exit;
 }
@@ -40,7 +41,7 @@ $res = $conn->query("SELECT
 $row = $res->fetch_assoc();
 $UserName = $row['fullname'];
 
-if($UserName == null){
+if ($UserName == null) {
     fail("We cannot get that User...");
 }
 
@@ -51,7 +52,7 @@ $UserLocation = $row['location'];
 $AnswerCount = $row['answerCount'];
 $ClapsCount = $row['clapCount'];
 // if user hasn't answered anything then it will be null so switch to 0
-$ClapsCount = ($ClapsCount == null)? 0 : $ClapsCount;
+$ClapsCount = ($ClapsCount == null) ? 0 : $ClapsCount;
 $QuestionCount = $row['questionCount'];
 
 
@@ -99,7 +100,7 @@ $conn->close();
 <body>
     <div id='Main'>
         <?php
-            echo file_get_contents('../global/navbar.php');
+        echo file_get_contents('../global/navbar.php');
         ?>
         <div class='profileContainer'>
             <div class='profileImage'>
@@ -108,9 +109,9 @@ $conn->close();
             <div class='profileInfo'>
                 <div class='profileIdentity'>
                     <div class='profileName'><?php echo $UserName; ?></div>
-                        <div class='followBtn'>
-                            <i class='fa fa-heart'></i>
-                            <span>Follow</span>
+                    <div class='followBtn'>
+                        <i class='fa fa-heart'></i>
+                        <span>Follow</span>
                     </div>
                     <div class='profileIntro'><?php echo $UserIntro; ?></div>
                 </div>
@@ -120,30 +121,35 @@ $conn->close();
                             <?php echo $QuestionCount; ?>
                         </b>
                         <span>Questions</span>
+                        <div class='hoverlay'>See Question by <?php echo $UserName; ?></div>
                     </a>
                     <a href='/user/user.php?followedby=<?php echo $UserId; ?>' class='followingCount impr hv_border'>
                         <b class='count'>
                             <?php echo $FollowingCount; ?>
                         </b>
                         <span>Following</span>
+                        <div class='hoverlay'>See users <?php echo $UserName; ?> is following</div>
                     </a>
                     <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
                         <b class='count'>
                             <?php echo $ClapsCount; ?>
                         </b>
                         <span>Claps</span>
+                        <div class='hoverlay'>See All Posts <?php echo $UserName; ?> giot clapped</div>
                     </a>
                     <a href="/user/user.php?followersof=<?php echo $UserId; ?>" class='followersCount impr hv_border'>
                         <b class='count'>
                             <?php echo $FollowersCount;  ?>
                         </b>
                         <span>Followers</span>
+                        <div class='hoverlay'>See users following <?php echo $UserName; ?></div>
                     </a>
                     <a href="/thread/thread.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
                         <b class='count'>
                             <?php echo $AnswerCount; ?>
                         </b>
                         <span>Answers</span>
+                        <div class='hoverlay'>See Answers by <?php echo $UserName; ?></div>
                     </a>
                 </div>
             </div>
@@ -158,7 +164,7 @@ $conn->close();
                     <?php
                     foreach ($UserTags as &$tag) {
                         $tag = trim($tag);
-                        if(strlen($tag) == 0) continue;
+                        if (strlen($tag) == 0) continue;
                         echo "<a href='../questions/taggedfor/$tag' class='tag'>$tag</a>";
                     }
                     ?>

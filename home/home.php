@@ -2,7 +2,21 @@
 require_once('../server/get_feed.php');
 
 $feedFetcher = new Getfeed;
+$posts;
 
+$onloadScript = ""; // any js that needs to be executed when page loads
+if (isset($_GET['query'])) {
+    $stat = $feedFetcher->searchQuery($_GET['query'], $posts);
+    if ($stat == 1) {
+        // search had failed..
+        $onloadScript = "notify('We were unable to search for that Query..', 2, 10)";
+    } else if ($stat == 2) {
+        // no result found
+        $onloadScript = "notify('We were unable to fetch any of mathching query...')";
+    }
+} else {
+    $feedFetcher->Recent($posts);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,13 +37,12 @@ $feedFetcher = new Getfeed;
 
 <body onload='Ready();'>
     <?php
-        echo file_get_contents('../global/navbar.php');
+    echo file_get_contents('../global/navbar.php');
     ?>
     <div id='Main'>
         <div class='QuestionFeed'>
             <div class='Question'>
                 <div class='questionTitle'>
-                    <i class='qn_status fab fa-gripfire' title='Trending'></i>
                     <a href='#' class='titleText'></a>
                     <span class='quickAction'>
                         <i class='fas fa-bookmark' title='Bookmark this question to visit later..' onclick='bookmark(this)'></i>
@@ -76,13 +89,14 @@ $feedFetcher = new Getfeed;
         showTags = document.getElementsByClassName('ShowTags')[0];
         sample_tag_element = sample_question.getElementsByClassName('tagContainer')[0].firstElementChild;
 
-        response = <?php $feedFetcher->Recent(); ?>;
+        response = <?php echo $posts; ?>;
         response.forEach(obj => {
             createQuestion(obj);
         });
+        notification = document.getElementsByClassName('notify')[0];
 
+        eval(<?php echo $onloadScript; ?>);
     }
-    notification = document.getElementsByClassName('notify')[0];
 </script>
 
 </html>

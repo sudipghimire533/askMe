@@ -46,14 +46,13 @@ if (strlen($Description) < 20) {
 	fail("Less than 20 character in Description. current count:" . strlen($Description));
 }
 
-$res = $conn->query("
-			INSERT INTO
+$res = $conn->multi_query("INSERT INTO
 			Answer(Author, WrittenFor, Description)
 			VALUES
 			($UserId, $QuestionId, '$Description');
-			;") or fail($conn->error, __LINE__);
-//TO DO:
-// UPDATE Question SET LastActive=NOW() WHERE Id=$QuestionId;
+
+			UPDATE Question SET LastActive=NOW() WHERE Id=$QuestionId;
+			") or fail($conn->error, __LINE__);
 
 sucess();
 

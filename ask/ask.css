@@ -22,10 +22,10 @@
 .topInform a{
   color: inherit;
 }
-form{
+/* do not touch the input of navbar */
+#Main form{
   max-width: 930px;
 }
-/* do not touch the input of navbar */
 #Main input,
 textarea{
   width: 100%;

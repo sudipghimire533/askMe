@@ -37,6 +37,7 @@ body {
 .impr:after{
   width: 0;
   background: var(--White);
+  transition-duration: .3s;
 }
 .impr:hover:after,
 .impr:focus:after{
@@ -175,4 +176,22 @@ body {
     border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
+}
+.hoverlay{
+  position: absolute;
+  display: block;
+  background: rgba(41, 41, 41, 0.8);
+  left: 0;
+  vertical-align: middle;
+  font-size: var(--fontSmall);
+  height: 0;
+  width: 100%;
+  overflow: hidden;
+  top: 0;
+  transition: height .3s;
+  transition-delay: .3s;
+}
+.impr:hover .hoverlay,
+.impr:focus .hoverlay{
+  height: 100%;
 }
