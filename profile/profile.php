@@ -93,57 +93,57 @@ $conn->close();
 
     <link href='../global/global.css' type="text/css" rel="stylesheet" />
     <link href='./profile.css' type="text/css" rel="stylesheet" />
-    <link href='../thread/question_entity.css' type='text/css' rel='stylesheet' />
     <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
 </head>
 
 <body>
     <div id='Main'>
         <div class='profileContainer'>
-                <div class='profileImage'>
-                    <img src='../user.png'></img>
-                </div>
-                <div class='profileInfo'>
-                    <div class='profileIdentity'>
-                        <div class='profileName'><?php echo $UserName; ?></div>
-                        <div class='profileIntro'><?php echo $UserIntro; ?></div>
+            <div class='profileImage'>
+                <img src='../user.png'></img>
+            </div>
+            <div class='profileInfo'>
+                <div class='profileIdentity'>
+                    <div class='profileName'><?php echo $UserName; ?></div>
+                        <div class='followBtn'>
+                            <i class='fa fa-heart'></i>
+                            <span>Follow</span>
                     </div>
-                    <div class='impressionContainer'>
-                        <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>"
-                            class='questionCount impr hv_border'>
-                            <b class='count'>
-                                <?php echo $QuestionCount; ?>
-                            </b>
-                            <span>Questions</span>
-                        </a>
-                        <a href='/user/user.php?followedby=<?php echo $UserId; ?>'
-                            class='followingCount impr hv_border'>
-                            <b class='count'>
-                                <?php echo $FollowingCount; ?>
-                            </b>
-                            <span>Following</span>
-                        </a>
-                        <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
-                            <b class='count'>
-                                <?php echo $ClapsCount; ?>
-                            </b>
-                            <span>Claps</span>
-                        </a>
-                        <a href="/user/user.php?followersof=<?php echo $UserId; ?>"
-                            class='followersCount impr hv_border'>
-                            <b class='count'>
-                                <?php echo $FollowersCount;  ?>
-                            </b>
-                            <span>Followers</span>
-                        </a>
-                        <a href="/thread/thread.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
-                            <b class='count'>
-                                <?php echo $AnswerCount; ?>
-                            </b>
-                            <span>Answers</span>
-                        </a>
-                    </div>
+                    <div class='profileIntro'><?php echo $UserIntro; ?></div>
                 </div>
+                <div class='impressionContainer'>
+                    <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='questionCount impr hv_border'>
+                        <b class='count'>
+                            <?php echo $QuestionCount; ?>
+                        </b>
+                        <span>Questions</span>
+                    </a>
+                    <a href='/user/user.php?followedby=<?php echo $UserId; ?>' class='followingCount impr hv_border'>
+                        <b class='count'>
+                            <?php echo $FollowingCount; ?>
+                        </b>
+                        <span>Following</span>
+                    </a>
+                    <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
+                        <b class='count'>
+                            <?php echo $ClapsCount; ?>
+                        </b>
+                        <span>Claps</span>
+                    </a>
+                    <a href="/user/user.php?followersof=<?php echo $UserId; ?>" class='followersCount impr hv_border'>
+                        <b class='count'>
+                            <?php echo $FollowersCount;  ?>
+                        </b>
+                        <span>Followers</span>
+                    </a>
+                    <a href="/thread/thread.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
+                        <b class='count'>
+                            <?php echo $AnswerCount; ?>
+                        </b>
+                        <span>Answers</span>
+                    </a>
+                </div>
+            </div>
         </div>
         <div class='moreInfo'>
             <div class='infoBlock' id='intrestedIn'>
@@ -188,5 +188,3 @@ $conn->close();
 </body>
 
 </html>
-<style>
-</style>
