@@ -9,7 +9,7 @@ body {
   margin: 20px 0;
 }
 .impressionContainer,
-.moreInfo{
+.row{
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -101,12 +101,6 @@ body {
 }
 
 
-.Top {
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-around;
-    }
-
     .Top .Question {
         border-bottom: 2px solid var(--Red);
         margin: 10px 0;
@@ -130,12 +124,9 @@ body {
         position: relative;
         border-radius: 20px;
         background: var(--Shaft);
-        max-width: 500px;
-        width: 100%;
         text-align: center;
         padding: 20px;
     }
-
     .pinnedPost {
         text-align: left !important;
         font-size: var(--fontPrimary);

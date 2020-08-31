@@ -99,7 +99,7 @@ $conn->close();
 
 <body>
     <div id='Main'>
-        <div class='Top'>
+        <div class='row Top'>
             <div class='profileContainer'>
                 <div class='profileImage'>
                     <img src='../user.png'></img>
@@ -175,7 +175,7 @@ $conn->close();
                 </div>
             </div>
         </div>
-        <div class='moreInfo'>
+        <div class='moreInfo row'>
             <div class='infoBlock' id='intrestedIn'>
                 <div class='label'>Passionate About: </div>
                 <div class='innerBlock'>
