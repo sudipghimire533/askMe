@@ -98,6 +98,9 @@ $conn->close();
 
 <body>
     <div id='Main'>
+        <?php
+            echo file_get_contents('../global/navbar.php');
+        ?>
         <div class='profileContainer'>
             <div class='profileImage'>
                 <img src='../user.png'></img>

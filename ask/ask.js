@@ -10,12 +10,13 @@ function titlePreview(elem) {
 }
 let prev_length = 0;
 function bodyPreview(elem) {
-    content = elem.value.trim();
+    content = new String(elem.value.trim());
 
     // if (!(content.length - prev_length < 5)) { return; }
 
     prev_length = content.length;
     /* Do not need to sanitaze everuthing here because php will*/
+    // TODO:  replace all is not available in chrome. create that prototype
     previewBody.innerHTML = converter.makeHtml(content.replaceAll('<', '&lt;'));
     setTimeout(bodyPreview, 5 * 1000, elem);
 }

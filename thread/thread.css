@@ -100,10 +100,8 @@
   text-decoration: underline !important;
 }
 
-
-
-input,
-textarea{
+/* there is also input element in navbar */
+#Main  input, textarea{
   width: 100%;
   margin: 15px 0;
   background: inherit;
@@ -132,7 +130,8 @@ textarea{
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-#PostSubmit{
+/* Win the selector of input */
+.writerSection #PostSubmit{
   background: var(--Niagara);
   border-color: var(--Niagara);
   font-weight: bold;

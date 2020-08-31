@@ -15,6 +15,9 @@
 </head>
 
 <body onload='Ready()'>
+    <?php
+        echo file_get_contents('../global/navbar.php');
+    ?>
     <div id='Main'>
         <div class='topInform'>
             <i class='fas fa-cross' onclick='this.parentElement.remove()' style='cursor: pointer;position: absolute;right: 20px;'></i>

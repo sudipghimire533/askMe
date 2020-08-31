@@ -125,7 +125,7 @@ body {
         border-radius: 10px;
         text-align: center;
         padding: 20px;
-          background: linear-gradient(to left, #5d4157, #a8caba);
+          background: var(--Shaft);
 
     }
     .profileContainer .impr{
