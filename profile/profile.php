@@ -99,37 +99,81 @@ $conn->close();
 
 <body>
     <div id='Main'>
-        <div class='impressionContainer'>
-            <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>"class='questionCount impr hv_border'>
-                <b class='count'>
-                    <?php echo $QuestionCount; ?>
-                </b>
-                <span>Questions</span>
-            </a>
-            <a href='/user/user.php?followedby=<?php echo $UserId; ?>' class='followingCount impr hv_border'>
-                <b class='count'>
-                    <?php echo $FollowingCount; ?>
-                </b>
-                <span>Following</span>
-            </a>
-            <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
-                <b class='count'>
-                    <?php echo $ClapsCount; ?>
-                </b>
-                <span>Claps</span>
-            </a>
-            <a href="/user/user.php?followersof=<?php echo $UserId; ?>" class='followersCount impr hv_border'>
-                <b class='count'>
-                    <?php echo $FollowersCount;  ?>
-                </b>
-                <span>Followers</span>
-            </a>
-            <a href="/thread/thread.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
-                <b class='count'>
-                    <?php echo $AnswerCount; ?>
-                </b>
-                <span>Answers</span>
-            </a>
+        <div class='Top'>
+            <div class='profileContainer'>
+                <div class='profileImage'>
+                    <img src='../user.png'></img>
+                </div>
+                <div class='profileInfo'>
+                    <div class='profileIdentity'>
+                        <div class='profileName'><?php echo $UserName; ?></div>
+                        <div class='profileIntro'><?php echo $UserIntro; ?></div>
+                    </div>
+                    <div class='impressionContainer'>
+                        <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>"
+                            class='questionCount impr hv_border'>
+                            <b class='count'>
+                                <?php echo $QuestionCount; ?>
+                            </b>
+                            <span>Questions</span>
+                        </a>
+                        <a href='/user/user.php?followedby=<?php echo $UserId; ?>'
+                            class='followingCount impr hv_border'>
+                            <b class='count'>
+                                <?php echo $FollowingCount; ?>
+                            </b>
+                            <span>Following</span>
+                        </a>
+                        <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
+                            <b class='count'>
+                                <?php echo $ClapsCount; ?>
+                            </b>
+                            <span>Claps</span>
+                        </a>
+                        <a href="/user/user.php?followersof=<?php echo $UserId; ?>"
+                            class='followersCount impr hv_border'>
+                            <b class='count'>
+                                <?php echo $FollowersCount;  ?>
+                            </b>
+                            <span>Followers</span>
+                        </a>
+                        <a href="/thread/thread.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
+                            <b class='count'>
+                                <?php echo $AnswerCount; ?>
+                            </b>
+                            <span>Answers</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class='pinnedPost'>
+                <div class='label'>Featured Posts:</div>
+                <div class='Question'>
+                    <div class='questionTitle'>
+                        <a href='#' class='titleText'>How to force c++ Compiler to perform stack unwinding after the
+                            uncaught
+                            exception</a>
+                    </div>
+                </div>
+                <div class='Question'>
+                    <div class='questionTitle'>
+                        <a class='titleText'>How to force c++ Compiler to perform stack unwinding after the uncaught
+                            exception</a>
+                    </div>
+                </div>
+                <div class='Question'>
+                    <div class='questionTitle'>
+                        <a class='titleText'>How to force c++ Compiler to perform stack unwinding after the uncaught
+                            exception</a>
+                    </div>
+                </div>
+                <div class='Question'>
+                    <div class='questionTitle'>
+                        <a class='titleText'>How to force c++ Compiler to perform stack unwinding after the uncaught
+                            exception</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class='moreInfo'>
             <div class='infoBlock' id='intrestedIn'>
@@ -174,3 +218,5 @@ $conn->close();
 </body>
 
 </html>
+<style>
+</style>

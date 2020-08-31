@@ -26,16 +26,16 @@ body {
   display: inline-flex;
   cursor: pointer;
   flex-flow: column wrap;
-  background: var(--Shaft);
+  background: var(--color);
   border-radius: 5px;
   flex: 1;
   text-align: center;
   text-decoration: none;
-  color: var(--color);
+  color: var(--White);
 }
 .impr:after{
   width: 0;
-  background: var(--color);
+  background: var(--White);
 }
 .impr:hover:after,
 .impr:focus:after{
@@ -99,3 +99,77 @@ body {
     padding-right: 5px;
   }
 }
+
+
+.Top {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+    }
+
+    .Top .Question {
+        border-bottom: 2px solid var(--Red);
+        margin: 10px 0;
+    }
+
+    .Top .Question:nth-of-type(odd) {
+        border-color: var(--Yellow);
+    }
+
+    .Top .Question:nth-of-type(3n+0) {
+        border-color: var(--Niagara);
+    }
+
+    .Top .Question .titleText {
+        font-weight: 400;
+    }
+
+    .profileContainer,
+    .pinnedPost {
+        margin: 20px 10px !important;
+        position: relative;
+        border-radius: 20px;
+        background: var(--Shaft);
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .pinnedPost {
+        text-align: left !important;
+        font-size: var(--fontPrimary);
+        font-weight: 300;
+    }
+
+    .profileContainer img {
+        width: 200px;
+        border-radius: 50%;
+        padding: 7px;
+        border: 5px solid transparent;
+        border-bottom-color: var(--Yellow);
+        border-right-color: var(--Red);
+        max-width: 100%;
+        position: relative;
+        transition: border .5s;
+    }
+
+    .profileContainer img:hover {
+        border-right-color: var(--Yellow);
+        border-top-color: var(--Red);
+        border-left-color: var(--Niagara);
+        border-bottom-color: var(--Purple);
+    }
+    .profileContainer .profileName {
+        font-size: var(--fontLarge);
+    }
+
+    .profileContainer .profileIntro {
+        font-size: var(--fontSmall);
+        color: var(--ShaftI);
+    }
+
+    .profileIdentity {
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
