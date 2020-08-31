@@ -9,7 +9,7 @@ body {
   margin: 20px 0;
 }
 .impressionContainer,
-.row{
+.moreInfo{
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -32,6 +32,7 @@ body {
   text-align: center;
   text-decoration: none;
   color: var(--White);
+  letter-spacing: 1px;
 }
 .impr:after{
   width: 0;
@@ -62,7 +63,6 @@ body {
   border-radius: 10px;
   flex: 1;
   min-width: 250px;
-  font-size: var();
 }
 .label {
   font-weight: bold;
@@ -101,25 +101,7 @@ body {
 }
 
 
-    .Top .Question {
-        border-bottom: 2px solid var(--Red);
-        margin: 10px 0;
-    }
-
-    .Top .Question:nth-of-type(odd) {
-        border-color: var(--Yellow);
-    }
-
-    .Top .Question:nth-of-type(3n+0) {
-        border-color: var(--Niagara);
-    }
-
-    .Top .Question .titleText {
-        font-weight: 400;
-    }
-
-    .profileContainer,
-    .pinnedPost {
+    .profileContainer{
         margin: 20px 10px !important;
         position: relative;
         border-radius: 20px;
@@ -127,10 +109,8 @@ body {
         text-align: center;
         padding: 20px;
     }
-    .pinnedPost {
-        text-align: left !important;
-        font-size: var(--fontPrimary);
-        font-weight: 300;
+    .profileContainer .impr{
+      max-width: 200px;
     }
 
     .profileContainer img {

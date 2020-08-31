@@ -99,8 +99,7 @@ $conn->close();
 
 <body>
     <div id='Main'>
-        <div class='row Top'>
-            <div class='profileContainer'>
+        <div class='profileContainer'>
                 <div class='profileImage'>
                     <img src='../user.png'></img>
                 </div>
@@ -145,37 +144,8 @@ $conn->close();
                         </a>
                     </div>
                 </div>
-            </div>
-            <div class='pinnedPost'>
-                <div class='label'>Featured Posts:</div>
-                <div class='Question'>
-                    <div class='questionTitle'>
-                        <a href='#' class='titleText'>How to force c++ Compiler to perform stack unwinding after the
-                            uncaught
-                            exception</a>
-                    </div>
-                </div>
-                <div class='Question'>
-                    <div class='questionTitle'>
-                        <a class='titleText'>How to force c++ Compiler to perform stack unwinding after the uncaught
-                            exception</a>
-                    </div>
-                </div>
-                <div class='Question'>
-                    <div class='questionTitle'>
-                        <a class='titleText'>How to force c++ Compiler to perform stack unwinding after the uncaught
-                            exception</a>
-                    </div>
-                </div>
-                <div class='Question'>
-                    <div class='questionTitle'>
-                        <a class='titleText'>How to force c++ Compiler to perform stack unwinding after the uncaught
-                            exception</a>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class='moreInfo row'>
+        <div class='moreInfo'>
             <div class='infoBlock' id='intrestedIn'>
                 <div class='label'>Passionate About: </div>
                 <div class='innerBlock'>
