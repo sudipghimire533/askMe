@@ -99,10 +99,14 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
             <hr />
             <div id='AnswersContaner'>
                 <div class='Answer'>
-                    <i class='fas fa-tick'></i>
                     <div class='author'>
                         <span class='avatarContainer'>
                             <img src='' alt='' title='' class='avatar' />
+                        </span>
+                        <span class='clapIcon' title='Clpas Count'>
+                            <i class='fas fa-thumbs-up clap_icon inactive' title='Give a Clap to this Post' onclick='clap(this, true)'></i>
+                            <br>
+                            <span class='clapCount'></span>
                         </span>
                         <span class='authorAbout'>
                             <a href='#' class='authorName hv_border'></a><br />
