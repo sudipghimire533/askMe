@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 01, 2020 at 01:04 PM
+-- Generation Time: Sep 01, 2020 at 08:14 PM
 -- Server version: 10.3.22-MariaDB-1
 -- PHP Version: 7.3.15-3
 
@@ -102,6 +102,17 @@ CREATE TABLE `User` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `UserAnswerClaps`
+--
+
+CREATE TABLE `UserAnswerClaps` (
+  `User` int(11) NOT NULL,
+  `Answer` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `UserBookmarks`
 --
 
@@ -119,6 +130,17 @@ CREATE TABLE `UserBookmarks` (
 CREATE TABLE `UserFollow` (
   `FollowedBy` int(11) NOT NULL,
   `FollowedTo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `UserQuestionClaps`
+--
+
+CREATE TABLE `UserQuestionClaps` (
+  `User` int(11) NOT NULL,
+  `Question` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -175,6 +197,13 @@ ALTER TABLE `User`
   ADD UNIQUE KEY `UserName` (`UserName`);
 
 --
+-- Indexes for table `UserAnswerClaps`
+--
+ALTER TABLE `UserAnswerClaps`
+  ADD PRIMARY KEY (`User`,`Answer`),
+  ADD KEY `Answer` (`Answer`);
+
+--
 -- Indexes for table `UserBookmarks`
 --
 ALTER TABLE `UserBookmarks`
@@ -187,6 +216,13 @@ ALTER TABLE `UserBookmarks`
 ALTER TABLE `UserFollow`
   ADD PRIMARY KEY (`FollowedBy`,`FollowedTo`),
   ADD KEY `FollowedTo` (`FollowedTo`);
+
+--
+-- Indexes for table `UserQuestionClaps`
+--
+ALTER TABLE `UserQuestionClaps`
+  ADD PRIMARY KEY (`User`,`Question`),
+  ADD KEY `Question` (`Question`);
 
 --
 -- Indexes for table `UserTag`
@@ -249,6 +285,13 @@ ALTER TABLE `QuestionTag`
   ADD CONSTRAINT `QuestionTag_ibfk_2` FOREIGN KEY (`Tag`) REFERENCES `Tags` (`Id`);
 
 --
+-- Constraints for table `UserAnswerClaps`
+--
+ALTER TABLE `UserAnswerClaps`
+  ADD CONSTRAINT `UserAnswerClaps_ibfk_1` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
+  ADD CONSTRAINT `UserAnswerClaps_ibfk_2` FOREIGN KEY (`Answer`) REFERENCES `Answer` (`Id`);
+
+--
 -- Constraints for table `UserBookmarks`
 --
 ALTER TABLE `UserBookmarks`
@@ -261,6 +304,14 @@ ALTER TABLE `UserBookmarks`
 ALTER TABLE `UserFollow`
   ADD CONSTRAINT `UserFollow_ibfk_1` FOREIGN KEY (`FollowedBy`) REFERENCES `User` (`Id`),
   ADD CONSTRAINT `UserFollow_ibfk_2` FOREIGN KEY (`FollowedTo`) REFERENCES `User` (`Id`);
+
+--
+-- Constraints for table `UserQuestionClaps`
+--
+ALTER TABLE `UserQuestionClaps`
+  ADD CONSTRAINT `UserQuestionClaps_ibfk_1` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
+  ADD CONSTRAINT `UserQuestionClaps_ibfk_2` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
+  ADD CONSTRAINT `UserQuestionClaps_ibfk_3` FOREIGN KEY (`Question`) REFERENCES `Question` (`Id`);
 
 --
 -- Constraints for table `UserTag`
