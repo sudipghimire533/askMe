@@ -30,12 +30,18 @@
 .Question .tag:first-of-type{
   display: none;
 }
-.description,
-.askingUser{
+.description{
     opacity: 0.7;
 }
 .askingUser{
   margin-top: 10px;
+  font-size: var(--fontSmall);
+}
+.askingUser > *{
+  opacity: 0.7;
+}
+.asker_name{
+  opacity: 1;
 }
 .description > span *{
   all: inherit;

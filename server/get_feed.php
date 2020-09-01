@@ -28,7 +28,7 @@ class Getfeed
         // Always give response from this function.
         $res = $this->conn->query("SELECT DISTINCT
                 qn.Title As title,
-                qn.URLTitle AS url,
+                qn.Id AS id,
                 SUBSTRING(qn.Description,1, 270) AS info,
                 GROUP_CONCAT(tg.Name) AS tag,
                 CONCAT(user.FirstName, ' ', user.LastName) as authorName,

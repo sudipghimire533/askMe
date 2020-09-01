@@ -14,14 +14,14 @@ var feeded_tags = new Map;
 */
 function createQuestion(Question) {
     /*Only sow unique Question..*/
-    if (appended_questions.has(Question.url)) {
+    if (appended_questions.has(Question.id)) {
         return;
     }
 
     let target = sample_question.cloneNode(true);
 
     target.getElementsByClassName('titleText')[0].textContent = Question.title;
-    target.getElementsByClassName('titleText')[0].setAttribute('href', '/thread/' + Question.url);
+    target.getElementsByClassName('titleText')[0].setAttribute('href', '/thread/thread.php?id=' + Question.id);
 
     target.getElementsByClassName('description')[0].firstElementChild.innerHTML = Question.info + '...';
 
@@ -50,5 +50,5 @@ function createQuestion(Question) {
     }
 
     feed_container.appendChild(target);
-    appended_questions.set(Question.url, true);
+    appended_questions.set(Question.id, true);
 }

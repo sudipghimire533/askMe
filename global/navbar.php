@@ -13,14 +13,14 @@
 		<i class='fas fa-search' type='submit' name='submit' onclick='topSearch()'></i>
 	</form>
 	<div id='navRight'>
-		<a href='../profile/profile.php?id=' id='navUser'>
+		<a href='../profile/profile.php' id='navUser'>
 			<img src='../user.png' alt='Profile Image' title='Visit My Profile' id='navMe' />
 		</a>
 		<span id='navHelp'>
 			<i class='fas fa-question-circle'></i>
 		</span>
 		<span id='navMenu'>
-			<i class='fas fa-caret-down'onclick='toggleDropDown()'></i>
+			<i class='fas fa-caret-down' onclick='toggleDropDown()'></i>
 			<div id='navDropDown'>
 				<a href='/profile/profile.php'>My Profile</a><br />
 				<a href="/home/home.php?questionby=me">My Questions</a><br />
@@ -47,6 +47,7 @@
 		z-index: 3;
 		margin: 0;
 	}
+
 	#navHome {
 		cursor: pointer;
 		color: var(--LightDark);
@@ -73,7 +74,7 @@
 		max-width: 600px;
 	}
 
-	#navMiddle i{
+	#navMiddle i {
 		position: absolute;
 		right: 10px;
 		cursor: pointer;
@@ -121,6 +122,7 @@
 		border-radius: 50%;
 		width: 42px;
 	}
+
 	#navMe:hover,
 	#navMe:focus {
 		opacity: 1;
@@ -143,14 +145,17 @@
 	#navAskBtn:focus {
 		background: transparent;
 	}
-	#navMenu{
+
+	#navMenu {
 		opacity: 1;
 		position: relative;
 	}
-	#navMenu > i{
+
+	#navMenu>i {
 		opacity: 0.7;
 	}
-	#navDropDown{
+
+	#navDropDown {
 		position: absolute;
 		right: -10px;
 		border-radius: 10px;
@@ -164,10 +169,12 @@
 		width: 200px;
 		z-index: 2;
 	}
-	#navMenu.active #navDropDown{
+
+	#navMenu.active #navDropDown {
 		max-height: 200vh;
 	}
-	#navDropDown > a{
+
+	#navDropDown>a {
 		cursor: var(--White);
 		line-height: calc(var(--fontPrimary) * 1.5);
 		font-size: var(--fontPrimary);
@@ -179,10 +186,12 @@
 		transition: opacity .5s;
 
 	}
-	#navDropDown > a:hover,
-	#navDropDown > a:focus{
+
+	#navDropDown>a:hover,
+	#navDropDown>a:focus {
 		opacity: 1;
 	}
+
 	@media only screen and (max-width: 720px) {
 		#navMiddle {
 			display: none;
@@ -193,7 +202,8 @@
 	function topSearch() {
 		document.getElementById('navMiddle').submit();
 	}
-	function toggleDropDown(){
+
+	function toggleDropDown() {
 		document.getElementById('navMenu').classList.toggle('active');
 	}
 </script>

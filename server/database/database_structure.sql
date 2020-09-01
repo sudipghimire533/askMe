@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 01, 2020 at 08:14 PM
+-- Generation Time: Sep 01, 2020 at 09:04 PM
 -- Server version: 10.3.22-MariaDB-1
 -- PHP Version: 7.3.15-3
 
@@ -33,9 +33,19 @@ CREATE TABLE `Answer` (
   `Author` int(11) NOT NULL,
   `WrittenFor` int(11) NOT NULL,
   `Description` text NOT NULL,
-  `ClapsCount` int(11) NOT NULL DEFAULT 0,
   `AddedOn` timestamp NOT NULL DEFAULT current_timestamp(),
   `ModifiedOn` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `AnswerClaps`
+--
+
+CREATE TABLE `AnswerClaps` (
+  `User` int(11) NOT NULL,
+  `Answer` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -53,9 +63,19 @@ CREATE TABLE `Question` (
   `ModifiedOn` timestamp NOT NULL DEFAULT current_timestamp(),
   `Description` text NOT NULL,
   `AcceptedAnswer` int(11) DEFAULT NULL,
-  `ClapsCount` int(11) NOT NULL DEFAULT 0,
   `VisitCount` int(11) NOT NULL DEFAULT 0,
   `LastActive` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `QuestionClaps`
+--
+
+CREATE TABLE `QuestionClaps` (
+  `User` int(11) NOT NULL,
+  `Question` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -102,17 +122,6 @@ CREATE TABLE `User` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `UserAnswerClaps`
---
-
-CREATE TABLE `UserAnswerClaps` (
-  `User` int(11) NOT NULL,
-  `Answer` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `UserBookmarks`
 --
 
@@ -130,17 +139,6 @@ CREATE TABLE `UserBookmarks` (
 CREATE TABLE `UserFollow` (
   `FollowedBy` int(11) NOT NULL,
   `FollowedTo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `UserQuestionClaps`
---
-
-CREATE TABLE `UserQuestionClaps` (
-  `User` int(11) NOT NULL,
-  `Question` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -167,6 +165,13 @@ ALTER TABLE `Answer`
   ADD KEY `Author` (`Author`);
 
 --
+-- Indexes for table `AnswerClaps`
+--
+ALTER TABLE `AnswerClaps`
+  ADD PRIMARY KEY (`User`,`Answer`),
+  ADD KEY `Answer` (`Answer`);
+
+--
 -- Indexes for table `Question`
 --
 ALTER TABLE `Question`
@@ -174,6 +179,13 @@ ALTER TABLE `Question`
   ADD UNIQUE KEY `URLTitle` (`URLTitle`),
   ADD KEY `Author` (`Author`),
   ADD KEY `AcceptedAnswer` (`AcceptedAnswer`);
+
+--
+-- Indexes for table `QuestionClaps`
+--
+ALTER TABLE `QuestionClaps`
+  ADD PRIMARY KEY (`User`,`Question`),
+  ADD KEY `Question` (`Question`);
 
 --
 -- Indexes for table `QuestionTag`
@@ -197,13 +209,6 @@ ALTER TABLE `User`
   ADD UNIQUE KEY `UserName` (`UserName`);
 
 --
--- Indexes for table `UserAnswerClaps`
---
-ALTER TABLE `UserAnswerClaps`
-  ADD PRIMARY KEY (`User`,`Answer`),
-  ADD KEY `Answer` (`Answer`);
-
---
 -- Indexes for table `UserBookmarks`
 --
 ALTER TABLE `UserBookmarks`
@@ -216,13 +221,6 @@ ALTER TABLE `UserBookmarks`
 ALTER TABLE `UserFollow`
   ADD PRIMARY KEY (`FollowedBy`,`FollowedTo`),
   ADD KEY `FollowedTo` (`FollowedTo`);
-
---
--- Indexes for table `UserQuestionClaps`
---
-ALTER TABLE `UserQuestionClaps`
-  ADD PRIMARY KEY (`User`,`Question`),
-  ADD KEY `Question` (`Question`);
 
 --
 -- Indexes for table `UserTag`
@@ -271,6 +269,13 @@ ALTER TABLE `Answer`
   ADD CONSTRAINT `Answer_ibfk_2` FOREIGN KEY (`Author`) REFERENCES `User` (`Id`);
 
 --
+-- Constraints for table `AnswerClaps`
+--
+ALTER TABLE `AnswerClaps`
+  ADD CONSTRAINT `AnswerClaps_ibfk_1` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
+  ADD CONSTRAINT `AnswerClaps_ibfk_2` FOREIGN KEY (`Answer`) REFERENCES `Answer` (`Id`);
+
+--
 -- Constraints for table `Question`
 --
 ALTER TABLE `Question`
@@ -278,18 +283,19 @@ ALTER TABLE `Question`
   ADD CONSTRAINT `Question_ibfk_2` FOREIGN KEY (`AcceptedAnswer`) REFERENCES `Answer` (`Id`);
 
 --
+-- Constraints for table `QuestionClaps`
+--
+ALTER TABLE `QuestionClaps`
+  ADD CONSTRAINT `QuestionClaps_ibfk_1` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
+  ADD CONSTRAINT `QuestionClaps_ibfk_2` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
+  ADD CONSTRAINT `QuestionClaps_ibfk_3` FOREIGN KEY (`Question`) REFERENCES `Question` (`Id`);
+
+--
 -- Constraints for table `QuestionTag`
 --
 ALTER TABLE `QuestionTag`
   ADD CONSTRAINT `QuestionTag_ibfk_1` FOREIGN KEY (`Question`) REFERENCES `Question` (`Id`),
   ADD CONSTRAINT `QuestionTag_ibfk_2` FOREIGN KEY (`Tag`) REFERENCES `Tags` (`Id`);
-
---
--- Constraints for table `UserAnswerClaps`
---
-ALTER TABLE `UserAnswerClaps`
-  ADD CONSTRAINT `UserAnswerClaps_ibfk_1` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
-  ADD CONSTRAINT `UserAnswerClaps_ibfk_2` FOREIGN KEY (`Answer`) REFERENCES `Answer` (`Id`);
 
 --
 -- Constraints for table `UserBookmarks`
@@ -304,14 +310,6 @@ ALTER TABLE `UserBookmarks`
 ALTER TABLE `UserFollow`
   ADD CONSTRAINT `UserFollow_ibfk_1` FOREIGN KEY (`FollowedBy`) REFERENCES `User` (`Id`),
   ADD CONSTRAINT `UserFollow_ibfk_2` FOREIGN KEY (`FollowedTo`) REFERENCES `User` (`Id`);
-
---
--- Constraints for table `UserQuestionClaps`
---
-ALTER TABLE `UserQuestionClaps`
-  ADD CONSTRAINT `UserQuestionClaps_ibfk_1` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
-  ADD CONSTRAINT `UserQuestionClaps_ibfk_2` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
-  ADD CONSTRAINT `UserQuestionClaps_ibfk_3` FOREIGN KEY (`Question`) REFERENCES `Question` (`Id`);
 
 --
 -- Constraints for table `UserTag`

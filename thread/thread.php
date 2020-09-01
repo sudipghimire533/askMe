@@ -19,13 +19,18 @@ $id = trim($_GET['id']);
 $response = "No response from server";
 $handler = new showQuestion;
 
-$handler->getQuestionById($id, $response);
+$onloadScript = ""; // any js that needs to be executed when page loads
+if ($handler->getQuestionById($id, $response) == false) { // if request failed
+    // however show the nav bar
+    echo file_get_contents('../global/navbar.php') . "<hr>";
+    // and die
+    die($response);
+} else {
+    $QuestionInformation = $response;
 
-$QuestionInformation = $response;
-
-$handler->getAnswerFor($id, $response);
-$AnswerInformation = $response;
-
+    $handler->getAnswerFor($id, $response);
+    $AnswerInformation = $response;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,9 +59,10 @@ $AnswerInformation = $response;
             <div class='Question'>
                 <div class='questionTitle'>
                     <span class='titleText'></span>
-                    <span class='quickAction'>
-                        <i class='fas fa-bookmark bookmarkIcon' onclick='bookmark(this)'></i>
-                        <a href='#writeAnswer' class='fas fa-reply'></a>
+                    <span class='clapIcon' title='Clpas Count'>
+                        <i class='fas fa-thumbs-up clap_icon inactive' title='Give a Clap to this Post' onclick='clap(this, true)'></i>
+                        <br>
+                        <span class='clapCount'></span>
                     </span>
                 </div>
                 <div class='description'>
@@ -64,63 +70,74 @@ $AnswerInformation = $response;
                 </div>
                 <div class='questionInfo'>
                     <div class='tagContainer'></div>
-                    <span class='meta'>
-                        <span class='label'>Posted by:</span>
-                        <a href='#' class='asker_name meta'></a>
+                    <span class='meta' title='Posted by'>
+                        <!--span class='label'>Posted by:</span-->
+                        <i class='fas fa-user-astronaut'></i>
+                        <a href='#' class='asker_name' onclick="notify('Getting you to '+this.textContent+' Profile')"></a>
                     </span>
-                    <span class='meta'>
-                        <span class='label'>Added on:</span>
+                    <span class='meta' title='First Registered on'>
+                        <!--span class='label'>Added on:</span-->
+                        <i class='fas fa-calendar-week'></i>
                         <span class='added_on'></span>
                     </span>
-                    <span class='meta'>
-                        <span class='label'>Updated on:</span>
+                    <span class='meta' title='Last updated on'>
+                        <!--span class='label'>Updated on:</span-->
+                        <i class='fas fa-calendar-alt'></i>
                         <span class='updated_on'></span>
                     </span>
-                    <span class='meta'>
-                        <span class='label'>visit count:</span>
+                    <span class='meta'  title='Viewed for'>
+                        <!--span class='label'>visit count:</span!-->
+                        <i class='fas fa-eye'></i>
                         <span class='visited_for'></span>
                     </span>
-                </div>
-            </div>
-            <div class='Answer'>
-                <i class='fas fa-tick'></i>
-                <div class='author'>
-                    <span class='avatarContainer'>
-                        <img src='' alt='' title='' class='avatar' />
-                    </span>
-                    <span class='authorAbout'>
-                        <a href='#' class='authorName hv_border'></a><br />
-                        <span class='authorIntro'></span>
-                    </span>
-                </div>
-                <div class='description'>
-                    <p></p>
-                </div>
-                <div class='impression'>
-                    <span class='meta'>
-                        <span class='label'>Added on:</span>
-                        <span class='added_on'></span>
-                    </span>
-                    <span class='meta'>
-                        <span class='label'>Updated on:</span>
-                        <span class='updated_on'></span>
+                    <span class='meta quickAction'>
+                        <i class='fas fa-bookmark bookmarkIcon' onclick='bookmark(this, true)'></i>
+                        <a href='#writeAnswer' class='fas fa-reply' onclick="notify('Go hit it!!')"></a>
                     </span>
                 </div>
             </div>
-            <a name='writeAnswer'></a>
-            <form class='writerSection' method='POST' action='/server/post_answer.php'>
-                <div class=' inputContainer'>
-                    <div class='toolbar'>ToolBar</div>
-                    <textarea placeholder='Write Question Description Here..' id='PostBody' required='' minlength='20' onfocus='startPreview(this,false);' onblur='endPreview()'></textarea>
-                    <textarea name='description' id='PostBodyReal' style='display:none;' value=''></textarea>
+            <hr />
+            <div id='AnswersContaner'>
+                <div class='Answer'>
+                    <i class='fas fa-tick'></i>
+                    <div class='author'>
+                        <span class='avatarContainer'>
+                            <img src='' alt='' title='' class='avatar' />
+                        </span>
+                        <span class='authorAbout'>
+                            <a href='#' class='authorName hv_border'></a><br />
+                            <span class='authorIntro'></span>
+                        </span>
+                    </div>
+                    <div class='description'>
+                        <p></p>
+                    </div>
+                    <div class='impression'>
+                        <span class='meta'>
+                            <span class='label'>Added on:</span>
+                            <span class='added_on'></span>
+                        </span>
+                        <span class='meta'>
+                            <span class='label'>Updated on:</span>
+                            <span class='updated_on'></span>
+                        </span>
+                    </div>
                 </div>
-                <div id='PostPreview' class='Answer description' tabindex='0'>
-                </div>
-                <input type='text' name='QuestionId' value='<?php echo $id; ?>' style='display: none;' />
-                <div class='inputContainer'>
-                    <input type="submit" name="submit" value='Post' id='PostSubmit' />
-                </div>
-            </form>
+                <a name='writeAnswer'></a>
+                <form class='writerSection' method='POST' action='/server/post_answer.php'>
+                    <div class=' inputContainer'>
+                        <div class='toolbar'>ToolBar</div>
+                        <textarea placeholder='Write Question Description Here..' id='PostBody' required='' minlength='20' onfocus='startPreview(this,false);' onblur='endPreview()'></textarea>
+                        <textarea name='description' id='PostBodyReal' style='display:none;' value=''></textarea>
+                    </div>
+                    <div id='PostPreview' class='Answer description' tabindex='0'>
+                    </div>
+                    <input type='text' name='QuestionId' value='<?php echo $id; ?>' style='display: none;' />
+                    <div class='inputContainer'>
+                        <input type="submit" name="submit" value='Post' id='PostSubmit' />
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -136,6 +153,7 @@ $AnswerInformation = $response;
 
     function Ready() {
         converter = new showdown.Converter();
+        notification = document.getElementsByClassName('notify')[0];
         fillQuestion();
         allAnswers = <?php echo $AnswerInformation; ?>;
         sampleAnswer = document.getElementsByClassName('Answer')[0];
@@ -152,23 +170,6 @@ $AnswerInformation = $response;
             document.getElementById('PostBodyReal').value =
                 converter.makeHtml(document.getElementById('PostBody').value);
         };
-
-        notification = document.getElementsByClassName('notify')[0];
-        confirmAnswerBox =
-            /*set this variable according to answer posted status*/
-            <?php
-            if (isset($_GET['answerPosted'])) {
-                echo $_GET['answerPosted'];
-            } else {
-                echo '0';
-            }
-            ?>;
-
-        if (confirmAnswerBox == '1') { // answer has been registered
-            notify("Awesome!!You answer has been posted.", 0, 10);
-        } else if (confirmAnswerBox == '2') { // unsucessful
-            notify("Aww!!An error occured while posting answer. Try resubmitting or contact help center", 2, 20);
-        }
     }
 </script>
 

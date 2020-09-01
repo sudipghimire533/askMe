@@ -16,8 +16,16 @@ function fail($err, $line = 0)
 }
 
 $UserId = 1;
-
+if (isset($_GET['id'])) {
+    $UserId = $_GET['id'];
+}
 /* Fetch Personal data.. */
+/*
+ * TODO:
+ * OPTIMIZE This Query...
+ * Also the query is not heavily tested
+ * after creating seperate table for clapsCount for Answer
+*/
 $res = $conn->query("SELECT
             CONCAT(user.Firstname, ' ', user.LastName) AS fullname,
             user.Email AS email,
@@ -27,7 +35,10 @@ $res = $conn->query("SELECT
             user.UserName AS userName,
             COUNT(qn.Id) AS questionCount,
             COUNT(ans.Id) AS answerCount,
-            SUM(ans.ClapsCount) AS clapCount
+            (
+                 (SELECT COUNT(User) FROM AnswerClaps WHERE Answer=ans.Id)
+                +(SELECT COUNT(USER) FROM QuestionClaps WHERE Question=qn.Id)
+            ) AS clapCount
             FROM User AS user
             LEFT JOIN
             Answer ans ON ans.Author=user.Id

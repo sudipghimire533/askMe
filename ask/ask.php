@@ -20,7 +20,7 @@
     ?>
     <div id='Main'>
         <div class='topInform'>
-            <i class='fas fa-cross' onclick='this.parentElement.remove()' style='cursor: pointer;position: absolute;right: 20px;'></i>
+            <i class='fas fa-times' onclick='this.parentElement.remove()' style='cursor: pointer;position: absolute;right: 20px;'></i>
             <h2>Ask A Question</h2>
             <h3>
                 Ask a Question with full information and easy to understand language by all. As you write your question

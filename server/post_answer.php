@@ -20,7 +20,7 @@ if (
 $conn = get_connection();
 $errorMessage;
 
-$UserId = 1;
+$UserId = 2;
 $QuestionId = trim($conn->real_escape_string($_POST['QuestionId']));
 $Description = trim($conn->real_escape_string(htmlspecialchars($_POST['description'])));
 
@@ -38,7 +38,7 @@ function sucess()
 	global $QuestionId;
 	echo "<br>Everything is done...";
 
-	header("Location: /thread/thread.php?id=$QuestionId&answerPosted=1");
+	header("Location: /thread/thread.php?id=$QuestionId");
 	exit;
 }
 

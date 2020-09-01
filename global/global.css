@@ -11,14 +11,14 @@
 	--SandTan: #E1B382;
 	--White: #F2F2F2;
 	--Niagara: #03A87C;
-    --LightDark: #717272;
-    --Shaft: #292929;
-    --ForeGround: #aaa;
-    --fontPrimary: 21px;
-    --fontLarge: 40px;
-    --fontSmall: 16px;
-  --fontTiny: 13px;
-  --ShaftI: #C5C5C5;
+	--LightDark: #717272;
+	--Shaft: #292929;
+	--ForeGround: #aaa;
+	--fontPrimary: 21px;
+	--fontLarge: 40px;
+	--fontSmall: 16px;
+	--fontTiny: 13px;
+	--ShaftI: #C5C5C5;
 }
 @media only screen and (max-width: 768px){
   :root{

@@ -17,7 +17,7 @@ function fillQuestion() {
     }
 
     let nameContainer = Question.getElementsByClassName('asker_name')[0];
-    nameContainer.setAttribute('href', '/profile/id?=' + thisQuestion.authorId);
+    nameContainer.setAttribute('href', '/profile/profile.php?id=' + thisQuestion.authorId);
     nameContainer.textContent = thisQuestion.authorName;
 
     Question.getElementsByClassName('added_on')[0].textContent =
@@ -26,11 +26,29 @@ function fillQuestion() {
         thisQuestion.updatedOn.split(' ')[0];
     Question.getElementsByClassName('visited_for')[0].textContent =
         thisQuestion.visit;
+    Question.getElementsByClassName('clapCount')[0].textContent =
+        thisQuestion.claps;
     if (thisQuestion.isBookmarked !== null) { // is question bookmarked?
         let bookmarkIcon = Question.getElementsByClassName('bookmarkIcon')[0];
         bookmarkIcon.classList.add('active');
-        bookmarkIcon.onclick = dblBookmark;
+        bookmark(bookmarkIcon, false);
     }
+    if (thisQuestion.isClapped !== null) { // is question bookmarked?
+        let clapIcon = Question.getElementsByClassName('clap_icon')[0];
+        clapIcon.classList.add('active');
+        clap(clapIcon, false);
+    }
+}
+function clap(source, alsoSend = false){
+    if(alsoSend ===  true){
+        // send request..
+        notify('Yummy! Tasty clap');
+    }
+    source.onclick = function(){
+        notify('You already clapped this item. Visit your profile for more action.', 1);
+    };
+    source.classList.add('active');
+    source.classList.remove('inactive');
 }
 
 let sampleAnswer;
@@ -59,7 +77,6 @@ function fillAnswer(index) {
         allAnswers[index].updatedOn.split(' ')[0];
 
     sampleAnswer.parentElement.appendChild(Answer);
-
     allAnswers[index] = null;
 }
 

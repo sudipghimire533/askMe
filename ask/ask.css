@@ -76,7 +76,8 @@ textarea{
   text-decoration: none;
   text-transform: lowercase;
 }
-#QuestionSubmit{
+/*Win the selector for input #Main input*/
+.inputContainer #QuestionSubmit{
   background: var(--Niagara);
   border-color: var(--Niagara);
   font-weight: bold;
