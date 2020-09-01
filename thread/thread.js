@@ -28,12 +28,12 @@ function fillQuestion() {
         thisQuestion.visit;
     Question.getElementsByClassName('clapCount')[0].textContent =
         thisQuestion.claps;
-    if (thisQuestion.isBookmarked !== null) { // is question bookmarked?
+    if (thisQuestion.isBookmarked != null) { // is question bookmarked?
         let bookmarkIcon = Question.getElementsByClassName('bookmarkIcon')[0];
         bookmarkIcon.classList.add('active');
         bookmark(bookmarkIcon, false);
     }
-    if (thisQuestion.isClapped !== null) { // is question bookmarked?
+    if (thisQuestion.isClapped != null) { // is question clapped?
         let clapIcon = Question.getElementsByClassName('clap_icon')[0];
         clapIcon.classList.add('active');
         clap(clapIcon, false);
@@ -75,6 +75,16 @@ function fillAnswer(index) {
         allAnswers[index].addedOn.split(' ')[0];//do not need time after space
     Answer.getElementsByClassName('updated_on')[0].textContent =
         allAnswers[index].updatedOn.split(' ')[0];
+    Answer.getElementsByClassName('clapCount')[0].textContent =
+        allAnswers[index].claps;
+
+    console.log(allAnswers[index]);
+    if (allAnswers[index].isClapped != null) { // is question clapped?
+        let clapIcon = Answer.getElementsByClassName('clap_icon')[0];
+        clapIcon.classList.add('active');
+        clap(clapIcon, false);
+    }
+
 
     sampleAnswer.parentElement.appendChild(Answer);
     allAnswers[index] = null;

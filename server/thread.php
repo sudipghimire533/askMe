@@ -6,6 +6,12 @@ error_reporting(E_ALL);
 
 require_once('global.php');
 
+
+/*
+ * TODO:
+ * In below query $thisUserId is used to get the id of user browsing the data
+ * This means some work is to be done for annonomous user(who is not signed in)
+ */
 class showQuestion
 {
     private $conn;
@@ -27,14 +33,13 @@ class showQuestion
          * In below query 'thisUserId refers to the id of user browing this thread'
          * set that accordingly after implementing login
         */
-
+        $thisUserId = 1;
         /*
          * TODO:
          * OPTIMIZE This Query...
          * Also the query is not heavily tested
          * after creating seperate table for clapsCount for Answer
         */
-        $thisUserId = 1;
         $res = $this->conn->query("SELECT
                     qn.Title AS title,
                     qn.URLTitle AS url,
@@ -75,6 +80,11 @@ class showQuestion
     public function getAnswerFor($id, &$response, $offset = 0, $count = 3)
     {
         $id = $this->conn->real_escape_string($id);
+        /*
+         * In below query 'thisUserId refers to the id of user browing this thread'
+         * set that accordingly after implementing login
+        */
+        $thisUserId = 1;
         $res = $this->conn->query("SELECT
                     CONCAT(user.FirstName,' ', user.LastName) AS authorName,
                     user.Id AS authorId,
@@ -82,9 +92,14 @@ class showQuestion
                     ans.Description AS info,
                     ans.AddedOn AS addedOn,
                     ans.ModifiedOn As updatedOn,
-                    (SELECT COUNT(User) FROM AnswerClaps WHERE Answer=$id)
+                    ac.Answer As isClapped,
+                    (
+                        SELECT COUNT(User) FROM AnswerClaps WHERE Answer=$id
+                    ) AS claps
                     FROM
                     Answer ans
+                    LEFT JOIN
+                    AnswerClaps ac ON (ac.User = $thisUserId) AND (ac.Answer=ans.Id)
                     LEFT JOIN
                     User user On ans.Author=user.Id
                     WHERE ans.WrittenFor=$id

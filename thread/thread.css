@@ -166,25 +166,12 @@ textarea{
     transition-duration: .3s;
     transition-property: transform, background, scale;
 }
-@keyframes clapAnimate{
-  from{
-    scale: 1;
-    transform: none;
-    background: var(--Shaft);
-  }
-  to{
-    scale: 1.2;
-    transform: rotateZ(-30deg);
-    background: var(--Niagara);
-  }
-}
 .clap_icon.inactive:hover{
     scale: 1.2;
     transform: rotateZ(-30deg);
     background: var(--Niagara);
 }
 .clap_icon.active{
-  animation: clapAnimate .3s;
   background: var(--Niagara) !important;
 }
 .meta{
