@@ -30,8 +30,12 @@
 .Question .tag:first-of-type{
   display: none;
 }
-.description{
+.description,
+.askingUser{
     opacity: 0.7;
+}
+.askingUser{
+  margin-top: 10px;
 }
 .description > span *{
   all: inherit;

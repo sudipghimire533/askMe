@@ -45,7 +45,7 @@ if (isset($_GET['query'])) {
                 <div class='questionTitle'>
                     <a href='#' class='titleText'></a>
                     <span class='quickAction'>
-                        <i class='fas fa-bookmark' title='Bookmark this question to visit later..' onclick='bookmark(this)'></i>
+                        <i class='fas fa-bookmark bookmarkIcon' title='Bookmark this question to visit later..' onclick='bookmark(this)'></i>
                         <i class='fas fa-star'></i>
                         <a href='#' class='fas fa-reply' title='Give answer to this Question...'></a>
                     </span>
@@ -57,12 +57,11 @@ if (isset($_GET['query'])) {
                     <div class='tagContainer'>
                         <a href='#' class='tag'></a herf='#'>
                     </div>
-                    <!--div class='asking_user'>
-                        <span>Asked By</span>
-                        <a href='#' class='asker_name hv_border'>Sudip Ghimire</a>
-                        <span> on </span>
-                        <div class='asked_date'>2020-07-34</div>
-                    </div-->
+                    <div class='askingUser'>
+                        <a href='#' class='asker_name hv_border' title=''></a>
+                        <span> updated on </span>
+                        <span class='updated_on'></span>
+                    </div>
                 </div>
             </div>
         </div>

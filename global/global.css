@@ -103,3 +103,13 @@ img{
 }
 .notify.error{ background-color: var(--Red); }
 .notify.warning{ background-color: var(--Yellow); }
+@keyframes zoomSet{
+  0% {transform: scale(2.5);}
+  100%{transform: scale(1);}
+}
+.bookmarkIcon.active{
+  color: var(--White);
+  opacity: 1;
+  animation: zoomSet .3s;
+  color: var(--Niagara) !important;
+}

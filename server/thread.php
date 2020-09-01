@@ -31,7 +31,8 @@ class showQuestion
                     qn.ModifiedOn AS updatedOn,
                     CONCAT(user.FirstName, ' ', user.LastName) AS authorName,
                     user.Id AS authorId,
-                    GROUP_CONCAT(tg.Name) As tag
+                    GROUP_CONCAT(tg.Name) As tag,
+                    ub.Question As isBookmarked
                     FROM
                     Question qn
                     LEFT JOIN
@@ -40,7 +41,10 @@ class showQuestion
                     Tags tg ON qt.Tag=tg.Id
                     LEFT JOIN
                     User user ON qn.Author=user.Id
+                    LEFT JOIN
+                    UserBookmarks ub ON (ub.Question = qn.Id) AND (ub.User = user.Id)
                     WHERE qn.Id = $id
+                    GROUP BY qn.Id
                 ;") or die($this->conn->error);
         $response = $res->fetch_all(MYSQLI_ASSOC);
         if ($response[0]['title'] == null) {

@@ -5,7 +5,7 @@
 			<span>Posts</span>
 		</a>
 		<span id='navAsk'>
-			<a href='../ask/ask.php' id='navAskBtn'>Ask</a>
+			<a href='../ask/ask.php?ref=navbar' id='navAskBtn'>Ask</a>
 		</span>
 	</div>
 	<form id='navMiddle'>

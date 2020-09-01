@@ -26,7 +26,6 @@ $QuestionInformation = $response;
 $handler->getAnswerFor($id, $response);
 $AnswerInformation = $response;
 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,11 +53,9 @@ $AnswerInformation = $response;
         <div class='threadSection'>
             <div class='Question'>
                 <div class='questionTitle'>
-                    <i class='qn_status fab fa-gripfire' title='Trending'></i>
                     <span class='titleText'></span>
                     <span class='quickAction'>
-                        <i class='fas fa-bookmark'></i>
-                        <i class='fas fa-star'></i>
+                        <i class='fas fa-bookmark bookmarkIcon' onclick='bookmark(this)'></i>
                         <a href='#writeAnswer' class='fas fa-reply'></a>
                     </span>
                 </div>

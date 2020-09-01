@@ -4,7 +4,7 @@ function fillQuestion() {
     let title = Question.getElementsByClassName('titleText')[0];
     title.textContent = thisQuestion.title;
 
-    Question.getElementsByClassName('description')[0].firstElementChild.innerHTML = 
+    Question.getElementsByClassName('description')[0].firstElementChild.innerHTML =
         thisQuestion.info;
 
     let tagContainer = Question.getElementsByClassName('tagContainer')[0];
@@ -26,6 +26,11 @@ function fillQuestion() {
         thisQuestion.updatedOn.split(' ')[0];
     Question.getElementsByClassName('visited_for')[0].textContent =
         thisQuestion.visit;
+    if (thisQuestion.isBookmarked !== null) { // is question bookmarked?
+        let bookmarkIcon = Question.getElementsByClassName('bookmarkIcon')[0];
+        bookmarkIcon.classList.add('active');
+        bookmarkIcon.onclick = dblBookmark;
+    }
 }
 
 let sampleAnswer;
@@ -42,7 +47,7 @@ function fillAnswer(index) {
     Answer.getElementsByClassName('authorIntro')[0].textContent =
         allAnswers[index].authorIntro;
 
-    let authorAvatar = 
+    let authorAvatar =
         Answer.getElementsByClassName('avatarContainer')[0].getElementsByTagName('img')[0];
     authorAvatar.setAttribute('src', '../user.png');
     authorAvatar.setAttribute('alt', allAnswers[index].authorName);
@@ -61,18 +66,18 @@ function fillAnswer(index) {
 let previewContainer;
 let prev_loop;
 let stop = true;
-function startPreview(elem, st = stop){
-    if(st == true){return;}
+function startPreview(elem, st = stop) {
+    if (st == true) { return; }
     content = elem.value.trim();
 
     previewContainer.innerHTML = converter.makeHtml(content.replaceAll('<', '&lt;'));
     prev_loop = setTimeout(startPreview, 4 * 1000, elem, false);
 }
-function endPreview(elem){
-    setTimeout(function(){
+function endPreview(elem) {
+    setTimeout(function () {
         stop = true;
         clearTimeout(prev_loop);
-        prev_loop = null;  
-    }, 5*1000);
+        prev_loop = null;
+    }, 5 * 1000);
     // When user stops typing and immeditly blur the input element then wait for next preview
 }

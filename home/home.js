@@ -12,20 +12,20 @@ var feeded_tags = new Map;
  * Now while setting textContent it will display like &lp;h1 ...
  * If pushed directly as innerHTML there may be image or anything and also will be less than 270 visible character.
 */
-function createQuestion(question) {
+function createQuestion(Question) {
     /*Only sow unique Question..*/
-    if (appended_questions.has(question.url)) {
+    if (appended_questions.has(Question.url)) {
         return;
     }
 
     let target = sample_question.cloneNode(true);
 
-    target.getElementsByClassName('titleText')[0].textContent = question.title;
-    target.getElementsByClassName('titleText')[0].setAttribute('href', '/thread/' + question.url);
+    target.getElementsByClassName('titleText')[0].textContent = Question.title;
+    target.getElementsByClassName('titleText')[0].setAttribute('href', '/thread/' + Question.url);
 
-    target.getElementsByClassName('description')[0].firstElementChild.innerHTML = question.info + '...';
+    target.getElementsByClassName('description')[0].firstElementChild.innerHTML = Question.info + '...';
 
-    for (let i = 0, tags = question.tag.split(','); i < tags.length; i++) {
+    for (let i = 0, tags = Question.tag.split(','); i < tags.length; i++) {
         let tag = sample_tag_element.cloneNode(true);
         tag.setAttribute('href', '/taggedfor/' + tags[i]);
         tag.textContent = tags[i];
@@ -36,10 +36,19 @@ function createQuestion(question) {
             feeded_tags.set(tags[i], true);
         }
     }
-    feed_container.appendChild(target);
-    appended_questions.set(question.url, true);
-}
 
-function bookmark(question) {
-    notify("Question Has been Boorkarked. You can visit your profile to see all your bookmarked questions", 0)
+    let user = target.getElementsByClassName('asker_name')[0];
+    user.setAttribute('href', '../profile/profile.php?id=' + Question.authorId);
+    user.setAttribute('title', 'Visit profile of ' + Question.authorName);
+    user.textContent = Question.authorName;
+    target.getElementsByClassName('updated_on')[0].textContent = Question.modifiedOn.split(' ')[0]; // only date not time
+
+    if (Question.isBookmarked !== null) { // is question bookmarked?
+        let bookmarkIcon = target.getElementsByClassName('bookmarkIcon')[0];
+        bookmarkIcon.classList.add('active');
+        bookmarkIcon.onclick = dblBookmark;
+    }
+
+    feed_container.appendChild(target);
+    appended_questions.set(Question.url, true);
 }
