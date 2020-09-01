@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 27, 2020 at 02:13 PM
+-- Generation Time: Sep 01, 2020 at 01:04 PM
 -- Server version: 10.3.22-MariaDB-1
 -- PHP Version: 7.3.15-3
 
@@ -25,16 +25,17 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Answers`
+-- Table structure for table `Answer`
 --
 
-CREATE TABLE `Answers` (
+CREATE TABLE `Answer` (
   `Id` int(11) NOT NULL,
   `Author` int(11) NOT NULL,
   `WrittenFor` int(11) NOT NULL,
-  `Description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `UpdatedOn` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `ClapsCount` int(11) NOT NULL DEFAULT 0
+  `Description` text NOT NULL,
+  `ClapsCount` int(11) NOT NULL DEFAULT 0,
+  `AddedOn` timestamp NOT NULL DEFAULT current_timestamp(),
+  `ModifiedOn` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -49,9 +50,11 @@ CREATE TABLE `Question` (
   `URLTitle` varchar(200) NOT NULL,
   `Author` int(11) NOT NULL,
   `AddedOn` timestamp NOT NULL DEFAULT current_timestamp(),
-  `ModifiedOn` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ModifiedOn` timestamp NOT NULL DEFAULT current_timestamp(),
   `Description` text NOT NULL,
   `AcceptedAnswer` int(11) DEFAULT NULL,
+  `ClapsCount` int(11) NOT NULL DEFAULT 0,
+  `VisitCount` int(11) NOT NULL DEFAULT 0,
   `LastActive` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -93,8 +96,18 @@ CREATE TABLE `User` (
   `Phone` varchar(15) NOT NULL,
   `Location` varchar(30) DEFAULT NULL,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp(),
-  `Intro` varchar(255) DEFAULT NULL,
-  `Bio` varchar(100) NOT NULL DEFAULT 'User at This Website'
+  `Intro` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `UserBookmarks`
+--
+
+CREATE TABLE `UserBookmarks` (
+  `User` int(11) NOT NULL,
+  `Question` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -106,18 +119,6 @@ CREATE TABLE `User` (
 CREATE TABLE `UserFollow` (
   `FollowedBy` int(11) NOT NULL,
   `FollowedTo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `UserQuestion`
---
-
-CREATE TABLE `UserQuestion` (
-  `User` int(11) NOT NULL,
-  `Question` int(11) NOT NULL,
-  `Type` tinyint(2) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -136,11 +137,12 @@ CREATE TABLE `UserTag` (
 --
 
 --
--- Indexes for table `Answers`
+-- Indexes for table `Answer`
 --
-ALTER TABLE `Answers`
+ALTER TABLE `Answer`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `Author` (`Author`);
+  ADD KEY `WrittenFor` (`WrittenFor`),
+  ADD KEY `Author` (`Author`);
 
 --
 -- Indexes for table `Question`
@@ -155,7 +157,7 @@ ALTER TABLE `Question`
 -- Indexes for table `QuestionTag`
 --
 ALTER TABLE `QuestionTag`
-  ADD KEY `Question` (`Question`),
+  ADD PRIMARY KEY (`Question`,`Tag`),
   ADD KEY `Tag` (`Tag`);
 
 --
@@ -173,24 +175,24 @@ ALTER TABLE `User`
   ADD UNIQUE KEY `UserName` (`UserName`);
 
 --
+-- Indexes for table `UserBookmarks`
+--
+ALTER TABLE `UserBookmarks`
+  ADD PRIMARY KEY (`User`,`Question`),
+  ADD KEY `Question` (`Question`);
+
+--
 -- Indexes for table `UserFollow`
 --
 ALTER TABLE `UserFollow`
-  ADD KEY `FollowedBy` (`FollowedBy`),
+  ADD PRIMARY KEY (`FollowedBy`,`FollowedTo`),
   ADD KEY `FollowedTo` (`FollowedTo`);
-
---
--- Indexes for table `UserQuestion`
---
-ALTER TABLE `UserQuestion`
-  ADD KEY `User` (`User`),
-  ADD KEY `Question` (`Question`);
 
 --
 -- Indexes for table `UserTag`
 --
 ALTER TABLE `UserTag`
-  ADD KEY `User` (`User`),
+  ADD PRIMARY KEY (`User`,`Tag`),
   ADD KEY `Tag` (`Tag`);
 
 --
@@ -198,9 +200,9 @@ ALTER TABLE `UserTag`
 --
 
 --
--- AUTO_INCREMENT for table `Answers`
+-- AUTO_INCREMENT for table `Answer`
 --
-ALTER TABLE `Answers`
+ALTER TABLE `Answer`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -226,17 +228,18 @@ ALTER TABLE `User`
 --
 
 --
--- Constraints for table `Answers`
+-- Constraints for table `Answer`
 --
-ALTER TABLE `Answers`
-  ADD CONSTRAINT `Answers_ibfk_1` FOREIGN KEY (`Author`) REFERENCES `User` (`Id`);
+ALTER TABLE `Answer`
+  ADD CONSTRAINT `Answer_ibfk_1` FOREIGN KEY (`WrittenFor`) REFERENCES `Question` (`Id`),
+  ADD CONSTRAINT `Answer_ibfk_2` FOREIGN KEY (`Author`) REFERENCES `User` (`Id`);
 
 --
 -- Constraints for table `Question`
 --
 ALTER TABLE `Question`
   ADD CONSTRAINT `Question_ibfk_1` FOREIGN KEY (`Author`) REFERENCES `User` (`Id`),
-  ADD CONSTRAINT `Question_ibfk_2` FOREIGN KEY (`AcceptedAnswer`) REFERENCES `Answers` (`Id`);
+  ADD CONSTRAINT `Question_ibfk_2` FOREIGN KEY (`AcceptedAnswer`) REFERENCES `Answer` (`Id`);
 
 --
 -- Constraints for table `QuestionTag`
@@ -246,18 +249,18 @@ ALTER TABLE `QuestionTag`
   ADD CONSTRAINT `QuestionTag_ibfk_2` FOREIGN KEY (`Tag`) REFERENCES `Tags` (`Id`);
 
 --
+-- Constraints for table `UserBookmarks`
+--
+ALTER TABLE `UserBookmarks`
+  ADD CONSTRAINT `UserBookmarks_ibfk_1` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
+  ADD CONSTRAINT `UserBookmarks_ibfk_2` FOREIGN KEY (`Question`) REFERENCES `Question` (`Id`);
+
+--
 -- Constraints for table `UserFollow`
 --
 ALTER TABLE `UserFollow`
   ADD CONSTRAINT `UserFollow_ibfk_1` FOREIGN KEY (`FollowedBy`) REFERENCES `User` (`Id`),
   ADD CONSTRAINT `UserFollow_ibfk_2` FOREIGN KEY (`FollowedTo`) REFERENCES `User` (`Id`);
-
---
--- Constraints for table `UserQuestion`
---
-ALTER TABLE `UserQuestion`
-  ADD CONSTRAINT `UserQuestion_ibfk_1` FOREIGN KEY (`User`) REFERENCES `User` (`Id`),
-  ADD CONSTRAINT `UserQuestion_ibfk_2` FOREIGN KEY (`Question`) REFERENCES `Question` (`Id`);
 
 --
 -- Constraints for table `UserTag`
