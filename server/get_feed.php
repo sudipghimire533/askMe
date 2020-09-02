@@ -83,6 +83,26 @@ class Getfeed
             $this->Recent($response);
             return 1;
         }
+        $res = $this->conn->query("SELECT
+                GROUP_CONCAT(qn.Id) As Ids
+                FROM Question qn
+                LEFT JOIN
+                QuestionTag qt ON qt.Question=qn.Id
+                LEFT JOIN
+                Tags tg ON tg.Id=qt.Tag
+                LEFT JOIN Answer ans ON ans.WrittenFor=qn.Id
+                LEFT JOIN User user ON (user.Id = ans.Author) OR (user.Id = qn.Author)
+                WHERE
+                (qn.URLTitle LIKE '%$query%') OR
+                (qn.Title LIKE '%$query%') OR
+                (CONCAT(user.FirstName, user.LastName) LIKE '%$query%') OR
+                (tg.Name LIKE '%$query')
+        ;") or fail($this->conn->error, __LINE__);
+        $res = $res->fetch_all(MYSQLI_ASSOC);
+        if (count($res) == 0 || $res[0]['Ids'] == null) {
+            return 1;
+        }
+        return $this->makePosts($res[0]['Ids'], $response);
     }
     private function XbyHelper($lastParam, &$response, &$query)
     {

@@ -5,16 +5,16 @@
 			<span>Posts</span>
 		</a>
 		<span id='navAsk'>
-			<a href='../ask/ask.php?ref=navbar' id='navAskBtn'>Ask</a>
+			<a href='/ask/ask.php?ref=navbar' id='navAskBtn'>Ask</a>
 		</span>
 	</div>
-	<form id='navMiddle'>
-		<input type='text' placeholder='What You Want To Find Today?' title='What You Wan to Find Today' id='navSearch' name='query' method='GET' action='../home/home.php/' />
-		<i class='fas fa-search' type='submit' name='submit' onclick='topSearch()'></i>
+	<form id='navMiddle' method='GET' action='/home/home.php'>
+		<input type='text' placeholder='What You Want To Find Today?' title='What You Want to Find Today' id='navSearch' name='query' />
+		<i class='fas fa-search' onclick='topSearch()'></i>
 	</form>
 	<div id='navRight'>
-		<a href='../profile/profile.php' id='navUser'>
-			<img src='../user.png' alt='Profile Image' title='Visit My Profile' id='navMe' />
+		<a href='/profile/profile.php' id='navUser'>
+			<img src='/user.png' alt='Profile Image' title='Visit My Profile' id='navMe' />
 		</a>
 		<span id='navHelp'>
 			<i class='fas fa-question-circle'></i>

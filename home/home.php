@@ -7,13 +7,12 @@ $posts = json_encode(array());
 $onloadScript = ""; // any js that needs to be executed when page loads
 $stat = "Custom filtered Question...";
 if (isset($_GET['query'])) {
-    $stat = $feedFetcher->searchQuery($_GET['query'], $posts);
-    if ($stat == 1) {
-        // search had failed..
-        $onloadScript = "notify('We were unable to search for that Query..', 2, 10)";
-    } else if ($stat == 2) {
-        // no result found
-        $onloadScript = "notify('We were unable to fetch any of mathching query...')";
+    $res = $feedFetcher->searchQuery($_GET['query'], $posts);
+    if ($res != 0) {
+        $stat = "We were unable to fetch result for '" . $_GET['query'] . "'";
+        $onloadScript = "notify('No matching query found....')";
+    } else {
+        $stat =  "Result for search '" . htmlspecialchars($_GET['query']) . "'";
     }
 } else if (isset($_GET['by'])) {
     $feedFetcher->activityBy($_GET['by'], $posts);
