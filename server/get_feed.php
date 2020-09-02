@@ -11,6 +11,14 @@ function fail($err, $lineno = __LINE__)
     exit;
 }
 
+/*
+ * TODO:
+ * In all Getfeed's method implement a lower and upper bound
+ * for limit.
+ * In Feed the page number (may also be with ajax request)
+ * Then the client will send the offset like 20,25
+ * which indicated that we will put limit 20,25 in query and show end message if is out of bound...
+ */
 class Getfeed
 {
     private $conn;

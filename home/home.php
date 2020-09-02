@@ -5,6 +5,7 @@ $feedFetcher = new Getfeed;
 $posts = json_encode(array());
 
 $onloadScript = ""; // any js that needs to be executed when page loads
+$stat = "Custom filtered Question...";
 if (isset($_GET['query'])) {
     $stat = $feedFetcher->searchQuery($_GET['query'], $posts);
     if ($stat == 1) {
@@ -22,8 +23,10 @@ if (isset($_GET['query'])) {
     $feedFetcher->answerBy($_GET['answerby'], $posts);
 } else if (isset($_GET['taggedfor'])) {
     $feedFetcher->taggedFor($_GET['taggedfor'], $posts);
+    $stat = "Question tagged for '" . $_GET['taggedfor'] . "'";
 } else {
     $feedFetcher->Recent($posts);
+    $stat = "Today's Selections...";
 }
 ?>
 <!DOCTYPE html>
@@ -48,6 +51,8 @@ if (isset($_GET['query'])) {
     echo file_get_contents('../global/navbar.php');
     ?>
     <div id='Main'>
+
+        <div class='feed_title' style='color: var(--Niagara);margin: 20px 0;'><?php echo $stat; ?></div>
         <div class='QuestionFeed'>
             <div class='Question'>
                 <div class='questionTitle'>
@@ -76,7 +81,7 @@ if (isset($_GET['query'])) {
         <div class='ShowTags'>
             <h2 class='label'>Be Smart. The Smart way</h2>
             <div class='label'>
-                <a href='#' style='color: var(--Yellow);'>See all Tag</a>
+                <a href='#' style='color: var(--Niagara);'>See all Tag</a>
             </div>
         </div>
 

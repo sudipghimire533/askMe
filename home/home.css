@@ -48,7 +48,7 @@
 }
 .tag:before{
   content: '#';
-  color: var(--Yellow);
+  color: var(--Niagara);
 }
 .ShowTags{
   text-align: center;

@@ -127,7 +127,7 @@ $conn->close();
                     <div class='profileIntro'><?php echo $UserIntro; ?></div>
                 </div>
                 <div class='impressionContainer'>
-                    <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='questionCount impr hv_border'>
+                    <a href="/home/home.php?questionby=<?php echo $UserId; ?>" class='questionCount impr hv_border'>
                         <b class='count'>
                             <?php echo $QuestionCount; ?>
                         </b>
@@ -141,7 +141,7 @@ $conn->close();
                         <span>Following</span>
                         <div class='hoverlay'>See users <?php echo $UserName; ?> is following</div>
                     </a>
-                    <a href="/thread/thread.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
+                    <a href="/home/home.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
                         <b class='count'>
                             <?php echo $ClapsCount; ?>
                         </b>
@@ -155,7 +155,7 @@ $conn->close();
                         <span>Followers</span>
                         <div class='hoverlay'>See users following <?php echo $UserName; ?></div>
                     </a>
-                    <a href="/thread/thread.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
+                    <a href="/home/home.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
                         <b class='count'>
                             <?php echo $AnswerCount; ?>
                         </b>
