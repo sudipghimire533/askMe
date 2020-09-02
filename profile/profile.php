@@ -120,8 +120,8 @@ $conn->close();
             <div class='profileInfo'>
                 <div class='profileIdentity'>
                     <div class='profileName'><?php echo $UserName; ?></div>
-                    <div class='followBtn'>
-                        <i class='fa fa-heart'></i>
+                    <div class='followBtn inactive' onclick='follow(this, true)'>
+                        <i class='fa fa-heart follow_icon'></i>
                         <span>Follow</span>
                     </div>
                     <div class='profileIntro'><?php echo $UserIntro; ?></div>
@@ -206,5 +206,16 @@ $conn->close();
             </div>
         </div>
 </body>
+<script>
+    function follow(source, sendAlso = false){
+        if(sendAlso === true){
+            // ...
 
+        }
+        source.classList.add('active');
+        source.classList.remove('inactive');
+        source.lastElementChild.textContent = 'followed';
+        source.firstElementChild.style.animationIterationCount = '1';
+    }
+</script>
 </html>

@@ -195,3 +195,21 @@ body {
 .impr:focus .hoverlay{
   height: 100%;
 }
+@keyframes beat{
+  0%{
+    scale: 1;
+  } 50%{
+    scale: 1.1;
+  } 80%{
+    scale: 1.5;
+  } 100%{
+    scale: 1;
+  }
+}
+.follow_icon{
+  animation: beat .5s infinite;
+}
+.followBtn.inactive:hover .follow_icon,
+.followBtn.active  .follow_icon{
+  color: var(--Red);
+}
