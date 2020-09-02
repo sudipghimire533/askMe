@@ -52,30 +52,83 @@ class Getfeed
             $row['info'] = html_entity_decode($row['info']);
         }
         $response = json_encode($response);
+        return 0;
     }
     public function Recent(&$response)
     {
         // Only select the desired post here
         $res = $this->conn->query("SELECT
-                qn.Id FROM
+                GROUP_CONCAT(qn.Id)  as Ids
+                FROM
                 Question qn
                 ORDER BY qn.LastActive DESC
                 LIMIT 10
             ;");
-        $questions = "";
-        /* Question id should be comma seperated before sending to makePost */
-        for ($i = 0; $i < $res->num_rows - 1; $i++) {
-            $questions .= $res->fetch_row()[0] . ",";
-        }
-        $questions .= $res->fetch_row()[0]; // no comma at end
-        $this->makePosts($questions, $response);
+        $questions = $res->fetch_all(MYSQLI_ASSOC)[0]['Ids'];
+        return $this->makePosts($questions, $response);
     }
     public function searchQuery($query, &$response)
     {
         $query = trim(urldecode($this->conn->real_escape_string($query)));
-        if (!strlen($query) > 0) { // empty query
+        if (strlen($query) == 0) { // empty query
             $this->Recent($response);
             return 1;
         }
+    }
+    private function XbyHelper($person, &$response, &$query)
+    {
+        $person = trim($this->conn->real_escape_string($person));
+        if (strlen($person) == 0) {
+            $this->Recent($response);
+            return 1;
+        }
+        $res = $this->conn->query(
+            $query . $person
+        ) or die($this->conn->error);
+        $posts = $res->fetch_all(MYSQLI_ASSOC)[0]['Ids'];
+        if ($posts == null) {
+            return 1;
+        }
+        return $this->makePosts($posts, $response);
+    }
+    public function postedBy($person, &$response)
+    {
+        $query = "SELECT
+                    GROUP_CONCAT(qn.Id) as Ids
+                    FROM
+                    Question qn
+                    WHERE qn.Author=";
+        return $this->XbyHelper($person, $response, $query);
+    }
+    public function answerBy($person, &$response)
+    {
+        $query = "SELECT
+                GROUP_CONCAT(qn.Id) as Ids
+                FROM
+                Question qn
+                LEFT JOIN
+                Answer ans ON ans.WrittenFor = qn.Id
+                WHERE ans.Author=";
+        return $this->XbyHelper($person, $response, $query);
+    }
+    public function bookmarkBy($person, &$response)
+    {
+        $query = "SELECT GROUP_CONCAT(qn.Id) as Ids
+                FROM
+                Question qn
+                LEFT JOIN
+                UserBookmarks ub ON ub.Question = qn.Id
+                WHERE ub.User=";
+        return $this->XbyHelper($person, $response, $query);
+    }
+    public function activityBy($person, &$response)
+    {
+        $got = $this->postedBy($person, $response);
+        $qns = ($got == 0) ? json_decode($response) : array();
+
+        $got = $this->answerBy($person, $response);
+        $ans = ($got == 0) ? json_decode($response) : array();
+
+        $response = json_encode(array_merge($ans, $qns));
     }
 };

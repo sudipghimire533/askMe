@@ -216,6 +216,7 @@ $conn->close();
         source.classList.remove('inactive');
         source.lastElementChild.textContent = 'followed';
         source.firstElementChild.style.animationIterationCount = '1';
+        source.onclick = function(){follow(source, false)};
     }
 </script>
 </html>

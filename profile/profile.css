@@ -210,6 +210,6 @@ body {
   animation: beat .5s infinite;
 }
 .followBtn.inactive:hover .follow_icon,
-.followBtn.active  .follow_icon{
+.followBtn.active{
   color: var(--Red);
 }

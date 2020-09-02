@@ -2,7 +2,7 @@
 require_once('../server/get_feed.php');
 
 $feedFetcher = new Getfeed;
-$posts;
+$posts = "";
 
 $onloadScript = ""; // any js that needs to be executed when page loads
 if (isset($_GET['query'])) {
@@ -14,6 +14,12 @@ if (isset($_GET['query'])) {
         // no result found
         $onloadScript = "notify('We were unable to fetch any of mathching query...')";
     }
+} else if (isset($_GET['by'])) {
+    $feedFetcher->activityBy($_GET['by'], $posts);
+} else if (isset($_GET['questionby'])) { // if requestionquestion by someone's id
+    $feedFetcher->postedBy($_GET['questionby'], $posts);
+} else if (isset($_GET['answerby'])) {
+    $feedFetcher->answerBy($_GET['answerby'], $posts);
 } else {
     $feedFetcher->Recent($posts);
 }
