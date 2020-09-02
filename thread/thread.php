@@ -52,7 +52,7 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
 
 <body onload='Ready();'>
     <?php
-        echo file_get_contents('../global/navbar.php');
+    echo file_get_contents('../global/navbar.php');
     ?>
     <div id='Main'>
         <div class='threadSection'>
@@ -85,7 +85,7 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
                         <i class='fas fa-calendar-alt'></i>
                         <span class='updated_on'></span>
                     </span>
-                    <span class='meta'  title='Viewed for'>
+                    <span class='meta' title='Viewed for'>
                         <!--span class='label'>visit count:</span!-->
                         <i class='fas fa-eye'></i>
                         <span class='visited_for'></span>

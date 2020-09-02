@@ -11,7 +11,7 @@ function fillQuestion() {
     for (let i = 0, tags = thisQuestion.tag.split(','); i < tags.length; i++) {
         let tag = document.createElement('a');
         tag.classList.add('tag');
-        tag.setAttribute('href', '/taggedfor/' + tags[i]);
+        tag.setAttribute('href', '/home/home.php?taggedfor=' + tags[i]);
         tag.textContent = tags[i];
         tagContainer.appendChild(tag);
     }
@@ -39,12 +39,12 @@ function fillQuestion() {
         clap(clapIcon, false);
     }
 }
-function clap(source, alsoSend = false){
-    if(alsoSend ===  true){
+function clap(source, alsoSend = false) {
+    if (alsoSend === true) {
         // send request..
         notify('Yummy! Tasty clap');
     }
-    source.onclick = function(){
+    source.onclick = function () {
         notify('You already clapped this item. Visit your profile for more action.', 1);
     };
     source.classList.add('active');

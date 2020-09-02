@@ -22,12 +22,13 @@ function createQuestion(Question) {
 
     target.getElementsByClassName('titleText')[0].textContent = Question.title;
     target.getElementsByClassName('titleText')[0].setAttribute('href', '/thread/thread.php?id=' + Question.id);
+    target.getElementsByClassName('reply_icon')[0].setAttribute('href', '/thread/thread.php?id=' + Question.id + '#writeAnswer');
 
     target.getElementsByClassName('description')[0].firstElementChild.innerHTML = Question.info + '...';
 
     for (let i = 0, tags = Question.tag.split(','); i < tags.length; i++) {
         let tag = sample_tag_element.cloneNode(true);
-        tag.setAttribute('href', '/taggedfor/' + tags[i]);
+        tag.setAttribute('href', '/home/home.php?taggedfor=' + tags[i]);
         tag.textContent = tags[i];
         target.getElementsByClassName('tagContainer')[0].appendChild(tag);
         if (!feeded_tags.has(tags[i])) {
@@ -42,13 +43,12 @@ function createQuestion(Question) {
     user.setAttribute('title', 'Visit profile of ' + Question.authorName);
     user.textContent = Question.authorName;
     target.getElementsByClassName('updated_on')[0].textContent = Question.modifiedOn.split(' ')[0]; // only date not time
-
     if (Question.isBookmarked !== null) { // is question bookmarked?
         let bookmarkIcon = target.getElementsByClassName('bookmarkIcon')[0];
         bookmarkIcon.classList.add('active');
-        bookmarkIcon.onclick = dblBookmark;
+        bookmarkIcon.onclick = function () { bookmark(bookmarkIcon, false); };
     }
-
+    console.log(Question);
     feed_container.appendChild(target);
     appended_questions.set(Question.id, true);
 }

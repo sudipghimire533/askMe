@@ -28,7 +28,7 @@ class showQuestion
     // isBookmarked and isClapped is not working..
     public function getQuestionById($id, &$response)
     {
-        $id = $this->conn->real_escape_string($id);
+        $id = $this->conn->real_escape_string(trim($id));
         /*
          * In below query 'thisUserId refers to the id of user browing this thread'
          * set that accordingly after implementing login

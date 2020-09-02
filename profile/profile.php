@@ -17,7 +17,7 @@ function fail($err, $line = 0)
 
 $UserId = 1;
 if (isset($_GET['id'])) {
-    $UserId = $_GET['id'];
+    $UserId = $conn->real_escape_string($_GET['id']);
 }
 /* Fetch Personal data.. */
 /*
@@ -176,7 +176,7 @@ $conn->close();
                     foreach ($UserTags as &$tag) {
                         $tag = trim($tag);
                         if (strlen($tag) == 0) continue;
-                        echo "<a href='../questions/taggedfor/$tag' class='tag'>$tag</a>";
+                        echo "<a href='/home/home.php?taggedfor=$tag' class='tag'>$tag</a>";
                     }
                     ?>
                 </div>
@@ -207,8 +207,8 @@ $conn->close();
         </div>
 </body>
 <script>
-    function follow(source, sendAlso = false){
-        if(sendAlso === true){
+    function follow(source, sendAlso = false) {
+        if (sendAlso === true) {
             // ...
 
         }
@@ -216,7 +216,10 @@ $conn->close();
         source.classList.remove('inactive');
         source.lastElementChild.textContent = 'followed';
         source.firstElementChild.style.animationIterationCount = '1';
-        source.onclick = function(){follow(source, false)};
+        source.onclick = function() {
+            follow(source, false)
+        };
     }
 </script>
+
 </html>

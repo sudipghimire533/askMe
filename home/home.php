@@ -2,7 +2,7 @@
 require_once('../server/get_feed.php');
 
 $feedFetcher = new Getfeed;
-$posts = "";
+$posts = json_encode(array());
 
 $onloadScript = ""; // any js that needs to be executed when page loads
 if (isset($_GET['query'])) {
@@ -16,10 +16,12 @@ if (isset($_GET['query'])) {
     }
 } else if (isset($_GET['by'])) {
     $feedFetcher->activityBy($_GET['by'], $posts);
-} else if (isset($_GET['questionby'])) { // if requestionquestion by someone's id
+} else if (isset($_GET['questionby'])) {
     $feedFetcher->postedBy($_GET['questionby'], $posts);
 } else if (isset($_GET['answerby'])) {
     $feedFetcher->answerBy($_GET['answerby'], $posts);
+} else if (isset($_GET['taggedfor'])) {
+    $feedFetcher->taggedFor($_GET['taggedfor'], $posts);
 } else {
     $feedFetcher->Recent($posts);
 }
@@ -53,7 +55,7 @@ if (isset($_GET['query'])) {
                     <span class='quickAction'>
                         <i class='fas fa-bookmark bookmarkIcon' title='Bookmark this question to visit later..' onclick='bookmark(this, true)'></i>
                         <i class='fas fa-star'></i>
-                        <a href='#' class='fas fa-reply' title='Give answer to this Question...'></a>
+                        <a href='#' class='fas fa-reply reply_icon' title='Give answer to this Question...' onclick='notify("Go hit it!!")'></a>
                     </span>
                 </div>
                 <div class='description'>

@@ -26,6 +26,7 @@ class Getfeed
     private function makePosts($question, &$response)
     {
         // Always give response from this function.
+        $thisUser = 1;
         $res = $this->conn->query("SELECT DISTINCT
                 qn.Title As title,
                 qn.Id AS id,
@@ -43,10 +44,10 @@ class Getfeed
                 LEFT JOIN
                 User user ON user.Id = qn.Author
                 LEFT JOIN
-                UserBookmarks ub ON (ub.User = user.Id) AND (ub.Question = qn.Id)
+                UserBookmarks ub ON (ub.User=$thisUser) AND (ub.Question = qn.Id)
                 WHERE qn.Id IN ($question)
                 GROUP BY qn.Id
-            ;") or die($this->conn->error);
+            ;") or fail($this->conn->error, __LINE__);
         $response = $res->fetch_all(MYSQLI_ASSOC);
         foreach ($response as &$row) {
             $row['info'] = html_entity_decode($row['info']);
@@ -69,22 +70,22 @@ class Getfeed
     }
     public function searchQuery($query, &$response)
     {
-        $query = trim(urldecode($this->conn->real_escape_string($query)));
+        $query = $this->conn->real_escape_string(trim(urldecode($query)));
         if (strlen($query) == 0) { // empty query
             $this->Recent($response);
             return 1;
         }
     }
-    private function XbyHelper($person, &$response, &$query)
+    private function XbyHelper($lastParam, &$response, &$query)
     {
-        $person = trim($this->conn->real_escape_string($person));
-        if (strlen($person) == 0) {
+        $lastParam = $this->conn->real_escape_string(trim($lastParam));
+        if (strlen($lastParam) == 0) {
             $this->Recent($response);
             return 1;
         }
         $res = $this->conn->query(
-            $query . $person
-        ) or die($this->conn->error);
+            $query . $lastParam
+        ) or fail($this->conn->error, __LINE__);
         $posts = $res->fetch_all(MYSQLI_ASSOC)[0]['Ids'];
         if ($posts == null) {
             return 1;
@@ -123,15 +124,6 @@ class Getfeed
     }
     public function activityBy($person, &$response)
     {
-        /*
-        $got = $this->postedBy($person, $response);
-        $qns = ($got == 0) ? json_decode($response) : array();
-
-        $got = $this->answerBy($person, $response);
-        $ans = ($got == 0) ? json_decode($response) : array();
-
-        $response = json_encode(array_merge($ans, $qns));
-        */
         $got = $this->postedBy($person, $response);
         $res = ($got == 0) ? json_decode($response) : array();
 
@@ -142,5 +134,18 @@ class Getfeed
                 ($got == 0) ? json_decode($response) : array()
             )
         );
+    }
+    public function taggedFor($tag, &$response)
+    {
+        $tag = $this->conn->real_escape_string(trim(urldecode($tag)));
+        $tag = $this->conn->query("SELECT Id FROM Tags WHERE Name='$tag';") or fail($this->conn->error, __LINE__);
+        $tag = $tag->fetch_row()[0];
+        $query = "SELECT 
+                GROUP_CONCAT(qn.Id) as Ids
+                FROM Question qn
+                LEFT JOIN
+                QuestionTag qt ON qt.Question=qn.Id
+                WHERE qt.Tag=";
+        return $this->XbyHelper($tag, $response, $query);
     }
 };
