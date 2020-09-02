@@ -23,8 +23,8 @@
 			<i class='fas fa-caret-down' onclick='toggleDropDown()'></i>
 			<div id='navDropDown'>
 				<a href='/profile/profile.php'>My Profile</a><br />
-				<a href="/home/home.php?questionby=me">My Questions</a><br />
-				<a href='/home/home.php?bookmarksof=me'>My Bokmarks</a><br />
+				<a href="/home/home.php">My Questions</a><br />
+				<a href='/home/home.php'>My Bokmarks</a><br />
 				<hr />
 				<a href="#">Log out</a>
 			</div>

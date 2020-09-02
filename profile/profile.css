@@ -213,3 +213,10 @@ body {
 .followBtn.active{
   color: var(--Red);
 }
+.followBtn{
+  transition: scale .3s;
+}
+.followBtn.inactive:hover,
+.followBtn.active{
+  scale: 0.9;
+}
