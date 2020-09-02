@@ -73,7 +73,6 @@ class showQuestion
             $response = "That Question or related information not found";
             return false;
         }
-        $response[0]['info'] = htmlspecialchars_decode($response[0]['info']);
         $response = json_encode($response);
         return true;
     }
@@ -111,9 +110,6 @@ class showQuestion
             return;
         }
         $response = $res->fetch_all(MYSQLI_ASSOC);
-        foreach ($response as &$row) {
-            $row['info'] = htmlspecialchars_decode($row['info']);
-        }
         $response = json_encode($response);
         return true;
     }

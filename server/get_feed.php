@@ -57,9 +57,6 @@ class Getfeed
                 GROUP BY qn.Id
             ;") or fail($this->conn->error, __LINE__);
         $response = $res->fetch_all(MYSQLI_ASSOC);
-        foreach ($response as &$row) {
-            $row['info'] = html_entity_decode($row['info']);
-        }
         $response = json_encode($response);
         return 0;
     }

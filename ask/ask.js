@@ -17,7 +17,7 @@ function bodyPreview(elem) {
     prev_length = content.length;
     /* Do not need to sanitaze everuthing here because php will*/
     // TODO:  replace all is not available in chrome. create that prototype
-    previewBody.innerHTML = converter.makeHtml(content.replaceAll('<', '&lt;'));
+    previewBody.textContent = content;
     setTimeout(bodyPreview, 5 * 1000, elem);
 }
 function tagPreview(elem) {
@@ -38,8 +38,6 @@ function submitForm(event) {
 
 }
 function Ready() {
-    converter = new showdown.Converter();
-
     let previewArea = document.getElementById('QuestionPreview');
     previewTitle = previewArea.getElementsByClassName('prev_title')[0];
     previewBody = previewArea.getElementsByClassName('prev_body')[0];
@@ -54,6 +52,6 @@ function Ready() {
 
     document.getElementsByClassName('AskQuestion')[0].onsubmit = function (ev) {
         document.getElementById('QuestionBodyReal').value =
-            converter.makeHtml(document.getElementById('QuestionBody').value);
+            document.getElementById('QuestionBody');
     }
 }

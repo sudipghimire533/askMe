@@ -46,7 +46,6 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
     <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
     <script src='../global/global.js' type='text/javascript'></script>
 
-    <script src='../global/js/showdown.min.js' type='text/javascript'></script>
     <script src='./thread.js' type='text/javascript'></script>
 </head>
 
@@ -156,7 +155,6 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
     var notification;
 
     function Ready() {
-        converter = new showdown.Converter();
         notification = document.getElementsByClassName('notify')[0];
         fillQuestion();
         allAnswers = <?php echo $AnswerInformation; ?>;
@@ -172,7 +170,7 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
         previewContainer = document.getElementById('PostPreview');
         document.getElementsByTagName('form')[0].onsubmit = function(ev) {
             document.getElementById('PostBodyReal').value =
-                converter.makeHtml(document.getElementById('PostBody').value);
+                document.getElementById('PostBody').value;
         };
     }
 </script>

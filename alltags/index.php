@@ -161,11 +161,10 @@ $conn->close();
     let lastActiveSection = sampleSection;
 
     function filter(query) {
-        let searchIn = letterMap.get(query.trim()[0].toLowerCase());
+        let searchIn = letterMap.get(query.trim()[0]);
         if (searchIn == null) {
             return;
         }
-        lastActiveSection.classList.remove('active');
         lastActiveSection = searchIn;
 
         searchIn.classList.add('active');
