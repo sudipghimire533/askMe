@@ -52,6 +52,6 @@ function Ready() {
 
     document.getElementsByClassName('AskQuestion')[0].onsubmit = function (ev) {
         document.getElementById('QuestionBodyReal').value =
-            document.getElementById('QuestionBody');
+            document.getElementById('QuestionBody').value;
     }
 }

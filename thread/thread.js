@@ -78,7 +78,7 @@ function fillAnswer(index) {
     Answer.getElementsByClassName('clapCount')[0].textContent =
         allAnswers[index].claps;
 
-    console.log(allAnswers[index]);
+
     if (allAnswers[index].isClapped != null) { // is question clapped?
         let clapIcon = Answer.getElementsByClassName('clap_icon')[0];
         clapIcon.classList.add('active');

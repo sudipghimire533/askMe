@@ -101,6 +101,7 @@ if (isset($_GET['query'])) {
         sample_tag_element = sample_question.getElementsByClassName('tagContainer')[0].firstElementChild;
 
         response = <?php echo $posts; ?>;
+        
         response.forEach(obj => {
             createQuestion(obj);
         });

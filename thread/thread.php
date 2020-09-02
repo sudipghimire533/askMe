@@ -70,22 +70,18 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
                 <div class='questionInfo'>
                     <div class='tagContainer'></div>
                     <span class='meta' title='Posted by'>
-                        <!--span class='label'>Posted by:</span-->
                         <i class='fas fa-user-astronaut'></i>
                         <a href='#' class='asker_name' onclick="notify('Getting you to '+this.textContent+' Profile')"></a>
                     </span>
                     <span class='meta' title='First Registered on'>
-                        <!--span class='label'>Added on:</span-->
                         <i class='fas fa-calendar-week'></i>
                         <span class='added_on'></span>
                     </span>
                     <span class='meta' title='Last updated on'>
-                        <!--span class='label'>Updated on:</span-->
                         <i class='fas fa-calendar-alt'></i>
                         <span class='updated_on'></span>
                     </span>
                     <span class='meta' title='Viewed for'>
-                        <!--span class='label'>visit count:</span!-->
                         <i class='fas fa-eye'></i>
                         <span class='visited_for'></span>
                     </span>
@@ -131,7 +127,7 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
                     <div class=' inputContainer'>
                         <div class='toolbar'>ToolBar</div>
                         <textarea placeholder='Write Question Description Here..' id='PostBody' required='' minlength='20' onfocus='startPreview(this,false);' onblur='endPreview()'></textarea>
-                        <textarea name='description' id='PostBodyReal' style='display:none;' value=''></textarea>
+                        <input type='text' name='description' id='PostBodyReal' style='display: none;' value='' />
                     </div>
                     <div id='PostPreview' class='Answer description' tabindex='0'>
                     </div>
@@ -169,8 +165,9 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
 
         previewContainer = document.getElementById('PostPreview');
         document.getElementsByTagName('form')[0].onsubmit = function(ev) {
-            document.getElementById('PostBodyReal').value =
-                document.getElementById('PostBody').value;
+            console.log(document.getElementById('PostBodyReal').value =
+                document.getElementById('PostBody').value);
+            alert('stop');
         };
     }
 </script>

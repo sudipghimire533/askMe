@@ -91,7 +91,7 @@ function validateTags(&$tags)
 $Author = 1;
 
 $Title =  $_POST['title'];
-$Description = htmlspecialchars($_POST['description']);
+$Description = $_POST['description'];
 $Tags  = $_POST['tags'];
 
 $Title = trim($conn->real_escape_string($Title));
@@ -128,22 +128,16 @@ function insertQuestion()
             VALUES ($QuestionId, ?)
         ;") or fail($linkTag->error);
 
-    $conn->commit();
-
     $tag = "";
-    $updateCount = $conn->prepare("UPDATE 
-            Tags SET UseCount = UseCount+1
-            WHERE Id = ?
-        ;") or fail($conn->error);
     $linkTag->bind_param("i", $tag);
-    $updateCount->bind_param("i", $tag);
+    
     for ($i = 0; $i < count($Tags); ++$i) {
         $tag = $Tags[$i];
         $linkTag->execute() or fail("Error while linking tag. " . $linkTag->error);
-        $updateCount->execute() or fail("Error while updatingCount. " . $updateCount->error);
     }
+    
     $linkTag->close();
-    $updateCount->close();
+    $conn->commit();
 
     sucess($QuestionId);
 }
