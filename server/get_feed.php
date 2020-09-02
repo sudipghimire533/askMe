@@ -123,6 +123,7 @@ class Getfeed
     }
     public function activityBy($person, &$response)
     {
+        /*
         $got = $this->postedBy($person, $response);
         $qns = ($got == 0) ? json_decode($response) : array();
 
@@ -130,5 +131,16 @@ class Getfeed
         $ans = ($got == 0) ? json_decode($response) : array();
 
         $response = json_encode(array_merge($ans, $qns));
+        */
+        $got = $this->postedBy($person, $response);
+        $res = ($got == 0) ? json_decode($response) : array();
+
+        $got = $this->answerBy($person, $response);
+        $response  = json_encode(
+            array_merge(
+                $res,
+                ($got == 0) ? json_decode($response) : array()
+            )
+        );
     }
 };
