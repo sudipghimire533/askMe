@@ -23,7 +23,7 @@ function quickAction(action, id, sucessCallBack) {
     req.timeout = 5 * 1000;
     req.onerror = function () {
         console.log(this);
-        notify('We were unable to send that Request to the server', 2);
+        notify('We were unable to perform that action', 2);
         return -1;
     }
     req.ontimeout = req.onerror;

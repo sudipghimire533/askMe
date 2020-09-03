@@ -123,7 +123,7 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
                     </div>
                 </div>
                 <a name='writeAnswer'></a>
-                <form class='writerSection' method='POST' action='/server/post_answer.php'>
+                <form class='writerSection' method='POST' action='/server/post_answer.php' id='answerForm'>
                     <div class=' inputContainer'>
                         <div class='toolbar'>ToolBar</div>
                         <textarea placeholder='Write Question Description Here..' id='PostBody' required='' minlength='20' onfocus='startPreview(this,false);' onblur='endPreview()'></textarea>
@@ -164,10 +164,9 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
         thisQuestion = null;
 
         previewContainer = document.getElementById('PostPreview');
-        document.getElementsByTagName('form')[0].onsubmit = function(ev) {
+        document.getElementById('answerForm').onsubmit = function(ev) {
             console.log(document.getElementById('PostBodyReal').value =
                 document.getElementById('PostBody').value);
-            alert('stop');
         };
     }
 </script>

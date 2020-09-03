@@ -27,6 +27,10 @@ if (isset($_GET['id'])) {
  * The result for clapCount is unexpected...
  * (may it is missing something to fetch from questionclaps)
 */
+/*
+ * This query is going so wrong. 
+ * even questioncount and answer count is wrong;
+*/
 $res = $conn->query("SELECT
             CONCAT(user.Firstname, ' ', user.LastName) AS fullname,
             user.Email AS email,
@@ -221,7 +225,7 @@ $conn->close();
         source.classList.add('active');
         source.classList.remove('inactive');
         source.onclick = function() {
-            notify('You are already following ' + '<?php echo $UserName; ?>');
+            notify('You are already following ' + '<?php echo $UserName; ?>', 1);
         };
     }
 
@@ -230,6 +234,8 @@ $conn->close();
             quickAction("follow", id, function() {
                 notify("You are now following " + '<?php echo $UserName; ?>');
                 followLastStep(source);
+                let followersCounter = document.getElementsByClassName('followersCount')[0].getElementsByClassName('count')[0];
+                followersCounter.textContent = parseInt(followersCounter.textContent) + 1;
             });
 
         } else {

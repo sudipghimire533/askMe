@@ -182,7 +182,6 @@ body {
   display: block;
   background: rgba(41, 41, 41, 0.8);
   left: 0;
-  vertical-align: middle;
   font-size: var(--fontSmall);
   height: 0;
   width: 100%;
@@ -210,7 +209,7 @@ body {
   animation: beat .5s infinite;
 }
 .followBtn.inactive:hover .follow_icon,
-.followBtn.active{
+.followBtn.active .follow_icon{
   color: var(--Red);
 }
 .followBtn.active .follow_icon{
@@ -228,4 +227,7 @@ body {
 }
 .followBtn.active > span:after{
   content: 'followed';
+  color: var(--Black);
+  font-weight: bold;
+  letter-spacing: 1.4px;
 }
