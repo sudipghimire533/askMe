@@ -44,11 +44,9 @@ $conn->close();
     </div>
 </body>
 <style>
+    .tag:first-of-type,
+    .tagCategory.inactive,
     .tagCategory:first-of-type {
-        display: none;
-    }
-
-    .tag:first-of-type {
         display: none;
     }
 
@@ -124,14 +122,6 @@ $conn->close();
     .tag.active {
         background: var(--Niagara);
     }
-
-    .tag.inactive {
-        display: none;
-    }
-
-    .tagCategory.inactive {
-        display: none;
-    }
 </style>
 <script>
     let allTags = <?php echo $res; ?>; // we will assume everything is in lowercase
@@ -179,11 +169,6 @@ $conn->close();
         } else {
             letterMap.forEach(function(sec) {
                 sec.classList.remove('inactive');
-                sec.classList.remove('active');
-            });
-            lastMatch.forEach(function(el) {
-                el.classList.remove('inactive');
-                el.classList.remove('active');
             });
             return;
         }
