@@ -33,22 +33,56 @@ function fillQuestion() {
         bookmarkIcon.classList.add('active');
         bookmark(bookmarkIcon, false);
     }
+
+    let clapIcon = Question.getElementsByClassName('clap_icon')[0];
     if (thisQuestion.isClapped != null) { // is question clapped?
-        let clapIcon = Question.getElementsByClassName('clap_icon')[0];
         clapIcon.classList.add('active');
         clap(clapIcon, false);
+    } else {
+        /*
+        clapIcon.onclick = function () {
+            console.log(thisQuestion.authorId);
+            clap(clapIcon, true, 'qn', thisQuestion.authorId);
+        };
+        */
+        clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
 }
-function clap(source, alsoSend = false) {
-    if (alsoSend === true) {
-        // send request..
-        notify('Yummy! Tasty clap');
-    }
+function clapLastStep(source) {
     source.onclick = function () {
         notify('You already clapped this item. Visit your profile for more action.', 1);
     };
     source.classList.add('active');
     source.classList.remove('inactive');
+}
+function clap(source, alsoSend = false, type = 'ans', id) {
+    if (alsoSend === true) {
+        let req = new XMLHttpRequest;
+        req.timeout = 5 * 1000;
+        req.ontimeout = function () {
+            notify('We were unable to send that Request to the server', 2);
+        }
+        req.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText != '0') {
+                    this.onerror();
+                    reeturn;
+                }
+                notify('Yummy! Tasty clap');
+                let counterText = source.parentElement.getElementsByClassName('clapCount')[0];
+                counterText.textContent = parseInt(counterText.textContent) + 1; //  increase the counter
+                clapLastStep(source);
+            }
+        };
+        if (type === 'ans') type = 'clapAnswer';
+        else if (type === 'qn') type = 'clapQuestion';
+        else return;
+
+        req.open('GET', '/server/quick_action.php?' + type + '=true&clapTo=' + id);
+        req.send();
+    } else {
+        clapLastStep(source);
+    }
 }
 
 let sampleAnswer;
@@ -79,10 +113,18 @@ function fillAnswer(index) {
         allAnswers[index].claps;
 
 
+
+    let clapIcon = Answer.getElementsByClassName('clap_icon')[0];
     if (allAnswers[index].isClapped != null) { // is question clapped?
-        let clapIcon = Answer.getElementsByClassName('clap_icon')[0];
         clapIcon.classList.add('active');
         clap(clapIcon, false);
+    } else {
+        /*
+            clapIcon.onclick = function(){
+                clap(clapIcon, true, 'ans', allAnswer[index].authorId);
+            };
+        */
+        clapIcon.setAttribute("onclick", "clap(this, true, 'ans', " + allAnswers[index].id + ")");
     }
 
 

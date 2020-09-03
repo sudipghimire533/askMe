@@ -10,8 +10,9 @@
 	</div>
 	<form id='navMiddle' method='GET' action='/home/home.php'>
 		<input type='text' placeholder='What You Want To Find Today?' title='What You Want to Find Today' id='navSearch' name='query' />
-		<i class='fas fa-search' onclick='topSearch()'></i>
+		<i class='fas fa-search navSearchIcon' onclick='topSearch()'></i>
 	</form>
+	<i class='fas fa-search navTriggerIcon' onclick='triggerSearch(this)'></i>
 	<div id='navRight'>
 		<a href='/profile/profile.php' id='navUser'>
 			<img src='/user.png' alt='Profile Image' title='Visit My Profile' id='navMe' />
@@ -23,8 +24,10 @@
 			<i class='fas fa-caret-down' onclick='toggleDropDown()'></i>
 			<div id='navDropDown'>
 				<a href='/profile/profile.php'>My Profile</a><br />
-				<a href="/home/home.php">My Questions</a><br />
-				<a href='/home/home.php'>My Bokmarks</a><br />
+				<a href="/home/home.php?questionby=">My Questions</a><br />
+				<a href='/home/home.php?bookmarkedby='>My Bokmarks</a><br />
+				<hr />
+				<a href='/ask/ask.php?ref=dropdown'>Ask Community</a><br />
 				<hr />
 				<a href="#">Log out</a>
 			</div>
@@ -74,16 +77,24 @@
 		max-width: 600px;
 	}
 
-	#navMiddle i {
-		position: absolute;
-		right: 10px;
+	.navSearchIcon,
+	.navTriggerIcon {
 		cursor: pointer;
 		color: var(--LightDark);
 		transition-duration: .5s;
 		transition-property: color, scale;
 	}
 
-	#navMiddle i:hover {
+	.navSearchIcon {
+		position: absolute;
+		right: 10px;
+	}
+
+	.navTriggerIcon {
+		display: none !important;
+	}
+
+	.navSearchIcon:hover {
 		color: var(--White);
 		scale: 1.1;
 	}
@@ -194,8 +205,29 @@
 
 	@media only screen and (max-width: 720px) {
 		#navMiddle {
-			display: none;
+			max-width: 0px;
+			overflow: hidden;
 		}
+		#NavBar.searching #navMiddle{
+			max-width: 100%;
+			transition: max-width .3s;
+		}
+		.navTriggerIcon {
+			display: block !important;
+		}
+		#NavBar.searching #navLeft,
+		#NavBar.searching #navRight{
+			display: none !important;
+		}
+		#NavBar .navTriggerIcon:after{
+			content: 'search';
+			padding-left: 4px;
+			font-family: Rubik, sans-serif;
+		}
+		#NavBar.searching .navTriggerIcon:after{
+			content: 'cancel';
+		}
+
 	}
 </style>
 <script type='text/javascript'>
@@ -205,5 +237,11 @@
 
 	function toggleDropDown() {
 		document.getElementById('navMenu').classList.toggle('active');
+	}
+
+	function triggerSearch(source) {
+		document.getElementById('NavBar').classList.toggle('searching');
+		source.classList.toggle('fa-search');
+		source.classList.toggle('fa-times');
 	}
 </script>

@@ -42,19 +42,20 @@ class showQuestion
         */
         $res = $this->conn->query("SELECT
                     qn.Title AS title,
+                    qn.Id as id,
                     qn.URLTitle AS url,
                     qn.Description AS info,
                     qn.AddedOn AS addedOn,
                     qn.VisitCount AS visit,
                     (
-                        SELECT COUNT(User) FROM QuestionClaps WHERE Question = $id
+                        SELECT COUNT(User) FROM QuestionClaps WHERE Question = qn.Id
                     ) AS claps,
                     qn.ModifiedOn AS updatedOn,
                     CONCAT(user.FirstName, ' ', user.LastName) AS authorName,
                     user.Id AS authorId,
                     GROUP_CONCAT(tg.Name) As tag,
                     ub.Question As isBookmarked,
-                    ub.Question AS isClapped
+                    uc.Question AS isClapped
                     FROM
                     Question qn
                     LEFT JOIN
@@ -65,6 +66,8 @@ class showQuestion
                     User user ON qn.Author=user.Id
                     LEFT JOIN
                     UserBookmarks ub ON (ub.Question = qn.Id) AND (ub.User = $thisUserId)
+                    LEFT JOIN
+                    QuestionClaps uc ON (uc.Question = qn.Id) AND (uc.User = $thisUserId)
                     WHERE qn.Id = $id
                     GROUP BY qn.Id
                 ;") or die($this->conn->error);
@@ -89,11 +92,12 @@ class showQuestion
                     user.Id AS authorId,
                     user.Intro AS authorIntro,
                     ans.Description AS info,
+                    ans.Id as id,
                     ans.AddedOn AS addedOn,
                     ans.ModifiedOn As updatedOn,
                     ac.Answer As isClapped,
                     (
-                        SELECT COUNT(User) FROM AnswerClaps WHERE Answer=$id
+                        SELECT COUNT(User) FROM AnswerClaps WHERE Answer=ans.Id
                     ) AS claps
                     FROM
                     Answer ans

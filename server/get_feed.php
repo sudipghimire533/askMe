@@ -55,6 +55,7 @@ class Getfeed
                 UserBookmarks ub ON (ub.User=$thisUser) AND (ub.Question = qn.Id)
                 WHERE qn.Id IN ($question)
                 GROUP BY qn.Id
+                ORDER BY qn.ModifiedOn DESC
             ;") or fail($this->conn->error, __LINE__);
         $response = $res->fetch_all(MYSQLI_ASSOC);
         $response = json_encode($response);

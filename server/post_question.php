@@ -94,9 +94,9 @@ $Title =  $_POST['title'];
 $Description = $_POST['description'];
 $Tags  = $_POST['tags'];
 
-$Title = trim($conn->real_escape_string($Title));
-$Description = trim($conn->real_escape_string($Description));
-$Tags = trim($conn->real_escape_string($Tags));
+$Title = $conn->real_escape_string(trim($Title));
+$Description = $conn->real_escape_string(trim($Description));
+$Tags = $conn->real_escape_string(trim($Tags));
 
 function insertQuestion()
 {
@@ -130,12 +130,12 @@ function insertQuestion()
 
     $tag = "";
     $linkTag->bind_param("i", $tag);
-    
+
     for ($i = 0; $i < count($Tags); ++$i) {
         $tag = $Tags[$i];
         $linkTag->execute() or fail("Error while linking tag. " . $linkTag->error);
     }
-    
+
     $linkTag->close();
     $conn->commit();
 

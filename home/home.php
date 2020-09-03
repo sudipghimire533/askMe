@@ -80,7 +80,7 @@ if (isset($_GET['query'])) {
         <div class='ShowTags'>
             <h2 class='label'>Be Smart. The Smart way</h2>
             <div class='label'>
-                <a href='#' style='color: var(--Niagara);'>See all Tag</a>
+                <a href='/alltags/' style='color: var(--Niagara);'>See all Tag</a>
             </div>
         </div>
 

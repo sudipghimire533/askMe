@@ -58,8 +58,8 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
             <div class='Question'>
                 <div class='questionTitle'>
                     <span class='titleText'></span>
-                    <span class='clapIcon' title='Clpas Count'>
-                        <i class='fas fa-thumbs-up clap_icon inactive' title='Give a Clap to this Post' onclick='clap(this, true)'></i>
+                    <span class='clapIcon' title='Claps Count'>
+                        <i class='fas fa-thumbs-up clap_icon inactive' title='Give a Clap to this Post' onclick="clap()"></i>
                         <br>
                         <span class='clapCount'></span>
                     </span>
@@ -99,7 +99,7 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
                             <img src='' alt='' title='' class='avatar' />
                         </span>
                         <span class='clapIcon' title='Clpas Count'>
-                            <i class='fas fa-thumbs-up clap_icon inactive' title='Give a Clap to this Post' onclick='clap(this, true)'></i>
+                            <i class='fas fa-thumbs-up clap_icon inactive' title='Give a Clap to this Post' onclick="clap('params....')"></i>
                             <br>
                             <span class='clapCount'></span>
                         </span>
