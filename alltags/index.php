@@ -122,11 +122,15 @@ $conn->close();
     }
 
     .tag.active {
-        background: red;
+        background: var(--Niagara);
     }
 
-    .tagCategory.active {
-        background: var(--Yellow);
+    .tag.inactive {
+        display: none;
+    }
+
+    .tagCategory.inactive {
+        display: none;
     }
 </style>
 <script>
@@ -135,11 +139,15 @@ $conn->close();
 
     let sampleSection;
 
+    let lastMatch = new Array;
+    let lastSection;
+
     function Ready() {
         sampleSection = document.getElementsByClassName('tagCategory')[0];
         let sampleTag = document.getElementsByClassName('tag')[0];
         let firstLetter = allTags[0].name[0];
         let currentSection = sampleSection.cloneNode(true);
+        lastSection = currentSection;
         currentSection.getElementsByClassName('tagLetter')[0].textContent = firstLetter;
         allTags.forEach(function(tag, i) {
             if (firstLetter != tag.name[0]) {
@@ -158,24 +166,42 @@ $conn->close();
         letterMap.set(firstLetter, currentSection);
     }
 
-    let lastActiveSection = sampleSection;
-
     function filter(query) {
-        let searchIn = letterMap.get(query.trim()[0]);
-        if (searchIn == null) {
+        query = String(query.trim()).toLowerCase();
+        lastMatch.forEach(function(el, index) {
+            el.classList.remove('active');
+        });
+        lastSection.classList.remove('active');
+        if (query.length != 0) {
+            letterMap.forEach(function(sec) {
+                sec.classList.add('inactive');
+            });
+        } else {
+            letterMap.forEach(function(sec) {
+                sec.classList.remove('inactive');
+                sec.classList.remove('active');
+            });
+            lastMatch.forEach(function(el) {
+                el.classList.remove('inactive');
+                el.classList.remove('active');
+            });
             return;
         }
-        lastActiveSection = searchIn;
+        lastMatch = new Array;
+        let section = letterMap.get(query[0]);
+        if (section == null) return; // there no tag that start from given char
 
-        searchIn.classList.add('active');
-        let options = searchIn.getElementsByClassName('tag');
-        console.log(options);
+        section.classList.remove('inactive');
+        section.classList.add('active');
+        lastSection = section;
+
+        let options = section.getElementsByClassName('tag');
         for (let i = 0; i < options.length; i++) {
-            if (String(options[i].textContent).indexOf(query) != -1) {
+            if (options[i].textContent.indexOf(query) != -1) {
                 options[i].classList.add('active');
-            } else {
-                options[i].classList.remove('active');
-            }
+                options[i].classList.remove('inactive');
+                lastMatch.push(options[i]);
+            } else {}
         }
     }
 </script>
