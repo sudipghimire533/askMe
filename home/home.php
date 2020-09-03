@@ -57,7 +57,7 @@ if (isset($_GET['query'])) {
                 <div class='questionTitle'>
                     <a href='#' class='titleText'></a>
                     <span class='quickAction'>
-                        <i class='fas fa-bookmark bookmarkIcon' title='Bookmark this question to visit later..' onclick='bookmark(this, true)'></i>
+                        <i class='fas fa-bookmark bookmarkIcon' title='Bookmark this question to visit later..' onclick="bookmark(this, true, 'QuestionId')"></i>
                         <i class='fas fa-star'></i>
                         <a href='#' class='fas fa-reply reply_icon' title='Give answer to this Question...' onclick='notify("Go hit it!!")'></a>
                     </span>
@@ -101,7 +101,7 @@ if (isset($_GET['query'])) {
         sample_tag_element = sample_question.getElementsByClassName('tagContainer')[0].firstElementChild;
 
         response = <?php echo $posts; ?>;
-        
+
         response.forEach(obj => {
             createQuestion(obj);
         });

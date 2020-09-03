@@ -28,10 +28,13 @@ function fillQuestion() {
         thisQuestion.visit;
     Question.getElementsByClassName('clapCount')[0].textContent =
         thisQuestion.claps;
+
+    let bookmarkIcon = Question.getElementsByClassName('bookmarkIcon')[0];
     if (thisQuestion.isBookmarked != null) { // is question bookmarked?
-        let bookmarkIcon = Question.getElementsByClassName('bookmarkIcon')[0];
         bookmarkIcon.classList.add('active');
         bookmark(bookmarkIcon, false);
+    } else {
+        bookmarkIcon.setAttribute("onclick", "bookmark(this, true, " + thisQuestion.id + ")");
     }
 
     let clapIcon = Question.getElementsByClassName('clap_icon')[0];
@@ -39,12 +42,6 @@ function fillQuestion() {
         clapIcon.classList.add('active');
         clap(clapIcon, false);
     } else {
-        /*
-        clapIcon.onclick = function () {
-            console.log(thisQuestion.authorId);
-            clap(clapIcon, true, 'qn', thisQuestion.authorId);
-        };
-        */
         clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
 }
@@ -55,31 +52,20 @@ function clapLastStep(source) {
     source.classList.add('active');
     source.classList.remove('inactive');
 }
-function clap(source, alsoSend = false, type = 'ans', id) {
+
+function clap(source, alsoSend = false, type = 'ans', id = 0) {
     if (alsoSend === true) {
-        let req = new XMLHttpRequest;
-        req.timeout = 5 * 1000;
-        req.ontimeout = function () {
-            notify('We were unable to send that Request to the server', 2);
-        }
-        req.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                if (this.responseText != '0') {
-                    this.onerror();
-                    reeturn;
-                }
+        if (type == 'qn' || type == 'ans') {
+            quickAction((type == 'qn') ? "clapQuestion" : "clapAnswer", id, function () {
                 notify('Yummy! Tasty clap');
                 let counterText = source.parentElement.getElementsByClassName('clapCount')[0];
                 counterText.textContent = parseInt(counterText.textContent) + 1; //  increase the counter
                 clapLastStep(source);
-            }
-        };
-        if (type === 'ans') type = 'clapAnswer';
-        else if (type === 'qn') type = 'clapQuestion';
-        else return;
-
-        req.open('GET', '/server/quick_action.php?' + type + '=true&clapTo=' + id);
-        req.send();
+            });
+        } else {
+            notify('Unknown Request....', 2);
+            return;
+        }
     } else {
         clapLastStep(source);
     }
@@ -93,7 +79,7 @@ function fillAnswer(index) {
         allAnswers[index].info;
 
     let nameContainer = Answer.getElementsByClassName('authorName')[0];
-    nameContainer.setAttribute('href', '/profile/id?=' + allAnswers[index].authorId);
+    nameContainer.setAttribute('href', '/profile/profile.php?id=' + allAnswers[index].authorId);
     nameContainer.textContent = allAnswers[index].authorName;
 
     Answer.getElementsByClassName('authorIntro')[0].textContent =
@@ -112,18 +98,11 @@ function fillAnswer(index) {
     Answer.getElementsByClassName('clapCount')[0].textContent =
         allAnswers[index].claps;
 
-
-
     let clapIcon = Answer.getElementsByClassName('clap_icon')[0];
     if (allAnswers[index].isClapped != null) { // is question clapped?
         clapIcon.classList.add('active');
         clap(clapIcon, false);
     } else {
-        /*
-            clapIcon.onclick = function(){
-                clap(clapIcon, true, 'ans', allAnswer[index].authorId);
-            };
-        */
         clapIcon.setAttribute("onclick", "clap(this, true, 'ans', " + allAnswers[index].id + ")");
     }
 

@@ -40,10 +40,12 @@ function createQuestion(Question) {
     user.textContent = Question.authorName;
     target.getElementsByClassName('updated_on')[0].textContent =
         Question.modifiedOn.split(' ')[0]; // only date not time
+    let bookmarkIcon = target.getElementsByClassName('bookmarkIcon')[0];
     if (Question.isBookmarked !== null) { // is question bookmarked?
-        let bookmarkIcon = target.getElementsByClassName('bookmarkIcon')[0];
         bookmarkIcon.classList.add('active');
         bookmarkIcon.onclick = function () { bookmark(bookmarkIcon, false); };
+    } else {
+        bookmarkIcon.setAttribute("onclick", "bookmark(this, true," + Question.id + ")")
     }
     feed_container.appendChild(target);
     appended_questions.set(Question.id, true);

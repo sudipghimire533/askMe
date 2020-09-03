@@ -17,23 +17,27 @@ function bookMark($questionId)
     return 0;
 }
 
-function clap($postId, $type)
+function clapQuestion($postId)
 {
     global $conn, $thisUserId;
     $postId = $conn->real_escape_string(trim($postId));
 
-    if ($type == 'qn') {
-        $table = "QuestionClaps";
-    } else if ($type == 'ans') {
-        $table = "AnswerClaps";
-    } else {
-        return 1;
-    }
-    $colName = ($table == "QuestionClaps") ? "Question" : "Answer";
     $conn->query("INSERT INTO
-            $table ($colName, User)
-            VALUES ($postId, $thisUserId)
-        ;") or die($conn->error);
+        QuestionClaps  (Question, User)
+        VALUES ($postId,$thisUserId)
+    ;") or die($conn->error);
+    return 0;
+}
+
+function clapAnswer($postId)
+{
+    global $conn, $thisUserId;
+    $postId = $conn->real_escape_string(trim($postId));
+
+    $conn->query("INSERT INTO
+        AnswerClaps  (Answer, User)
+        VALUES ($postId,$thisUserId)
+    ;") or die($conn->error);
     return 0;
 }
 
@@ -51,14 +55,14 @@ function follow($userId)
 }
 
 
-if (
-    (isset($_GET['clapAnswer']) ||
-        isset($_GET['clapQuestion'])) &&
-    isset($_GET['clapTo'])
-) {
-    echo clap($_GET['clapTo'], (isset($_GET['clapAnswer']) ? "ans" : "qn"));
-} else {
-    echo "incomplete request...";
+if (isset($_GET['target'])) {
+    if (isset($_GET['clapQuestion'])) {
+        clapQuestion($_GET['target']);
+    } else if (isset($_GET['clapAnswer'])) {
+        clapAnswer($_GET['target']);
+    } else if (isset($_GET['bookmark'])) {
+        echo bookMark($_GET['target']);
+    }
 }
 
 $conn->close();

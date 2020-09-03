@@ -86,7 +86,7 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
                         <span class='visited_for'></span>
                     </span>
                     <span class='meta quickAction'>
-                        <i class='fas fa-bookmark bookmarkIcon' onclick='bookmark(this, true)'></i>
+                        <i class='fas fa-bookmark bookmarkIcon' onclick="bookmark(this, true, 'QuestionId')"></i>
                         <a href='#writeAnswer' class='fas fa-reply' onclick="notify('Go hit it!!')"></a>
                     </span>
                 </div>

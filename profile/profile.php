@@ -22,9 +22,8 @@ if (isset($_GET['id'])) {
 /* Fetch Personal data.. */
 /*
  * TODO:
- * OPTIMIZE This Query...
- * Also the query is not heavily tested
- * after creating seperate table for clapsCount for Answer
+ * The result for clapCount is unexpected...
+ * (may it is missing something to fetch from questionclaps)
 */
 $res = $conn->query("SELECT
             CONCAT(user.Firstname, ' ', user.LastName) AS fullname,
@@ -36,8 +35,8 @@ $res = $conn->query("SELECT
             COUNT(qn.Id) AS questionCount,
             COUNT(ans.Id) AS answerCount,
             (
-                 (SELECT COUNT(User) FROM AnswerClaps WHERE Answer=ans.Id)
-                +(SELECT COUNT(USER) FROM QuestionClaps WHERE Question=qn.Id)
+                 (SELECT COUNT(USER) FROM QuestionClaps WHERE Question=qn.Id)
+                +(SELECT COUNT(User) FROM AnswerClaps WHERE Answer=ans.Id)
             ) AS clapCount
             FROM User AS user
             LEFT JOIN
@@ -46,8 +45,6 @@ $res = $conn->query("SELECT
             Question  qn ON qn.Author=user.Id
             WHere user.Id=$UserId
         ;") or fail($conn->error);
-
-
 
 $row = $res->fetch_assoc();
 $UserName = $row['fullname'];
