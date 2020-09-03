@@ -45,7 +45,9 @@ function follow($userId)
 {
     global $conn, $thisUserId;
     $userId = $conn->real_escape_string(trim($userId));
-
+    if ($userId == $thisUserId) { // Do not follow yourself
+        return 1;
+    }
     $conn->query("INSERT INTO
                 UserFollow
                 (FollowedBy, FollowedTO)
@@ -62,6 +64,8 @@ if (isset($_GET['target'])) {
         clapAnswer($_GET['target']);
     } else if (isset($_GET['bookmark'])) {
         echo bookMark($_GET['target']);
+    } else if (isset($_GET['follow'])) {
+        echo follow($_GET['target']);
     }
 }
 

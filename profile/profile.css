@@ -213,10 +213,19 @@ body {
 .followBtn.active{
   color: var(--Red);
 }
+.followBtn.active .follow_icon{
+  animation-iteration-count: 1;
+}
 .followBtn{
   transition: scale .3s;
 }
 .followBtn.inactive:hover,
 .followBtn.active{
   scale: 0.9;
+}
+.followBtn > span:after{
+  content: 'follow';
+}
+.followBtn.active > span:after{
+  content: 'followed';
 }

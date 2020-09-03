@@ -15,7 +15,7 @@ function notify(text, type = 0, keep_for = 3) {
     }, (keep_for + 1) * 1000);
 }
 function quickAction(action, id, sucessCallBack) {
-    if (action != 'clapAnswer' && action != 'clapQuestion' && action != 'bookmark') {
+    if (action != 'clapAnswer' && action != 'clapQuestion' && action != 'bookmark' && action != 'follow') {
         notify('No such Action...');
         return;
     }

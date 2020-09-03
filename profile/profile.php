@@ -15,9 +15,11 @@ function fail($err, $line = 0)
     exit;
 }
 
-$UserId = 1;
+$thisUserId = 1;
 if (isset($_GET['id'])) {
     $UserId = $conn->real_escape_string($_GET['id']);
+} else {
+    $UserId = 1;
 }
 /* Fetch Personal data.. */
 /*
@@ -37,12 +39,15 @@ $res = $conn->query("SELECT
             (
                  (SELECT COUNT(USER) FROM QuestionClaps WHERE Question=qn.Id)
                 +(SELECT COUNT(User) FROM AnswerClaps WHERE Answer=ans.Id)
-            ) AS clapCount
+            ) AS clapCount,
+            uf.FollowedBY AS isFollowing
             FROM User AS user
             LEFT JOIN
             Answer ans ON ans.Author=user.Id
             LEFT JOIN
             Question  qn ON qn.Author=user.Id
+            LEFT JOIN
+            UserFollow uf ON (uf.FollowedBy=$thisUserId) AND (uf.FollowedTo = user.Id)
             WHere user.Id=$UserId
         ;") or fail($conn->error);
 
@@ -63,6 +68,7 @@ $ClapsCount = $row['clapCount'];
 $ClapsCount = ($ClapsCount == null) ? 0 : $ClapsCount;
 $QuestionCount = $row['questionCount'];
 
+$isFollowing = $row['isFollowing'];
 
 $res = $conn->query("SELECT
     COUNT(uf1.FollowedBy)
@@ -103,9 +109,11 @@ $conn->close();
     <link href='../global/global.css' type="text/css" rel="stylesheet" />
     <link href='./profile.css' type="text/css" rel="stylesheet" />
     <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
+
+    <script stype='text/javascript' src='../global/global.js'></script>
 </head>
 
-<body>
+<body onload='Ready()'>
     <div id='Main'>
         <?php
         echo file_get_contents('../global/navbar.php');
@@ -117,9 +125,9 @@ $conn->close();
             <div class='profileInfo'>
                 <div class='profileIdentity'>
                     <div class='profileName'><?php echo $UserName; ?></div>
-                    <div class='followBtn inactive' onclick='follow(this, true)'>
+                    <div class='followBtn <?php echo ($isFollowing == null) ? "inactive" : "active"; ?>' onclick='follow(this, true, <?php echo $UserId; ?>)'>
                         <i class='fa fa-heart follow_icon'></i>
-                        <span>Follow</span>
+                        <span></span>
                     </div>
                     <div class='profileIntro'><?php echo $UserIntro; ?></div>
                 </div>
@@ -143,7 +151,7 @@ $conn->close();
                             <?php echo $ClapsCount; ?>
                         </b>
                         <span>Claps</span>
-                        <div class='hoverlay'>See All Posts <?php echo $UserName; ?> giot clapped</div>
+                        <div class='hoverlay'>See All Posts <?php echo $UserName; ?> got clapped</div>
                     </a>
                     <a href="/user/user.php?followersof=<?php echo $UserId; ?>" class='followersCount impr hv_border'>
                         <b class='count'>
@@ -202,20 +210,35 @@ $conn->close();
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class='notifyCenter'>
+        <div class='notify' style='display: none;'></div>
+    </div>
 </body>
 <script>
-    function follow(source, sendAlso = false) {
-        if (sendAlso === true) {
-            // ...
-
-        }
+    function followLastStep(source) {
         source.classList.add('active');
         source.classList.remove('inactive');
-        source.lastElementChild.textContent = 'followed';
-        source.firstElementChild.style.animationIterationCount = '1';
         source.onclick = function() {
-            follow(source, false)
+            notify('You are already following ' + '<?php echo $UserName; ?>');
         };
+    }
+
+    function follow(source, sendAlso = false, id) {
+        if (sendAlso === true) {
+            quickAction("follow", id, function() {
+                notify("You are now following " + '<?php echo $UserName; ?>');
+                followLastStep(source);
+            });
+
+        } else {
+            followLastStep(source);
+        }
+    }
+
+    function Ready() {
+        notification = document.getElementsByClassName('notify')[0];
     }
 </script>
 
