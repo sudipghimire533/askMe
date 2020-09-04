@@ -80,7 +80,7 @@ class showQuestion
         $response = json_encode($response);
         return true;
     }
-    public function getAnswerFor($id, &$response, $offset = 0, $count = 3)
+    public function getAnswerFor($id, &$response)
     {
         $id = $this->conn->real_escape_string($id);
         /*
@@ -109,7 +109,6 @@ class showQuestion
                     User user On ans.Author=user.Id
                     WHERE ans.WrittenFor=$id
                     ORDER BY ans.ModifiedOn ASC
-                    LIMIT $offset,$count
                 ;") or die($this->conn->error);
         if ($res->num_rows == 0) {
             $response = 0;
