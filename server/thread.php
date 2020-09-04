@@ -52,6 +52,7 @@ class showQuestion
                     qn.ModifiedOn AS updatedOn,
                     CONCAT(user.FirstName, ' ', user.LastName) AS authorName,
                     user.Id AS authorId,
+                    user.UserName AS authorPath,
                     GROUP_CONCAT(tg.Name) As tag,
                     ub.Question As isBookmarked,
                     uc.Question AS isClapped
@@ -91,6 +92,7 @@ class showQuestion
                     CONCAT(user.FirstName,' ', user.LastName) AS authorName,
                     user.Id AS authorId,
                     user.Intro AS authorIntro,
+                    user.UserName AS authorPath,
                     ans.Description AS info,
                     ans.Id as id,
                     ans.AddedOn AS addedOn,

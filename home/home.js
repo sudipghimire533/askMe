@@ -18,14 +18,14 @@ function createQuestion(Question) {
     target.getElementsByClassName('titleText')[0].
         setAttribute('href', '/thread/' + Question.url);
     target.getElementsByClassName('reply_icon')[0].
-        setAttribute('href', '/thread/thread.php?id=' + Question.id + '#writeAnswer');
+        setAttribute('href', '/thread/' + Question.url + '#writeAnswer');
 
     target.getElementsByClassName('description')[0].firstElementChild.textContent =
         Question.info + '...';
 
     for (let i = 0, tags = Question.tag.split(','); i < tags.length; i++) {
         let tag = sample_tag_element.cloneNode(true);
-        tag.setAttribute('href', '/home/home.php?taggedfor=' + tags[i]);
+        tag.setAttribute('href', '/taggedfor/' + tags[i]);
         tag.textContent = tags[i];
         target.getElementsByClassName('tagContainer')[0].appendChild(tag);
         if (!feeded_tags.has(tags[i])) {
@@ -36,7 +36,7 @@ function createQuestion(Question) {
     }
 
     let user = target.getElementsByClassName('asker_name')[0];
-    user.setAttribute('href', '../profile/profile.php?id=' + Question.authorId);
+    user.setAttribute('href', '/profile/' + Question.authorPath);
     user.setAttribute('title', 'Visit profile of ' + Question.authorName);
     user.textContent = Question.authorName;
     target.getElementsByClassName('updated_on')[0].textContent =

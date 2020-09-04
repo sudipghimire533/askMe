@@ -5,7 +5,7 @@
 
 # Getting Started
 ## Create subdomain
-In `/etc/apache2/sites-available/000-default.conf` file:
+In __*/etc/apache2/sites-available/000-default.conf*__ file:
 ```
 <VirtualHost *:80>
 	<Directory /var/www/html/project>
@@ -30,4 +30,4 @@ service apache2 --full-restart
 ```
 
 # Get to Work
-Sit infront of your computer whole and keep building.
+Sit infront of your computer whole day and keep building.

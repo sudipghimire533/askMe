@@ -11,13 +11,13 @@ function fillQuestion() {
     for (let i = 0, tags = thisQuestion.tag.split(','); i < tags.length; i++) {
         let tag = document.createElement('a');
         tag.classList.add('tag');
-        tag.setAttribute('href', '/home/home.php?taggedfor=' + tags[i]);
+        tag.setAttribute('href', '/taggedfor/' + tags[i]);
         tag.textContent = tags[i];
         tagContainer.appendChild(tag);
     }
 
     let nameContainer = Question.getElementsByClassName('asker_name')[0];
-    nameContainer.setAttribute('href', '/profile/profile.php?id=' + thisQuestion.authorId);
+    nameContainer.setAttribute('href', '/profile/' + thisQuestion.authorPath);
     nameContainer.textContent = thisQuestion.authorName;
 
     Question.getElementsByClassName('added_on')[0].textContent =
@@ -79,7 +79,7 @@ function fillAnswer(index) {
         allAnswers[index].info;
 
     let nameContainer = Answer.getElementsByClassName('authorName')[0];
-    nameContainer.setAttribute('href', '/profile/profile.php?id=' + allAnswers[index].authorId);
+    nameContainer.setAttribute('href', '/profile/' + allAnswers[index].authorPath);
     nameContainer.textContent = allAnswers[index].authorName;
 
     Answer.getElementsByClassName('authorIntro')[0].textContent =
@@ -87,7 +87,7 @@ function fillAnswer(index) {
 
     let authorAvatar =
         Answer.getElementsByClassName('avatarContainer')[0].getElementsByTagName('img')[0];
-    authorAvatar.setAttribute('src', '../user.png');
+    authorAvatar.setAttribute('src', '/user.png');
     authorAvatar.setAttribute('alt', allAnswers[index].authorName);
     authorAvatar.setAttribute('title', allAnswers[index].authorName);
 

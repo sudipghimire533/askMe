@@ -138,6 +138,7 @@ function insertQuestion()
 
     $linkTag->close();
     $conn->commit();
+    $conn->autocommit(true);
 
     sucess($QuestionId);
 }

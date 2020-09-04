@@ -8,7 +8,7 @@
 			<a href='/ask/ask.php?ref=navbar' id='navAskBtn'>Ask</a>
 		</span>
 	</div>
-	<form id='navMiddle' method='GET' action='/home/home.php'>
+	<form id='navMiddle' method='GET' action='/home'>
 		<input type='text' placeholder='What You Want To Find Today?' title='What You Want to Find Today' id='navSearch' name='query' />
 		<i class='fas fa-search navSearchIcon' onclick='topSearch()'></i>
 	</form>
@@ -208,23 +208,28 @@
 			max-width: 0px;
 			overflow: hidden;
 		}
-		#NavBar.searching #navMiddle{
+
+		#NavBar.searching #navMiddle {
 			max-width: 100%;
 			transition: max-width .3s;
 		}
+
 		.navTriggerIcon {
 			display: block !important;
 		}
+
 		#NavBar.searching #navLeft,
-		#NavBar.searching #navRight{
+		#NavBar.searching #navRight {
 			display: none !important;
 		}
-		#NavBar .navTriggerIcon:after{
+
+		#NavBar .navTriggerIcon:after {
 			content: 'search';
 			padding-left: 4px;
 			font-family: Rubik, sans-serif;
 		}
-		#NavBar.searching .navTriggerIcon:after{
+
+		#NavBar.searching .navTriggerIcon:after {
 			content: 'cancel';
 		}
 

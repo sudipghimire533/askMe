@@ -44,7 +44,7 @@ class Getfeed
                 SUBSTRING(qn.Description,1, 270) AS info,
                 GROUP_CONCAT(tg.Name) AS tag,
                 CONCAT(user.FirstName, ' ', user.LastName) as authorName,
-                user.Id AS authorId,
+                user.UserName AS authorPath,
                 ub.Question AS isBookmarked,
                 qn.ModifiedOn As modifiedOn
                 FROM Question qn
@@ -153,7 +153,9 @@ class Getfeed
         $res  = $this->conn->query("SELECT
                 qn.Id FROM
                 Question qn
-                WHERE qn.Author=$person
+                LEFT JOIN
+                User user On user.Id = qn.Author
+                WHERE user.UserName='$person'
                 AND qn.Id NOT IN ($notIn)
                 LIMIT $count
         ;") or fail($this->conn->error, __LINE__);
@@ -186,7 +188,9 @@ class Getfeed
                 Question qn
                 LEFT JOIN
                 Answer ans ON ans.WrittenFor = qn.Id
-                WHERE ans.Author=$person
+                LEFT JOIN
+                User user ON user.Id = ans.Author
+                WHERE user.UserName='$person'
                 AND qn.Id NOT IN($notIn)
                 LIMIT $count
         ;") or fail($this->conn->error, __LINE__);

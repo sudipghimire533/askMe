@@ -16,10 +16,14 @@ function fail($err, $line = 0)
 }
 
 $thisUserId = 1;
-if (isset($_GET['id'])) {
-    $UserId = $conn->real_escape_string($_GET['id']);
+
+
+
+if (isset($_GET['username'])) {
+    $uname = $conn->real_escape_string(trim(urldecode($_GET['username'])));
 } else {
-    $UserId = 1;
+    echo "No profile to show...";
+    exit;
 }
 
 /*
@@ -36,6 +40,7 @@ if (isset($_GET['id'])) {
  */
 
 $res = $conn->query("SELECT 
+            user.Id as id,
             CONCAT(user.FirstName, ' ', user.LastName) as fullName,
             user.Email as email,
             user.Phone as phone,
@@ -65,23 +70,21 @@ $res = $conn->query("SELECT
             UserFollow uf
             ON (uf.FollowedBy = $thisUserId) AND (uf.FollowedTo=user.Id)
 
-            Where user.Id = $UserId;
+            Where user.UserName = '$uname';
         ") or fail($conn->error, __LINE__);
 
 $res = $res->fetch_all(MYSQLI_ASSOC)[0];
 
-echo "<script>console.log(" . json_encode($res) . ");</script>";
-
 $allAnswers = $res['answers'];
 
-$UserName = $res['fullName'];
-
-if ($UserName == null) { // There is no such User.....
+$UserId = $res['id'];
+if ($UserId == null) { // There is no such User.....
     echo "<h1>We cannot get any user for this data.<br>Signin or share us with your friends to get registered on this id</h1>";
     $conn->close();
     exit;
 }
 
+$UserName = $res['fullName'];
 $UserEmail = $res['email'];
 $UserIntro = $res['intro'];
 $UserLocation = $res['location'];
@@ -128,11 +131,11 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Help me for Homework</title>
 
-    <link href='../global/global.css' type="text/css" rel="stylesheet" />
-    <link href='./profile.css' type="text/css" rel="stylesheet" />
-    <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
+    <link href='/global/global.css' type="text/css" rel="stylesheet" />
+    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
+    <link href='/profile/profile.css' type='text/css' rel='stylesheet' />
 
-    <script stype='text/javascript' src='../global/global.js'></script>
+    <script type='text/javascript' src='/global/global.js'></script>
 </head>
 
 <body onload='Ready()'>
@@ -142,7 +145,7 @@ $conn->close();
         ?>
         <div class='profileContainer'>
             <div class='profileImage'>
-                <img src='../user.png'></img>
+                <img src='/user.png'></img>
             </div>
             <div class='profileInfo'>
                 <div class='profileIdentity'>
@@ -160,7 +163,7 @@ $conn->close();
                     <div class='profileIntro'><?php echo $UserIntro; ?></div>
                 </div>
                 <div class='impressionContainer'>
-                    <a href="/home/home.php?questionby=<?php echo $UserId; ?>" class='questionCount impr hv_border'>
+                    <a href="/questionby/<?php echo $uname; ?>" class='questionCount impr hv_border'>
                         <b class='count'>
                             <?php echo $QuestionCount; ?>
                         </b>
@@ -188,7 +191,7 @@ $conn->close();
                         <span>Followers</span>
                         <div class='hoverlay'>See users following <?php echo $UserName; ?></div>
                     </a>
-                    <a href="/home/home.php?answerby=<?php echo $UserId; ?>" class='answerCount impr hv_border'>
+                    <a href="/answerby/<?php echo $uname; ?>" class='answerCount impr hv_border'>
                         <b class='count'>
                             <?php echo $AnswerCount; ?>
                         </b>
@@ -209,7 +212,7 @@ $conn->close();
                     foreach ($UserTags as &$tag) {
                         $tag = trim($tag);
                         if (strlen($tag) == 0) continue;
-                        echo "<a href='/home/home.php?taggedfor=$tag' class='tag'>$tag</a>";
+                        echo "<a href='/?taggedfor/$tag' class='tag'>$tag</a>";
                     }
                     ?>
                 </div>
