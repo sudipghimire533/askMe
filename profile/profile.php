@@ -22,6 +22,19 @@ if (isset($_GET['id'])) {
     $UserId = 1;
 }
 
+/*
+ * Splitting of query is needed because
+ * join will duplicate the data (like answerCount)
+ * and not all subquery independent (like answer and answerClaps)
+ */
+
+
+/*
+  * TODO:
+  * Join all query into a multi query to
+  * finnish all query in one contact with database
+ */
+
 $res = $conn->query("SELECT 
             CONCAT(user.FirstName, ' ', user.LastName) as fullName,
             user.Email as email,
@@ -53,7 +66,7 @@ $res = $conn->query("SELECT
             ON (uf.FollowedBy = $thisUserId) AND (uf.FollowedTo=user.Id)
 
             Where user.Id = $UserId;
-        ;") or fail($conn->error, __LINE__);
+        ") or fail($conn->error, __LINE__);
 
 $res = $res->fetch_all(MYSQLI_ASSOC)[0];
 
@@ -62,6 +75,13 @@ echo "<script>console.log(" . json_encode($res) . ");</script>";
 $allAnswers = $res['answers'];
 
 $UserName = $res['fullName'];
+
+if ($UserName == null) { // There is no such User.....
+    echo "<h1>We cannot get any user for this data.<br>Signin or share us with your friends to get registered on this id</h1>";
+    $conn->close();
+    exit;
+}
+
 $UserEmail = $res['email'];
 $UserIntro = $res['intro'];
 $UserLocation = $res['location'];
@@ -78,7 +98,6 @@ $res = $conn->query("SELECT
             COUNT(ac.User) as answerClapCount
             FROM
             AnswerClaps ac
-
             WHERE ac.Answer IN ($allAnswers)
         ;") or fail($conn->error, __LINE__);
 
@@ -128,10 +147,16 @@ $conn->close();
             <div class='profileInfo'>
                 <div class='profileIdentity'>
                     <div class='profileName'><?php echo $UserName; ?></div>
-                    <div class='followBtn <?php echo ($isFollowing == null) ? "inactive" : "active"; ?>' onclick='follow(this, true, <?php echo $UserId; ?>)'>
-                        <i class='fa fa-heart follow_icon'></i>
-                        <span></span>
-                    </div>
+                    <?php
+                    if ($UserId != $thisUserId) { // do not show follow button if this is own profile 
+                        echo "<div class='followBtn "
+                            . (($isFollowing == 0) ? 'inactive' : 'active') // set active if already followed
+                            . "' onclick='follow(this, true, " . $UserId . ")'>
+                            <i class='fa fa-heart follow_icon'></i>
+                            <span></span>
+                        </div>";
+                    }
+                    ?>
                     <div class='profileIntro'><?php echo $UserIntro; ?></div>
                 </div>
                 <div class='impressionContainer'>
