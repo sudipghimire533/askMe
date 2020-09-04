@@ -40,6 +40,7 @@ class Getfeed
         $res = $this->conn->query("SELECT DISTINCT
                 qn.Title As title,
                 qn.Id AS id,
+                qn.URLTitle AS url,
                 SUBSTRING(qn.Description,1, 270) AS info,
                 GROUP_CONCAT(tg.Name) AS tag,
                 CONCAT(user.FirstName, ' ', user.LastName) as authorName,

@@ -26,9 +26,9 @@ class showQuestion
     }
     // TODO:
     // isBookmarked and isClapped is not working..
-    public function getQuestionById($id, &$response)
+    public function getQuestionByUrl($url, &$response, &$id)
     {
-        $id = $this->conn->real_escape_string(trim($id));
+        $url = $this->conn->real_escape_string(trim(urldecode($url)));
         /*
          * In below query 'thisUserId refers to the id of user browing this thread'
          * set that accordingly after implementing login
@@ -43,7 +43,6 @@ class showQuestion
         $res = $this->conn->query("SELECT
                     qn.Title AS title,
                     qn.Id as id,
-                    qn.URLTitle AS url,
                     qn.Description AS info,
                     qn.AddedOn AS addedOn,
                     qn.VisitCount AS visit,
@@ -68,7 +67,7 @@ class showQuestion
                     UserBookmarks ub ON (ub.Question = qn.Id) AND (ub.User = $thisUserId)
                     LEFT JOIN
                     QuestionClaps uc ON (uc.Question = qn.Id) AND (uc.User = $thisUserId)
-                    WHERE qn.Id = $id
+                    WHERE qn.URLTitle = '$url'
                     GROUP BY qn.Id
                 ;") or die($this->conn->error);
         $response = $res->fetch_all(MYSQLI_ASSOC);
@@ -76,6 +75,7 @@ class showQuestion
             $response = "That Question or related information not found";
             return false;
         }
+        $id = $response[0]['id']; // set the id for further processing
         $response = json_encode($response);
         return true;
     }

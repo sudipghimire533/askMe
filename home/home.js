@@ -16,7 +16,7 @@ function createQuestion(Question) {
 
     target.getElementsByClassName('titleText')[0].textContent = Question.title;
     target.getElementsByClassName('titleText')[0].
-        setAttribute('href', '/thread/thread.php?id=' + Question.id);
+        setAttribute('href', '/thread/' + Question.url);
     target.getElementsByClassName('reply_icon')[0].
         setAttribute('href', '/thread/thread.php?id=' + Question.id + '#writeAnswer');
 

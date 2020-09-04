@@ -43,13 +43,13 @@ if (isset($_GET['query'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Help me for Homework</title>
 
-    <link href='../global/global.css' type="text/css" rel="stylesheet" />
-    <link href='./home.css' type="text/css" rel="stylesheet" />
-    <link href='../thread/question_entity.css' type='text/css' rel='stylesheet' />
-    <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
-    <script type='text/javascript' src='../global/global.js'></script>
+    <link href='/global/global.css' type="text/css" rel="stylesheet" />
+    <link href='/home/home.css' type="text/css" rel="stylesheet" />
+    <link href='/thread/question_entity.css' type='text/css' rel='stylesheet' />
+    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
+    <script type='text/javascript' src='/global/global.js'></script>
 
-    <script type='text/javascript' src='home.js'></script>
+    <script type='text/javascript' src='/home/home.js'></script>
 </head>
 
 <body onload='Ready();'>

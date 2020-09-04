@@ -1,10 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help me for Homework</title>
+
+    <link href='/global/global.css' type="text/css" rel="stylesheet" />
+    <link href='/thread/thread.css' type="text/css" rel="stylesheet" />
+    <link href='/thread/question_entity.css' type="text/css" rel="stylesheet" />
+    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
+    <script src='/global/global.js' type='text/javascript'></script>
+
+    <script src='/thread/thread.js' type='text/javascript'></script>
+</head>
+
+
 <?php
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-if (!isset($_GET['id'])) {
+if (!isset($_GET['url'])) {
     echo "<i style='color:red;'>We need a thread to show..</i>";
     exit;
 }
@@ -15,14 +33,16 @@ if (isset($_GET['answerPosted']) && $_GET['answerPosted'] == '1') {
 
 require_once("../server/thread.php");
 
-$id = trim($_GET['id']);
+$url = trim($_GET['url']);
 $response = "No response from server";
 $handler = new showQuestion;
 
 $onloadScript = ""; // any js that needs to be executed when page loads
-if ($handler->getQuestionById($id, $response) == false) { // if request failed
+$id; // process anything else in id. getQuestionByUrl should set this
+
+if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request failed
     // however show the nav bar
-    echo file_get_contents('../global/navbar.php') . "<hr>";
+    echo file_get_contents('../global/navbar.php');
     // and die
     die($response);
 } else {
@@ -32,22 +52,6 @@ if ($handler->getQuestionById($id, $response) == false) { // if request failed
     $AnswerInformation = $response;
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help me for Homework</title>
-
-    <link href='../global/global.css' type="text/css" rel="stylesheet" />
-    <link href='./thread.css' type="text/css" rel="stylesheet" />
-    <link href='./question_entity.css' type="text/css" rel="stylesheet" />
-    <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
-    <script src='../global/global.js' type='text/javascript'></script>
-
-    <script src='./thread.js' type='text/javascript'></script>
-</head>
 
 <body onload='Ready();'>
     <?php
