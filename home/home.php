@@ -10,13 +10,9 @@ $loadQuestion = "unknown";
 $param = "null";
 
 if (isset($_GET['query'])) {
-    $res = $feedFetcher->searchQuery($_GET['query'], $posts);
-    if ($res != 0) {
-        $stat = "We were unable to fetch result for '" . $_GET['query'] . "'";
-        $onloadScript = "notify('No matching query found....')";
-    } else {
-        $stat =  "Result for search '" . htmlspecialchars($_GET['query']) . "'";
-    }
+    $stat =  "Result for search '" . htmlspecialchars($_GET['query']) . "'";
+    $loadQuestion = "SearchQuery";
+    $param = urldecode($_GET['query']);
 } else if (isset($_GET['by'])) {
     $loadQuestion = "ActivityBy";
     $param = $_GET['by'];

@@ -94,15 +94,21 @@ class Getfeed
         return $this->makePosts($questions, $response);
     }
 
-    public function searchQuery($query, &$response)
+    public function searchQuery($query, &$response, $notIn, $count)
     {
+        /*
+         * SearchQuery() method also do not gurantee the result to $count
+         * and i also don't know why
+        */
         $query = $this->conn->real_escape_string(trim(urldecode($query)));
+        $notIn = $this->conn->real_escape_string(trim(urldecode($notIn)));
+        $count = $this->conn->real_escape_string(trim(urldecode($count)));
         if (strlen($query) == 0) { // empty query
             $this->Recent($response, -1);
             return 1;
         }
         $res = $this->conn->query("SELECT
-                GROUP_CONCAT(qn.Id) As Ids
+                qn.Id as Ids
                 FROM Question qn
                 LEFT JOIN
                 QuestionTag qt ON qt.Question=qn.Id
@@ -111,16 +117,29 @@ class Getfeed
                 LEFT JOIN Answer ans ON ans.WrittenFor=qn.Id
                 LEFT JOIN User user ON (user.Id = ans.Author) OR (user.Id = qn.Author)
                 WHERE
-                (qn.URLTitle LIKE '%$query%') OR
-                (qn.Title LIKE '%$query%') OR
-                (CONCAT(user.FirstName, user.LastName) LIKE '%$query%') OR
-                (tg.Name LIKE '%$query')
+                (
+                    (qn.URLTitle LIKE '%$query%') OR
+                    (qn.Title LIKE '%$query%') OR
+                    (CONCAT(user.FirstName, user.LastName) LIKE '%$query%') OR
+                    (tg.Name LIKE '%$query')
+                ) AND
+                qn.Id NOT IN ($notIn)
+                LIMIT $count
         ;") or fail($this->conn->error, __LINE__);
-        $res = $res->fetch_all(MYSQLI_ASSOC);
-        if (count($res) == 0 || $res[0]['Ids'] == null) {
+        if ($res->num_rows == 0) {
             return 1;
         }
-        return $this->makePosts($res[0]['Ids'], $response);
+        $res = $res->fetch_all(MYSQLI_NUM);
+
+        /* Join those ids with comma */
+        $questions = "";
+        for ($i = 0; $i < count($res) - 1; $i++) {
+            $questions .= $res[$i][0] . ",";
+        }
+        $questions .= $res[count($res) - 1][0];
+        /**************/
+
+        return $this->makePosts($questions, $response);
     }
 
 
@@ -312,6 +331,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $res = $handler->bookmarkBy($param, $response, $notIn, $count);
     } else if ($loadQuestion == 'ActivityBy') {
         $res = $handler->activityBy($param, $response, $notIn, $count);
+    } else if ($loadQuestion == 'SearchQuery') {
+        $res = $handler->searchQuery($param, $response, $notIn, $count);
     } else { // unknown feed request..
         echo 2;
         //echo "Unknown Request...";
