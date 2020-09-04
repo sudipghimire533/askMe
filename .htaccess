@@ -1,0 +1,10 @@
+RewriteEngine on
+
+RewriteRule ^taggedfor/([0-9a-zA-Z_\-\/\.]+)/$ /home/home.php?taggedfor=$1 [QSA]
+RewriteRule ^taggedfor/([0-9a-zA-Z_\-\/\.]+)$ /home/home.php?taggedfor=$1 [QSA]
+
+RewriteRule ^questionby/([a-zA-Z0-9\._]+)/$ /home/home.php?questionby=$1 [QSA]
+RewriteRule ^questionby/([a-zA-Z0-9\._]+)$ /home/home.php?questionby=$1 [QSA]
+
+RewriteRule ^answerby/([a-zA-Z0-9\._]+)/$ /home/home.php?answerby=$1 [QSA]
+RewriteRule ^answerby/([a-zA-Z0-9\._]+)$ /home/home.php?answerby=$1 [QSA]

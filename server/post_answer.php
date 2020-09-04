@@ -25,10 +25,6 @@ $QuestionId = $conn->real_escape_string(trim($_POST['QuestionId']));
 $Description = $conn->real_escape_string(trim(htmlspecialchars($_POST['description'])));
 
 
-/*
- * TODO:
- * Command is out of sync. may be due to multiquery.
-*/
 function fail($err, $lineno = __LINE__)
 {
 	global $conn, $QuestionId;
@@ -39,12 +35,11 @@ function fail($err, $lineno = __LINE__)
 }
 function sucess()
 {
+	/* Redirect to orginal question */
 	global $conn, $QuestionId;
-	echo "<br>Everything is done...";
 	$res = $conn->query("SELECT URLTitle FROM Question WHERE Id=$QuestionId;") or fail($conn->error, __LINE__);
-	print_r($res);
-	exit;
-	header("Location: /thread/$QuestionId");
+	header("Location: /thread/" . $res->fetch_array(MYSQLI_NUM)[0]);
+
 	$conn->close();
 	exit;
 }
@@ -53,24 +48,26 @@ if (strlen($Description) < 20) {
 	fail("Less than 20 character in Description. current count:" . strlen($Description));
 }
 
-$conn->autocommit(false);
 $res = $conn->multi_query("INSERT INTO
 			Answer(Author, WrittenFor, Description)
 			VALUES
 			($UserId, $QuestionId, '$Description');
 
-			UPDATE Question SET LastActive=NOW() WHERE Id=$QuestionId;
+			UPDATE Question SET LastActive=NOW() WHERE Id=$QuestionId
 			") or fail($conn->error, __LINE__);
 if ($res == false) {
 	fail("error in query...", __LINE__);
 }
-$conn->commit();
-$conn->autocommit(true);
 
+do {
+	if ($r = $conn->store_result()) {
+		$r->free();
+	}
+	if (!$conn->more_results()) {
+		break;
+	}
+} while ($conn->next_result());
 
-echo "<hr>";
-
-print_r($conn);
 
 sucess();
 
