@@ -21,83 +21,82 @@ if (isset($_GET['id'])) {
 } else {
     $UserId = 1;
 }
-/* Fetch Personal data.. */
-/*
- * TODO:
- * The result for clapCount is unexpected...
- * (may it is missing something to fetch from questionclaps)
-*/
-/*
- * This query is going so wrong. 
- * even questioncount and answer count is wrong;
-*/
-$res = $conn->query("SELECT
-            CONCAT(user.Firstname, ' ', user.LastName) AS fullname,
-            user.Email AS email,
-            user.Phone AS phone,
-            user.Location As location,
-            user.Intro AS intro,
-            user.UserName AS userName,
-            COUNT(qn.Id) AS questionCount,
-            COUNT(ans.Id) AS answerCount,
-            (
-                 (SELECT COUNT(USER) FROM QuestionClaps WHERE Question=qn.Id)
-                +(SELECT COUNT(User) FROM AnswerClaps WHERE Answer=ans.Id)
-            ) AS clapCount,
-            uf.FollowedBY AS isFollowing
-            FROM User AS user
-            LEFT JOIN
-            Answer ans ON ans.Author=user.Id
-            LEFT JOIN
-            Question  qn ON qn.Author=user.Id
-            LEFT JOIN
-            UserFollow uf ON (uf.FollowedBy=$thisUserId) AND (uf.FollowedTo = user.Id)
-            WHere user.Id=$UserId
-        ;") or fail($conn->error);
-
-$row = $res->fetch_assoc();
-$UserName = $row['fullname'];
-
-if ($UserName == null) {
-    fail("We cannot get that User...");
-}
-
-$UserEmail = $row['email'];
-$UserPhone = $row['phone'];
-$UserIntro = $row['intro'];
-$UserLocation = $row['location'];
-$AnswerCount = $row['answerCount'];
-$ClapsCount = $row['clapCount'];
-// if user hasn't answered anything then it will be null so switch to 0
-$ClapsCount = ($ClapsCount == null) ? 0 : $ClapsCount;
-$QuestionCount = $row['questionCount'];
-
-$isFollowing = $row['isFollowing'];
-
-$res = $conn->query("SELECT
-    COUNT(uf1.FollowedBy)
-    FROM UserFollow uf1
-    WHERE FollowedBy = $UserId
-;") or fail($conn->error, __LINE__);
-$FollowingCount = $res->fetch_array()[0];
 
 $res = $conn->query("SELECT 
-    COUNT(FollowedTo)
-    FROM UserFollow WHERE
-    FollowedTo = $UserId;
-") or fail($conn->error, __LINE__);
-$FollowersCount = $res->fetch_array()[0];
+            CONCAT(user.FirstName, ' ', user.LastName) as fullName,
+            user.Email as email,
+            user.Phone as phone,
+            user.Location as location,
+            user.Intro as intro,
+            COUNT(qn.Id) as questionCount,
+            (COUNT(uf.FollowedBy) != 0) as isFollowing,
+            (
+                SELECT COUNT(FollowedTo) FROM UserFollow WHERE FollowedTo=user.Id
+            ) AS followers,
+            (
+                SELECT COUNT(FollowedBY) FROM UserFollow WHERE FollowedBy=user.Id
+            ) AS following,
+            (
+                SELECT GROUP_CONCAT(ans.Id) FROM Answer ans WHERE ans.Author=user.Id
+            ) AS answers,
+            (
+                 (SELECT COUNT(User) FROM QuestionClaps WHERE Question IN (qn.Id))
+            ) AS questionClapCount
+            FROM User user
+            
+            LEFT JOIN
+            Question qn
+            ON user.Id = qn.Author
 
+            LEFT JOIN
+            UserFollow uf
+            ON (uf.FollowedBy = $thisUserId) AND (uf.FollowedTo=user.Id)
+
+            Where user.Id = $UserId;
+        ;") or fail($conn->error, __LINE__);
+
+$res = $res->fetch_all(MYSQLI_ASSOC)[0];
+
+echo "<script>console.log(" . json_encode($res) . ");</script>";
+
+$allAnswers = $res['answers'];
+
+$UserName = $res['fullName'];
+$UserEmail = $res['email'];
+$UserIntro = $res['intro'];
+$UserLocation = $res['location'];
+$UserPhone = $res['phone'];
+$isFollowing = ($res['isFollowing'] == 1) ? true : false;
+$FollowersCount = $res['followers'];
+$FollowingCount = $res['following'];
+$AnswerCount = count(explode(',', $res['answers']));
+$QuestionCount = $res['questionCount'];
+
+$questionClapsCount = $res['questionClapCount'];
+
+$res = $conn->query("SELECT
+            COUNT(ac.User) as answerClapCount
+            FROM
+            AnswerClaps ac
+
+            WHERE ac.Answer IN ($allAnswers)
+        ;") or fail($conn->error, __LINE__);
+
+$answerClapCount = $res->fetch_all(MYSQLI_NUM)[0][0];
+
+$ClapsCount = $questionClapsCount + $answerClapCount;
 
 
 $res = $conn->query("SELECT
-            GROUP_CONCAT(tg.Name)
-            FROM Tags tg
+            GROUP_CONCAT(tg.Name) as tags
+            FROM UserTag ut
             LEFT JOIN
-            UserTag ut ON ut.Tag=tg.Id
-            WHERE ut.User=$UserId
-;") or fail($conn->error, __LINE__);
-$UserTags = explode(',', $res->fetch_row()[0]);
+            Tags tg
+            ON tg.Id = ut.Tag
+            WHERE ut.User = $UserId
+        ") or fail($conn->error, __LINE__);
+$UserTags = $res->fetch_all(MYSQLI_NUM)[0][0];
+$UserTags = explode(",", $UserTags);
 
 $conn->close();
 ?>
