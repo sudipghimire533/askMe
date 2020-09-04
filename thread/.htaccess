@@ -1,0 +1,6 @@
+RewriteEngine on
+
+# convert path after `thread/` to `url` part of GET request
+
+RewriteRule ^([a-zA-Z0-9\-]+)/$ /thread/thread.php?url=$1 [QSA] #this regex match thread/url/
+RewriteRule ^([a-zA-Z0-9\-]+)$ /thread/thread.php?url=$1 [QSA] $this regex match thread/url

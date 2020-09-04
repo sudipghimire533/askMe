@@ -212,7 +212,7 @@ $conn->close();
                     foreach ($UserTags as &$tag) {
                         $tag = trim($tag);
                         if (strlen($tag) == 0) continue;
-                        echo "<a href='/?taggedfor/$tag' class='tag'>$tag</a>";
+                        echo "<a href='/taggedfor/$tag' class='tag'>$tag</a>";
                     }
                     ?>
                 </div>

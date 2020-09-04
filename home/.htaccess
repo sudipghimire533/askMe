@@ -1,0 +1,4 @@
+RewriteEngine on
+
+# replace /home/ to /home.php for friendly url
+RewriteRule ^$      /home/home.php [QSA]

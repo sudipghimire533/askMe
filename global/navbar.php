@@ -1,6 +1,6 @@
 <div id='NavBar'>
 	<div id='navLeft'>
-		<a href='/home/home.php?ref=navbar' id='navHome'>
+		<a href='/home?ref=navbar' id='navHome'>
 			<i class='fas fa-home'></i>
 			<span>Posts</span>
 		</a>
