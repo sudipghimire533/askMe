@@ -27,10 +27,12 @@ class Getfeed
     {
         $this->conn = get_connection();
     }
+
     public function __destruct()
     {
         $this->conn->close();
     }
+
     private function makePosts($question, &$response)
     {
         // Always give response from this function.
@@ -61,12 +63,12 @@ class Getfeed
         $response = json_encode($response);
         return 0;
     }
-    public function Recent(&$response, $notIn = -1, $count = 10)
+
+    public function Recent(&$response, &$notIn, &$count = 10)
     {
         $notIn = $this->conn->real_escape_string($notIn);
         $count = $this->conn->real_escape_string($count);
 
-        // Only select the desired post here
         $res = $this->conn->query("SELECT
                 qn.Id  as Ids
                 FROM
@@ -80,18 +82,23 @@ class Getfeed
             return 1;
         }
         $res = $res->fetch_all(MYSQLI_NUM);
+
+        /* Join those ids with comma */
         $questions = "";
         for ($i = 0; $i < count($res) - 1; $i++) {
             $questions .= $res[$i][0] . ",";
         }
         $questions .= $res[count($res) - 1][0];
+        /**************/
+
         return $this->makePosts($questions, $response);
     }
+
     public function searchQuery($query, &$response)
     {
         $query = $this->conn->real_escape_string(trim(urldecode($query)));
         if (strlen($query) == 0) { // empty query
-            $this->Recent($response);
+            $this->Recent($response, -1);
             return 1;
         }
         $res = $this->conn->query("SELECT
@@ -115,58 +122,113 @@ class Getfeed
         }
         return $this->makePosts($res[0]['Ids'], $response);
     }
-    private function XbyHelper($lastParam, &$response, &$query)
+
+
+    public function postedBy($person, &$response, &$notIn, &$count)
     {
-        $lastParam = $this->conn->real_escape_string(trim($lastParam));
-        if (strlen($lastParam) == 0) {
-            $this->Recent($response);
+        $person = $this->conn->real_escape_string(trim(urldecode($person)));
+        $notIn = $this->conn->real_escape_string(trim($notIn));
+        $count = $this->conn->real_escape_string(trim($count));
+
+        $res  = $this->conn->query("SELECT
+                qn.Id FROM
+                Question qn
+                WHERE qn.Author=$person
+                AND qn.Id NOT IN ($notIn)
+                LIMIT $count
+        ;") or fail($this->conn->error, __LINE__);
+        if ($res->num_rows == 0) {
+            $response = 1;
             return 1;
         }
-        $res = $this->conn->query(
-            $query . $lastParam
-        ) or fail($this->conn->error, __LINE__);
-        $posts = $res->fetch_all(MYSQLI_ASSOC)[0]['Ids'];
-        if ($posts == null) {
-            return 1;
+        $res = $res->fetch_all(MYSQLI_NUM);
+
+        /* Join those ids with comma */
+        $questions = "";
+        for ($i = 0; $i < count($res) - 1; $i++) {
+            $questions .= $res[$i][0] . ",";
         }
-        return $this->makePosts($posts, $response);
+        $questions .= $res[count($res) - 1][0];
+        /**************/
+
+        return $this->makePosts($questions, $response);
     }
-    public function postedBy($person, &$response)
+
+    public function answerBy($person, &$response, &$notIn, &$count)
     {
-        $query = "SELECT
-                    GROUP_CONCAT(qn.Id) as Ids
-                    FROM
-                    Question qn
-                    WHERE qn.Author=";
-        return $this->XbyHelper($person, $response, $query);
-    }
-    public function answerBy($person, &$response)
-    {
-        $query = "SELECT
-                GROUP_CONCAT(qn.Id) as Ids
-                FROM
+
+        $person = $this->conn->real_escape_string(trim(urldecode($person)));
+        $notIn = $this->conn->real_escape_string(trim($notIn));
+        $count = $this->conn->real_escape_string(trim($count));
+
+        $res  = $this->conn->query("SELECT
+                qn.Id FROM
                 Question qn
                 LEFT JOIN
                 Answer ans ON ans.WrittenFor = qn.Id
-                WHERE ans.Author=";
-        return $this->XbyHelper($person, $response, $query);
+                WHERE ans.Author=$person
+                AND qn.Id NOT IN($notIn)
+                LIMIT $count
+        ;") or fail($this->conn->error, __LINE__);
+        if ($res->num_rows == 0) {
+            $response = 1;
+            return 1;
+        }
+        $res = $res->fetch_all(MYSQLI_NUM);
+
+        /* Join those ids with comma */
+        $questions = "";
+        for ($i = 0; $i < count($res) - 1; $i++) {
+            $questions .= $res[$i][0] . ",";
+        }
+        $questions .= $res[count($res) - 1][0];
+        /**************/
+
+        return $this->makePosts($questions, $response);
     }
-    public function bookmarkBy($person, &$response)
+
+    public function bookmarkBy($person, &$response, &$notIn, &$count)
     {
-        $query = "SELECT GROUP_CONCAT(qn.Id) as Ids
-                FROM
-                Question qn
-                LEFT JOIN
-                UserBookmarks ub ON ub.Question = qn.Id
-                WHERE ub.User=";
-        return $this->XbyHelper($person, $response, $query);
+        $person = $this->conn->real_escape_string(trim(urldecode($person)));
+        $notIn = $this->conn->real_escape_string(trim($notIn));
+        $count = $this->conn->real_escape_string(trim($count));
+
+        $res  = $this->conn->query("SELECT
+                    qn.Id
+                    FROM Question qn
+                    LEFT JOIN
+                    UserBookmarks ub IN ub.Question=qn.Id
+                    WHERE ub.User=$person
+                    AND qn.Id NOT IN ($notIn)
+                    LIMIT $count
+        ;") or fail($this->conn->error, __LINE__);
+        if ($res->num_rows == 0) {
+            $response = 1;
+            return 1;
+        }
+        $res = $res->fetch_all(MYSQLI_NUM);
+
+        /* Join those ids with comma */
+        $questions = "";
+        for ($i = 0; $i < count($res) - 1; $i++) {
+            $questions .= $res[$i][0] . ",";
+        }
+        $questions .= $res[count($res) - 1][0];
+        /**************/
     }
-    public function activityBy($person, &$response)
+
+    public function activityBy($person, &$response, &$notIn, &$count)
     {
-        $got = $this->postedBy($person, $response);
+        /*
+         * For activityBy() function we cannot gurantee that returened question can match 
+         * $count paramater
+         * At worst case it will be twise(when user has many answer and many question too)
+         * but it will nor exceed $count*2
+        */
+        $got = $this->postedBy($person, $response, $notIn, $count);
         $res = ($got == 0) ? json_decode($response) : array();
 
-        $got = $this->answerBy($person, $response);
+        $got = $this->answerBy($person, $response, $notIn, $count);
         $response  = json_encode(
             array_merge(
                 $res,
@@ -174,37 +236,90 @@ class Getfeed
             )
         );
     }
-    public function taggedFor($tag, &$response)
+
+    public function taggedFor($tag, &$response, &$notIn, &$count)
     {
         $tag = $this->conn->real_escape_string(trim(urldecode($tag)));
-        $tag = $this->conn->query("SELECT Id FROM Tags WHERE Name='$tag';") or fail($this->conn->error, __LINE__);
-        $tag = $tag->fetch_row()[0];
-        $query = "SELECT 
-                GROUP_CONCAT(qn.Id) as Ids
-                FROM Question qn
-                LEFT JOIN
-                QuestionTag qt ON qt.Question=qn.Id
-                WHERE qt.Tag=";
-        return $this->XbyHelper($tag, $response, $query);
+        $notIn = $this->conn->real_escape_string(trim($notIn));
+        $count = $this->conn->real_escape_string(trim($count));
+
+        $res  = $this->conn->query("SELECT
+                qt.Question
+                FROM QuestionTag qt
+                WHERE qt.Question NOT IN ($notIn)
+                AND qt.Tag=(SELECT
+                    Id FROM Tags Where Name='$tag'
+                ) LIMIT $count;
+        ;") or fail($this->conn->error, __LINE__);
+        if ($res->num_rows == 0) {
+            $response = 1;
+            return 1;
+        }
+        $res = $res->fetch_all(MYSQLI_NUM);
+
+        /* Join those ids with comma */
+        $questions = "";
+        for ($i = 0; $i < count($res) - 1; $i++) {
+            $questions .= $res[$i][0] . ",";
+        }
+        $questions .= $res[count($res) - 1][0];
+        /**************/
+
+        return $this->makePosts($questions, $response);
     }
 };
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if ((isset($_POST['NotIn']) == false) || (isset($_POST['Count']) == false)) {
+    if (
+        (isset($_POST['NotIn']) == false) ||
+        (isset($_POST['Count']) == false) ||
+        (isset($_POST['LoadQuestion']) == false) ||
+        (isset($_POST['Param']) == false)
+    ) {
         echo 2;
+        //echo "Not all paramater found...";
+        exit;
     }
+
     $notIn = trim($_POST['NotIn']);
     $count = trim($_POST['Count']);
-    if (strlen($count) == 0 || strlen($notIn) == 0) {
-        return 2;
+    $param = trim($_POST['Param']);
+    $loadQuestion = trim($_POST['LoadQuestion']);
+
+    if (strlen($count) == 0 || strlen($notIn) == 0 || strlen($param) == 0) {
+        echo 2;
+        //echo "Empty paramater...";
+        exit;
     }
+
+    $handler = new Getfeed;
 
     $notIn = json_decode($notIn);
     $notIn = implode(',', $notIn);
-    $handler = new Getfeed;
+
     $response = "";
-    if ($handler->Recent($response, $notIn) == 0)
+    $res = 1;
+
+    if ($loadQuestion == 'Recent') {
+        $res = $handler->Recent($response, $notIn, $count);
+    } else if ($loadQuestion == 'TaggedFor') {
+        $res = $handler->taggedFor($param, $response, $notIn, $count);
+    } else if ($loadQuestion == 'QuestionBy') {
+        $res = $handler->postedBy($param, $response, $notIn, $count);
+    } else if ($loadQuestion == 'AnswerBy') {
+        $res = $handler->answerBy($param, $response, $notIn, $count);
+    } else if ($loadQuestion == 'BookmarkBy') {
+        $res = $handler->bookmarkBy($param, $response, $notIn, $count);
+    } else if ($loadQuestion == 'ActivityBy') {
+        $res = $handler->activityBy($param, $response, $notIn, $count);
+    } else { // unknown feed request..
+        echo 2;
+        //echo "Unknown Request...";
+        exit;
+    }
+    if ($res == 0) {
         echo $response;
-    else
-        echo 3;
+    } else {
+        echo $res;
+    }
 }

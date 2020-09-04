@@ -6,6 +6,9 @@ $posts = json_encode(array());
 
 $onloadScript = ""; // any js that needs to be executed when page loads
 $stat = "Custom filtered Question...";
+$loadQuestion = "unknown";
+$param = "null";
+
 if (isset($_GET['query'])) {
     $res = $feedFetcher->searchQuery($_GET['query'], $posts);
     if ($res != 0) {
@@ -15,20 +18,25 @@ if (isset($_GET['query'])) {
         $stat =  "Result for search '" . htmlspecialchars($_GET['query']) . "'";
     }
 } else if (isset($_GET['by'])) {
-    $feedFetcher->activityBy($_GET['by'], $posts);
+    $loadQuestion = "ActivityBy";
+    $param = $_GET['by'];
 } else if (isset($_GET['questionby'])) {
-    $feedFetcher->postedBy($_GET['questionby'], $posts);
+    $loadQuestion = "QuestionBy";
+    $param = $_GET['questionby'];
 } else if (isset($_GET['answerby'])) {
-    $feedFetcher->answerBy($_GET['answerby'], $posts);
+    $loadQuestion = "AnswerBy";
+    $param = $_GET['answerby'];
 } else if (isset($_GET['taggedfor'])) {
-    $feedFetcher->taggedFor($_GET['taggedfor'], $posts);
     $stat = "Question tagged for '" . $_GET['taggedfor'] . "'";
+    $loadQuestion = "TaggedFor";
+    $param = $_GET['taggedfor'];
 } else {
     /*
      * Ths is now implemented in javascript loadMore() method;
     */
     // $feedFetcher->Recent($posts);
     $stat = "Today's Selections...";
+    $loadQuestion = "Recent";
 }
 ?>
 <!DOCTYPE html>
@@ -86,7 +94,7 @@ if (isset($_GET['query'])) {
                 <a href='/alltags/' style='color: var(--Niagara);'>See all Tag</a>
             </div>
         </div>
-        <button onclick='loadMore()'>load more</button>
+        <button id='loadMoreBtn'>load more</button>
         <div class='notifyCenter'>
             <div class='notify' style='display: none;'></div>
         </div>
@@ -109,9 +117,16 @@ if (isset($_GET['query'])) {
         //response.forEach(obj => {
         //  createQuestion(obj);
         //});
+        let loadQuestion = "<?php echo $loadQuestion; ?>";
+        let param = "<?php echo $param; ?>"
 
+        document.getElementById('loadMoreBtn').onclick = function() {
+            loadMore(loadQuestion, 2, param);
+        };
 
-        loadMore(10);
+        // Only load few posts at first
+        loadMore(loadQuestion, 2, param);
+
         notification = document.getElementsByClassName('notify')[0];
 
         eval(<?php echo $onloadScript; ?>);
