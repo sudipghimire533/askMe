@@ -61,17 +61,30 @@ class Getfeed
         $response = json_encode($response);
         return 0;
     }
-    public function Recent(&$response)
+    public function Recent(&$response, $notIn = -1, $count = 10)
     {
+        $notIn = $this->conn->real_escape_string($notIn);
+        $count = $this->conn->real_escape_string($count);
+
         // Only select the desired post here
         $res = $this->conn->query("SELECT
-                GROUP_CONCAT(qn.Id)  as Ids
+                qn.Id  as Ids
                 FROM
                 Question qn
+                WHERE qn.Id NOT IN ($notIn)
                 ORDER BY qn.LastActive DESC
-                LIMIT 10
-            ;");
-        $questions = $res->fetch_all(MYSQLI_ASSOC)[0]['Ids'];
+                LIMIT $count
+            ;") or die($this->conn->error);
+        if ($res->num_rows == 0) { // $notIn contains all of our posts.
+            $response = 1;
+            return 1;
+        }
+        $res = $res->fetch_all(MYSQLI_NUM);
+        $questions = "";
+        for ($i = 0; $i < count($res) - 1; $i++) {
+            $questions .= $res[$i][0] . ",";
+        }
+        $questions .= $res[count($res) - 1][0];
         return $this->makePosts($questions, $response);
     }
     public function searchQuery($query, &$response)
@@ -175,3 +188,23 @@ class Getfeed
         return $this->XbyHelper($tag, $response, $query);
     }
 };
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ((isset($_POST['NotIn']) == false) || (isset($_POST['Count']) == false)) {
+        echo 2;
+    }
+    $notIn = trim($_POST['NotIn']);
+    $count = trim($_POST['Count']);
+    if (strlen($count) == 0 || strlen($notIn) == 0) {
+        return 2;
+    }
+
+    $notIn = json_decode($notIn);
+    $notIn = implode(',', $notIn);
+    $handler = new Getfeed;
+    $response = "";
+    if ($handler->Recent($response, $notIn) == 0)
+        echo $response;
+    else
+        echo 3;
+}

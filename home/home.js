@@ -3,6 +3,7 @@ var feed_container;
 var sample_tag_element;
 
 var appended_questions = new Map;
+appended_questions.set(-1, true); // a dummy set to send for fist time...
 var feeded_tags = new Map;
 
 function createQuestion(Question) {
@@ -49,4 +50,38 @@ function createQuestion(Question) {
     }
     feed_container.appendChild(target);
     appended_questions.set(Question.id, true);
+}
+
+
+function loadMore(count = 5) {
+    let notIn = new Array;
+    appended_questions.forEach(function (val, key) {
+        notIn.push(key);
+    });
+    let handler = new XMLHttpRequest;
+    handler.onerror = function () {
+        alert('An error occured');
+        console.log(this);
+    }
+    handler.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText == 1 || this.responseText == '1') { // end of feed
+                loadMore = function () { notify('You ate all of our feed..', 1); };
+                return;
+            } else if (this.responseText == '2' || this.responseText == 2) {
+                // incomplete data sent.
+                // caiuse me be user had modified this script manually after loading...
+            } else if (this.responseText == '3' || this.responseText == 3) {
+                // uknown error
+                // may be in database syntax or enything else
+            }
+            let nextposts = JSON.parse(this.responseText);
+            nextposts.forEach(function (obj) {
+                createQuestion(obj);
+            });
+        }
+    };
+    handler.open("POST", "/server/get_feed.php", true);
+    handler.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    handler.send("NotIn=" + JSON.stringify(notIn) + "&Count=" + count);
 }

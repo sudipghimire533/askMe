@@ -24,7 +24,10 @@ if (isset($_GET['query'])) {
     $feedFetcher->taggedFor($_GET['taggedfor'], $posts);
     $stat = "Question tagged for '" . $_GET['taggedfor'] . "'";
 } else {
-    $feedFetcher->Recent($posts);
+    /*
+     * Ths is now implemented in javascript loadMore() method;
+    */
+    // $feedFetcher->Recent($posts);
     $stat = "Today's Selections...";
 }
 ?>
@@ -83,7 +86,7 @@ if (isset($_GET['query'])) {
                 <a href='/alltags/' style='color: var(--Niagara);'>See all Tag</a>
             </div>
         </div>
-
+        <button onclick='loadMore()'>load more</button>
         <div class='notifyCenter'>
             <div class='notify' style='display: none;'></div>
         </div>
@@ -100,11 +103,15 @@ if (isset($_GET['query'])) {
         showTags = document.getElementsByClassName('ShowTags')[0];
         sample_tag_element = sample_question.getElementsByClassName('tagContainer')[0].firstElementChild;
 
-        response = <?php echo $posts; ?>;
 
-        response.forEach(obj => {
-            createQuestion(obj);
-        });
+        //response = <!--?php /*echo $posts;*/ ?-->;
+
+        //response.forEach(obj => {
+        //  createQuestion(obj);
+        //});
+
+
+        loadMore(10);
         notification = document.getElementsByClassName('notify')[0];
 
         eval(<?php echo $onloadScript; ?>);
