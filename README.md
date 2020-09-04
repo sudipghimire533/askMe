@@ -8,7 +8,7 @@
 In __*/etc/apache2/sites-available/000-default.conf*__ file:
 ```
 <VirtualHost *:80>
-	<Directory /var/www/html/project>
+    <Directory /var/www/html/project>
         Options Indexes FollowSymLinks MultiViews
         AllowOverride All
         Require all granted
@@ -16,6 +16,10 @@ In __*/etc/apache2/sites-available/000-default.conf*__ file:
 	DocumentRoot /var/www/html/project/
 	ServerName project.localhost
 </VirtualHost>
+```
+In __*/etc/hosts*__ file:
+```
+127.0.0.1 project.localhost
 ```
 
 ## enable mod_rewrite
