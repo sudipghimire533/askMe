@@ -6,5 +6,5 @@ RewriteEngine on
 #as we are allowing . for username so check if there any file/dir exist
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([a-zA-Z0-9\._]+)/$ profile.php?username=$1 [QSA] # for / at last
-RewriteRule ^([a-zA-Z0-9\._]+)$ profile.php?username=$1 [QSA]  # without / at last
+RewriteRule ^([a-zA-Z0-9_]+)/$ profile.php?username=$1 [QSA] # for / at last
+RewriteRule ^([a-zA-Z0-9_]+)$ profile.php?username=$1 [QSA]  # without / at last
