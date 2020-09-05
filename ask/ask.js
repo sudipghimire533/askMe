@@ -14,23 +14,6 @@ function bodyPreview(elem) {
     previewBody.textContent = content;
     setTimeout(bodyPreview, 5 * 1000, elem);
 }
-function tagPreview(elem) {
-    previewtags.innerHTML = "";
-    let tags = elem.value.split(',');
-    tags.forEach(function (tag, i) {
-        tag = tag.trim();
-        if (tag.length < 1) {
-            return;
-        }
-        if (!tagMap.has(tag)) {
-            return;
-        }
-        let target = sample_prev_tag.cloneNode();
-        target.textContent = tag;
-        previewtags.appendChild(target);
-    });
-    setTimeout(tagPreview, 2 * 1000, elem);
-}
 function submitForm() {
     /*Pu the use input into real field which form will submit*/
     document.getElementById('QuestionBodyReal').value =
@@ -56,13 +39,11 @@ function Ready() {
     let previewArea = document.getElementById('QuestionPreview');
     previewTitle = previewArea.getElementsByClassName('prev_title')[0];
     previewBody = previewArea.getElementsByClassName('prev_body')[0];
-    previewtags = previewArea.getElementsByClassName('prev_tagContainer')[0];
 
     sample_prev_tag = document.createElement('span');
     sample_prev_tag.classList.add('prev_tag');
 
     bodyPreview(document.getElementById('QuestionBody'));
-    tagPreview(document.getElementById('QuestionTags'));
 
     let tg = document.createElement('span');
     tg.classList.add('tag');
@@ -84,6 +65,7 @@ function toggleAvailableTags(source) {
 }
 function addTag(source) {
     let tag = source.cloneNode(true);
+    tag.setAttribute('onclick', '');
     document.getElementsByClassName('addedTags')[0].appendChild(tag);
     source.classList.add('added');
 }

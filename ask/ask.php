@@ -45,7 +45,7 @@
         <form class='AskQuestion' method='POST' action='/server/post_question.php'>
             <div class='WriterContainer'>
                 <div class='inputContainer'>
-                    <input type='text' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' onkeyup="titlePreview(this)" />
+                    <input type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' onkeyup="titlePreview(this)" />
                 </div>
                 <div class=' inputContainer'>
                     <div class='toolbar'>ToolBar</div>
@@ -69,8 +69,6 @@
             <div id='QuestionPreview'>
                 <div class='prev_title'></div>
                 <p class='prev_body'></p>
-                <div class='prev_tagContainer'>
-                </div>
             </div>
             <div class='inputContainer'>
                 <input type='submit' name='submit' value='Post Question' id='QuestionSubmit' onclick='submitForm()' />
@@ -79,7 +77,7 @@
     </div>
 </body>
 <script>
-    var allTags = new Array;
+    var allTags = new String;
 </script>
 <?php
 

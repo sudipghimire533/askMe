@@ -30,7 +30,7 @@ function sucess($QuestionId)
 {
     global $conn;
     global $URLTitle;
-    echo "<h1>Question registerd at: </h1><a href='/thread/=$URLTitle'>/threads/$URLTitle</a>";
+    echo "<h1>Question registerd at: </h1><a href='/thread/$URLTitle'>/threads/$URLTitle</a>";
 
     $conn->close();
     exit;

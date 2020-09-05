@@ -38,8 +38,19 @@
                 </div>
                 <i class='fas fa-pen edit_icon' title='Edit your faviourate Tags' onclick='editTags(this, false)'></i>
                 <div class='editor'>
-                    <input type='text' name='Tags' id='Tags' value='Programming, Parasite, Computers' />
+                    <i class='fas fa-plus addtag_icon' onclick='toggleAddTag(this)'></i>
+                    <span class='addedTags'>
+                        <!-- Initially this should be synchronous to .value element as in above -->
+                        <span class='tag'>Programming</span>
+                        <span class='tag'>Parasite</span>
+                        <span class='tag'>Computers</span>
+                    </span>
+                    <input type='text' name='Tags' id='Tags' value='' style='display: none;' />
                     <i class='fas fa-save save_icon' title='Save my Tags..' onclick='editTags(this, true)'></i>
+                    <div class='availableTags'>
+                        <input type='text' placeholder='Filter Tags..' id='searchAvailableTags' onkeyup='filterTag(this.value)' />
+                        <br />
+                    </div>
                 </div>
             </div>
 
@@ -80,8 +91,54 @@
     </div>
 </body>
 <script>
+    var allTags = new String;
+    let addedTagsShow;
+
     function Ready() {
         notification = document.getElementsByClassName('notify')[0];
+
+        addedTagsShow = document.getElementsByClassName('addedTags')[0];
+        let avts = document.getElementsByClassName('availableTags')[0];
+        let stg = document.createElement('span');
+        stg.classList.add('tag');
+        stg.setAttribute('onclick', 'addTag(this)')
+        let new_tag;
+        allTags.split(',').forEach(function(tag) {
+            new_tag = stg.cloneNode(true);
+            new_tag.textContent = tag.trim();
+            avts.appendChild(new_tag);
+        });
+    }
+
+    function addTag(source) {
+        let new_tag = source.cloneNode(true);
+        new_tag.setAttribute('onclick', '');
+        addedTagsShow.appendChild(new_tag);
+        source.classList.add('added');
+    }
+
+    function toggleAddTag(source) {
+        source.classList.toggle('fa-times');
+        source.classList.toggle('fa-plus');
+        document.getElementsByClassName('availableTags')[0].classList.toggle('active');
+    }
+
+    function filterTag(query) {
+        query = query.trim();
+        let allTags = document.getElementsByClassName('availableTags')[0].getElementsByClassName('tag');
+        if (query.length == 0) {
+            for (let i = 0; i < allTags.length; i++) {
+                allTags[i].classList.remove('inactive');
+            }
+            return;
+        }
+        for (let i = 0; i < allTags.length; i++) {
+            if (allTags[i].textContent.indexOf(query) === -1) {
+                allTags[i].classList.add('inactive');
+            } else {
+                allTags[i].classList.remove('inactive');
+            }
+        }
     }
 
     function toggleEdit(source) {
@@ -136,19 +193,27 @@
 
     function editTags(source, save = false) {
         if (save === true) {
-            let showTags = document.getElementById('Tags');
-            let newTags = new Array;
-            showTags.value.trim().split(',').forEach(function(tag) {
-                newTags.push(tag.trim());
-            });
-            sendData('ChangeUserTags', showTags.value.trim(), function() {
-                let showTags = document.getElementById('editTags').getElementsByClassName('value')[0];
-                showTags.innerHTML = '';
-                newTags.forEach(function(tag) {
-                    showTags.innerHTML += "<span class='tag'>" + tag + "</span>";
-                });
-                notify('Your tags had been updated..');
-            })
+            /*Add all added tags textContent into the tag input filed by seperating them with (,) */
+            let inputTags = document.getElementsByClassName('addedTags')[0].getElementsByClassName('tag');
+            if (inputTags.length == 0) {
+                notify('You should atleast provide one tag', 2);
+                return; // return if no tags given
+            }
+            let tagInput = document.getElementById('Tags');
+            tagInput.value = '';
+            for (let i = 0; i < inputTags.length - 1; i++) {
+                tagInput.value += inputTags[i].textContent + ',';
+            }
+            tagInput.value += inputTags[inputTags.length - 1].textContent; // no comma at the end
+
+            function sucess() {
+                let tagShow = document.getElementById('editTags').getElementsByClassName('value')[0];
+                tagShow.innerHTML = '';
+                for (let i = 0; i < inputTags.length; ++i) {
+                    tagShow.appendChild(inputTags[i].cloneNode(true));
+                }
+            }
+            sendData('UpdateTags', tagInput.value, sucess);
         }
         toggleEdit(source);
     }
@@ -169,5 +234,25 @@
         handler.send('Param=' + param + '&data=' + data);
     }
 </script>
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once('../../server/global.php');
+
+$conn = get_connection();
+
+$allTags = $conn->query("SELECT GROUP_CONCAT(Name) FROM  Tags;") or die('There was an error...');
+$allTags = $allTags->fetch_array(MYSQLI_NUM)[0];
+
+
+// Give this value to javascript
+echo "<script type='text/javascript'>allTags=" . json_encode($allTags) . "</script>";
+
+$conn->close();
+
+?>
+</body>
 
 </html>
