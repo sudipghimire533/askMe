@@ -136,6 +136,11 @@ $conn->close();
     <link href='/profile/profile.css' type='text/css' rel='stylesheet' />
 
     <script type='text/javascript' src='/global/global.js'></script>
+    <?php
+    if ($thisUserId == $UserId) {
+        echo "<script type='text/javascript' src='/profile/profile_editor.js'></script>";
+    }
+    ?>
 </head>
 
 <body onload='Ready()'>
@@ -149,18 +154,15 @@ $conn->close();
             </div>
             <div class='profileInfo'>
                 <div class='profileIdentity'>
-                    <div class='profileName'><?php echo $UserName; ?></div>
-                    <?php
-                    if ($UserId != $thisUserId) { // do not show follow button if this is own profile 
-                        echo "<div class='followBtn "
-                            . (($isFollowing == 0) ? 'inactive' : 'active') // set active if already followed
-                            . "' onclick='follow(this, true, " . $UserId . ")'>
-                            <i class='fa fa-heart follow_icon'></i>
-                            <span></span>
-                        </div>";
-                    }
-                    ?>
-                    <div class='profileIntro'><?php echo $UserIntro; ?></div>
+                    <div class='profileName'>
+                        <?php echo $UserName; ?>
+                    </div>
+                    <div class='followBtn <?php echo (($isFollowing == 0) ? 'inactive' : 'active'); ?>' onclick='follow(this, true, " . <?php $UserId ?>. ")'>
+                        <i class='fa fa-heart follow_icon'></i>
+                        <span></span>
+                    </div>
+                    <br />
+                    <span class='profileIntro'><?php echo $UserIntro; ?></span>
                 </div>
                 <div class='impressionContainer'>
                     <a href="/questionby/<?php echo $uname; ?>" class='questionCount impr hv_border'>
@@ -203,7 +205,7 @@ $conn->close();
         </div>
         <div class='moreInfo'>
             <div class='infoBlock' id='intrestedIn'>
-                <div class='label'>Passionate About: </div>
+                <span class='label'>Passionate About: </span>
                 <div class='innerBlock'>
                     <!--Sample tag
                     <a href='#' class='tag'>Programming</a>

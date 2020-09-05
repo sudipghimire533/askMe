@@ -163,6 +163,7 @@ body {
     .profileIdentity {
         margin-top: 10px;
         margin-bottom: 20px;
+        display: inline-block;
     }
 
 
@@ -230,4 +231,16 @@ body {
   color: var(--Black);
   font-weight: bold;
   letter-spacing: 1.4px;
+}
+.edit_icon{
+  font-size: 16px;
+  margin-left: 5px;
+  color: var(--LightDark);
+  transition: color .5s;
+  cursor: pointer;
+  float: right;
+  display: none;
+}
+.edit_icon:hover{
+  color: var(--White);
 }
