@@ -75,6 +75,8 @@ textarea{
   margin: 2px;
   text-decoration: none;
   text-transform: lowercase;
+  display: inline-block;
+  margin:  3px;
 }
 /*Win the selector for input #Main input*/
 .inputContainer #QuestionSubmit{
@@ -91,7 +93,9 @@ textarea{
   background: transparent;
 }
 .prev_title{
-  font-weight: 700;
+  font-weight: 500;
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--LightDark);
 }
 .prev_body{
   font-size: 16px;
@@ -107,4 +111,56 @@ textarea{
   padding: 3px 10px;
   font-size: var(--fontSmall);;
   border-radius: 5px;
+}
+.addTag{
+  position: relative;
+  display: block;
+  padding: 10px;
+  border: 1px solid var(--LightDark);
+  border-radius: 10px;
+}
+.addTag_icon{
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  cursor: pointer;
+}
+.addedTags{
+  min-height: 30px;
+  padding-right: 20px;
+}
+.availableTags{
+  display: none;
+  position: absolute;
+  border: 1px solid var(--White);
+  z-index: 1;
+  background: var(--Black);
+  max-width: 300px;
+  right: 10px;
+  top: 40px;
+  padding: 10px;
+  max-height: 150px;
+  overflow: auto;
+}
+.availableTags > *{
+  user-select: none;
+}
+.availableTags .tag{
+  cursor: pointer;
+  transition: opacity .3s;
+}
+.availableTags .tag.inactive,
+.availableTags .tag.added{
+  display: none;
+}
+.availableTags .tag:hover{
+  opacity: .7;
+}
+.availableTags.active{
+  display: block;
+}
+#searchAvailableTags{
+  padding: 10px;
+  height: 40px;
+  text-transform: lowercase;
 }

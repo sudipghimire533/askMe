@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask a New Question</title>
 
-    <link href='../global/global.css' type="text/css" rel="stylesheet" />
-    <link href='./ask.css' type="text/css" rel="stylesheet" />
-    <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
+    <link href='/global/global.css' type="text/css" rel="stylesheet" />
+    <link href='/ask/ask.css' type="text/css" rel="stylesheet" />
+    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
 
-    <script src='./ask.js' type='text/javascript'></script>
+    <script src='/ask/ask.js' type='text/javascript'></script>
 </head>
 
 <body onload='Ready()'>
@@ -53,15 +53,16 @@
                     <textarea name='description' id='QuestionBodyReal' style='display:none;' value=''></textarea>
                 </div>
                 <div class='tagComposer'>
-                    <div class='inputContainer'>
+                    <div class='inputContainer' style='display: none'>
                         <input type='text' name='tags' placeholder='Tags' id='QuestionTags' required='' />
                     </div>
-                    <!--TODO
-                    Add a section to show all available tags and another to show the matching tag(filtered)
-                    -->
-                    <div class='fileterdTags'>
-                    </div>
-                    <div class='tagShowCase'>
+                    <div class='addTag inputContainer'>
+                        <div class='addedTags'>
+                        </div>
+                        <i class='fas fa-plus addTag_icon' onclick='toggleAvailableTags(this)'>Add Tags</i>
+                        <div class='availableTags'>
+                            <input type='text' id='searchAvailableTags' placeholder='filter tags' onkeyup='filterTag(this.value)' />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,10 +73,29 @@
                 </div>
             </div>
             <div class='inputContainer'>
-                <input type='submit' name='submit' value='Post Question' id='QuestionSubmit' />
+                <input type='submit' name='submit' value='Post Question' id='QuestionSubmit' onclick='submitForm()' />
             </div>
         </form>
     </div>
 </body>
+<script>
+    var allTags = new Array;
+</script>
+<?php
+
+require_once('../server/global.php');
+
+$conn = get_connection();
+
+$allTags = $conn->query("SELECT GROUP_CONCAT(Name) FROM  Tags;") or die('There was an error...');
+$allTags = $allTags->fetch_array(MYSQLI_NUM)[0];
+
+
+// Give this value to javascript
+echo "<script type='text/javascript'>allTags=" . json_encode($allTags) . "</script>";
+
+$conn->close();
+
+?>
 
 </html>

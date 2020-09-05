@@ -149,6 +149,11 @@ $conn->close();
         echo file_get_contents('../global/navbar.php');
         ?>
         <div class='profileContainer'>
+            <?php
+            if ($thisUserId == $UserId) { // visiting own profile..
+                echo "<a class='editProfile' href='/profile/edit/profile_edit.php' style='color: white'>edit</a>";
+            }
+            ?>
             <div class='profileImage'>
                 <img src='/user.png'></img>
             </div>
@@ -157,7 +162,7 @@ $conn->close();
                     <div class='profileName'>
                         <?php echo $UserName; ?>
                     </div>
-                    <div class='followBtn <?php echo (($isFollowing == 0) ? 'inactive' : 'active'); ?>' onclick='follow(this, true, " . <?php $UserId ?>. ")'>
+                    <div class='followBtn <?php echo (($isFollowing == 0) ? 'inactive' : 'active'); ?>' onclick='follow(this, true, " . <?php $UserId ?>. ")' style='display: <?php echo ($thisUserId == $UserId) ? 'none' : 'inline-block'; ?>'>
                         <i class='fa fa-heart follow_icon'></i>
                         <span></span>
                     </div>

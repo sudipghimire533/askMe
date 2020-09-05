@@ -69,6 +69,9 @@ function validateTags(&$tags)
         $errorMessage = "Tag your question with atleast one tag..";
         return false;
     }
+
+    // TODO: Remove duplicate tags...
+
     $stmt = $conn->prepare("SELECT Id FROM Tags WHERE Name = ? LIMIT 1;") or die("Failed to prepare sql statement");
     $tag = $tags[0];
     $stmt->bind_param("s", $tag);
