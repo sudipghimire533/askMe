@@ -1,3 +1,39 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once('../../server/global.php');
+
+$thisUserId = 1;
+
+$conn = get_connection(); // close this connection later.(at end of this file)
+
+$res = $conn->query("SELECT
+            user.FirstName as firstName,
+            user.LastName as lastName,
+            user.UserName as userName,
+            user.Intro as intro,
+            GROUP_CONCAT(tg.Name) as tags
+            FROM User user
+            LEFT JOIN
+            UserTag ut ON ut.User=user.Id
+            LEFT JOIN
+            Tags tg ON tg.Id =ut.Tag
+            WHERE user.Id=$thisUserId
+        ;") or die($conn->error . " in line " . __LINE__);
+$res = $res->fetch_all(MYSQLI_ASSOC)[0];
+
+$FirstName = $res['firstName'];
+$LastName = $res['lastName'];
+$UserName = $res['userName'];
+$Intro = $res['intro'];
+$Tags = explode(',', $res['tags']);
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,18 +68,22 @@
             <div class='editBlock' id='editTags'>
                 <div class='label'>You Tags</div>
                 <div class='value'>
-                    <span class='tag'>Programming</span>
-                    <span class='tag'>Parasite</span>
-                    <span class='tag'>Computers</span>
+                    <?php
+                    foreach ($Tags as $tag) {
+                        echo "<span class='tag'>$tag</span>";
+                    }
+                    ?>
                 </div>
                 <i class='fas fa-pen edit_icon' title='Edit your faviourate Tags' onclick='editTags(this, false)'></i>
                 <div class='editor'>
                     <i class='fas fa-plus addtag_icon' onclick='toggleAddTag(this)'></i>
                     <span class='addedTags'>
                         <!-- Initially this should be synchronous to .value element as in above -->
-                        <span class='tag'>Programming</span>
-                        <span class='tag'>Parasite</span>
-                        <span class='tag'>Computers</span>
+                        <?php
+                        foreach ($Tags as $tag) {
+                            echo "<span class='tag'>$tag</span>";
+                        }
+                        ?>
                     </span>
                     <input type='text' name='Tags' id='Tags' value='' style='display: none;' />
                     <i class='fas fa-save save_icon' title='Save my Tags..' onclick='editTags(this, true)'></i>
@@ -56,30 +96,30 @@
 
             <div class='editBlock' id='editName'>
                 <div class='label'>You Name</div>
-                <div class='value'>Sudip Ghimire</div>
+                <div class='value'><?php echo $FirstName . " " . $LastName; ?></div>
                 <i class='fas fa-pen edit_icon' title='Edit Your Name' onclick='editName(this, false)'></i>
                 <div class='editor'>
-                    <input type='text' name='Name' id='Name' placeholder='Your Name' value='Sudip Ghimire' />
+                    <input type='text' id='Name' placeholder='Your Name' value='<?php echo $FirstName . " " . $LastName; ?>' />
                     <i class='fas fa-save save_icon' title='Save My Name' onclick='editName(this,true)'></i>
                 </div>
             </div>
 
             <div class='editBlock' id='editUserName'>
                 <div class='label'>You UserName</div>
-                <div class='value'>sudipghimire533</div>
+                <div class='value'><?php echo $UserName; ?></div>
                 <i class='fas fa-pen edit_icon' title='Edit Your Username' onclick='editName(this, false)'></i>
                 <div class='editor'>
-                    <input type='text' name='UserName' id='UserName' placeholder='New Username' value='sudipghimire533' />
+                    <input type='text' name='UserName' id='UserName' placeholder='New Username' value='<?php echo $UserName; ?>' />
                     <i class='fas fa-save save_icon' title='Save this Username' onclick='editUserName(this, true)'></i>
                 </div>
             </div>
 
             <div class='editBlock' id='editIntro'>
                 <div class='label'>You Intro</div>
-                <div class='value'>Electrical Engineer at Facebook inc. Since 2007.</div>
+                <div class='value'><?php echo $Intro ?></div>
                 <i class='fas fa-pen edit_icon' title='Edit your Intro Text' onclick='editIntro(this, false)'></i>
                 <div class='editor'>
-                    <input type='text' name='Intro' id='Intro' placeholder='You short Intro..' value='Electrical Engineer at Facebook Inc. since 2007.' />
+                    <input type='text' name='Intro' id='Intro' placeholder='You short Intro..' value='<?php echo $Intro; ?>' />
                     <i class='fas fa-save save_icon' title='Save Your Intro Text..' onclick='editIntro(this, true);'></i>
                 </div>
             </div>
@@ -227,21 +267,17 @@
         let handler = new XMLHttpRequest;
         handler.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
                 sucess();
             }
         }
         handler.open('POST', '/server/quick_action.php');
-        handler.send('Param=' + param + '&data=' + data);
+        handler.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        handler.send('param=' + param + '&data=' + data);
+        console.log('param=' + param + '&data=' + data);
     }
 </script>
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-require_once('../../server/global.php');
-
-$conn = get_connection();
 
 $allTags = $conn->query("SELECT GROUP_CONCAT(Name) FROM  Tags;") or die('There was an error...');
 $allTags = $allTags->fetch_array(MYSQLI_NUM)[0];

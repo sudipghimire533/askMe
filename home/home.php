@@ -23,9 +23,9 @@ if (isset($_GET['query'])) {
     $loadQuestion = "AnswerBy";
     $param = $_GET['answerby'];
 } else if (isset($_GET['taggedfor'])) {
-    $stat = "Question tagged for '" . $_GET['taggedfor'] . "'";
     $loadQuestion = "TaggedFor";
-    $param = $_GET['taggedfor'];
+    $param = urlencode($_GET['taggedfor']);
+    $stat = "Question tagged for '" . $param . "'";
 } else {
     /*
      * Ths is now implemented in javascript loadMore() method;

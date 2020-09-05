@@ -263,7 +263,7 @@ class Getfeed
 
     public function taggedFor($tag, &$response, &$notIn, &$count)
     {
-        $tag = $this->conn->real_escape_string(trim(urldecode($tag)));
+        $tag = $this->conn->real_escape_string(trim($tag));
         $notIn = $this->conn->real_escape_string(trim($notIn));
         $count = $this->conn->real_escape_string(trim($count));
 
@@ -307,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $notIn = trim($_POST['NotIn']);
     $count = trim($_POST['Count']);
-    $param = trim($_POST['Param']);
+    $param = trim(urlencode($_POST['Param']));
     $loadQuestion = trim($_POST['LoadQuestion']);
 
     if (strlen($count) == 0 || strlen($notIn) == 0 || strlen($param) == 0) {
