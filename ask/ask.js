@@ -1,25 +1,4 @@
-let previewTitle, previewBody, previewtags;
-let sample_prev_tag;
-let converter;
-
-let focuson;
-function titlePreview(elem) {
-    previewTitle.textContent = elem.value.trim();
-}
-let prev_length = 0;
-function bodyPreview(elem) {
-    content = new String(elem.value.trim());
-
-    prev_length = content.length;
-    previewBody.textContent = content;
-    setTimeout(bodyPreview, 5 * 1000, elem);
-}
 function submitForm() {
-    /*Pu the use input into real field which form will submit*/
-    document.getElementById('QuestionBodyReal').value =
-        document.getElementById('QuestionBody').value;
-
-
     /*Add all added tags textContent into the tag input filed by seperating them with (,) */
     let inputTags = document.getElementsByClassName('addedTags')[0].getElementsByClassName('tag');
     if (inputTags.length == 0) {
@@ -36,14 +15,6 @@ function submitForm() {
 let tagMap = new Map;
 
 function Ready() {
-    let previewArea = document.getElementById('QuestionPreview');
-    previewTitle = previewArea.getElementsByClassName('prev_title')[0];
-    previewBody = previewArea.getElementsByClassName('prev_body')[0];
-
-    sample_prev_tag = document.createElement('span');
-    sample_prev_tag.classList.add('prev_tag');
-
-    bodyPreview(document.getElementById('QuestionBody'));
 
     let tg = document.createElement('span');
     tg.classList.add('tag');

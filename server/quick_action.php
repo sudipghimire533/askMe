@@ -56,12 +56,6 @@ function follow($userId)
     return 0;
 }
 
-/*
- * This function is not ready to use for inpur with special characters like + & etc...
- * Proper encoding of post paramater should be done beforehand
- * text `c++` sent from client is recived as `c` in post paramater due to improper url encoding
- * and that's where i am missing something....
-*/
 function updateTags($tags)
 {
     global $conn, $thisUserId;
@@ -79,9 +73,12 @@ function updateTags($tags)
     $id = '';
     $insertStmt->bind_param('i', $id);
 
+    $tagMap = ''; // hash table to prevent insertion try for duplicate entry
     foreach ($tags as &$tag) {
         $tag = $conn->real_escape_string(trim($tag));
-        if (strlen($tag) == 0) continue;
+        if (strlen($tag) == 0 || isset($tagMap[$tag])) continue;
+
+        $tagMap[$tag] = true;
 
         $res = $conn->query("SELECT Id FROM Tags WHERE Name='$tag'") or die($conn->error . " in line " . __LINE__);
         if ($res->num_rows == 0) {
@@ -97,6 +94,53 @@ function updateTags($tags)
     return 0;
 }
 
+function updateName($name)
+{
+    global $conn, $thisUserId;
+    /*
+     * Todo Validate all characters.
+    */
+    $name = explode(urlencode(' '), $name);
+    if (count($name) != 2) {
+        return 1;
+    }
+    $firstName = $conn->real_escape_string(htmlentities(htmlspecialchars(trim($name[0]))));
+    $lastName = $conn->real_escape_string(htmlentities(htmlspecialchars(trim($name[1]))));
+
+    $conn->query("UPDATE User SET FirstName='$firstName', LastName='$lastName' WHERE Id=$thisUserId;") or die($conn->error);
+    return 0;
+}
+
+function updateUserName($userName)
+{
+    global $conn, $thisUserId;
+    /*
+     * TODO:
+     * Validate all character
+    */
+    $userName = $conn->real_escape_string(htmlentities(htmlspecialchars(trim($userName))));
+    if (strlen($userName) < 4) {
+        return 1;
+    }
+
+    $conn->query("UPDATE User SET UserName='$userName' WHERE Id=$thisUserId;") or die($conn->error);
+    return 0;
+}
+
+function updateIntro($intro)
+{
+    global $conn, $thisUserId;
+
+    $intro = $conn->real_escape_string(trim(htmlentities(htmlspecialchars(urldecode($intro)))));
+
+    if (strlen($intro) < 5) {
+        return 1;
+    }
+
+    $conn->query("UPDATE User SET Intro='$intro' WHERE Id=$thisUserId;") or die($conn->error);
+    return 0;
+}
+
 if (isset($_GET['target'])) { /*FOr action like clap and bookmark target is must*/
     if (isset($_GET['clapQuestion'])) {
         clapQuestion($_GET['target']);
@@ -108,12 +152,21 @@ if (isset($_GET['target'])) { /*FOr action like clap and bookmark target is must
         echo follow($_GET['target']);
     }
 } else if (isset($_POST['param']) && isset($_POST['data'])) { /*For profile editing action param is must*/
+    $_POST['data'] = urlencode($_POST['data']);
     if ($_POST['param'] == 'UpdateTags') {
-        $data = $_POST['data'];
-        echo updateTags($data);
+        echo updateTags($_POST['data']);
+    } else if ($_POST['param'] == 'UpdateName') {
+        echo updateName($_POST['data']);
+    } else if ($_POST['param'] == 'UpdateUserName') {
+        echo updateUserName($_POST['data']);
+    } else if ($_POST['param'] == 'UpdateIntro') {
+        echo updateIntro($_POST['data']);
+    } else {
+        echo 1;
     }
 } else {
     echo "What you want to do?";
+    echo 1;
 }
 
 $conn->close();

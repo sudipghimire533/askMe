@@ -7,12 +7,14 @@
     <title>Help me for Homework</title>
 
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
-    <link href='/thread/thread.css' type="text/css" rel="stylesheet" />
     <link href='/thread/question_entity.css' type="text/css" rel="stylesheet" />
+    <link href='/thread/thread.css' type="text/css" rel="stylesheet" />
     <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
-    <script src='/global/global.js' type='text/javascript'></script>
+    <link rel='stylesheet' type='text/css' href='/global/js/trix.css' />
 
+    <script src='/global/global.js' type='text/javascript'></script>
     <script src='/thread/thread.js' type='text/javascript'></script>
+    <script src='/global/js/trix.js'></script>
 </head>
 
 
@@ -129,15 +131,14 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                 <a name='writeAnswer'></a>
                 <form class='writerSection' method='POST' action='/server/post_answer.php' id='answerForm'>
                     <div class=' inputContainer'>
-                        <div class='toolbar'>ToolBar</div>
-                        <textarea placeholder='Write Question Description Here..' id='PostBody' required='' minlength='20' onfocus='startPreview(this,false);' onblur='endPreview()'></textarea>
-                        <input type='text' name='description' id='PostBodyReal' style='display: none;' value='' />
-                    </div>
-                    <div id='PostPreview' class='Answer description' tabindex='0'>
+                        <input type='hidden' name='description' id='QuestionBody' value='' />
+                        <div class='trixContainer'>
+                            <trix-editor input='QuestionBody'></trix-editor>
+                        </div>
                     </div>
                     <input type='text' name='QuestionId' value='<?php echo $id; ?>' style='display: none;' />
                     <div class='inputContainer'>
-                        <input type="submit" name="submit" value='Post' id='PostSubmit' />
+                        <input class='inp' type="submit" name="submit" value='Post' id='PostSubmit' />
                     </div>
                 </form>
             </div>

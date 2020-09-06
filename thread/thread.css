@@ -68,24 +68,13 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
-.description a{
-  color: var(--Niagara) !important;
-  text-decoration: underline !important;
-}
-.description h1,
-.description h2{
-  font-size: 22px;
-  font-weight: 400;
-}
 .tagContainer{
   margin-bottom: 15px;
 }
 .asker_name{
   text-decoration: underline !important;
 }
-
-/* there is also input element in navbar */
-#Main  input, textarea{
+.inp{
   width: 100%;
   margin: 15px 0;
   background: inherit;
@@ -114,8 +103,7 @@ textarea{
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-/* Win the selector of input */
-.writerSection #PostSubmit{
+#PostSubmit{
   background: var(--Niagara);
   border-color: var(--Niagara);
   font-weight: bold;
@@ -129,15 +117,6 @@ textarea{
   background: transparent;
 }
 
-.description code{
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--LightDark);
-  display: inline-block;
-  overflow: auto;
-  max-width: 97%;
-  max-height: 400px;
-}
 #AnswersContaner{
   display: inline-flex;
   flex-flow: column-reverse wrap;
@@ -179,4 +158,54 @@ textarea{
 }
 .Question{
   padding-bottom: 10px !important;
+}
+
+.trixContainer{
+  height: 300px;
+  overflow: auto;
+  border: 1px solid var(--LightDark);
+  margin: 30px 0;
+  position: relative;
+  display: block;
+}
+trix-editor h1,
+.description h1{
+  font-size: 1.5em;
+}
+
+trix-editor blockquote,
+.description blockquote{
+  border-left: 3px solid var(--Niagara);
+  padding: 20px 10px;
+}
+trix-editor a,
+.description a{
+   color: var(--Purple);
+ }
+
+figure{
+  position: relative;
+  display: inline-block;
+}
+figure img,
+.description img{
+   max-width: 200px;
+}
+.figcaption{
+  font-size: var(--fontTiny);
+  position: relative;;
+  display: inline-block;
+}
+.figcaption progress{
+  max-width: 280px;
+}
+.description pre,
+trix-editor pre{
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--LightDark);
+  display: inline-block;
+  overflow: auto;
+  max-width: 97%;
+  max-height: 400px;
 }

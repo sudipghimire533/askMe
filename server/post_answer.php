@@ -22,8 +22,11 @@ $errorMessage;
 
 $UserId = 2;
 $QuestionId = $conn->real_escape_string(trim($_POST['QuestionId']));
-$Description = $conn->real_escape_string(trim(htmlspecialchars($_POST['description'])));
-
+$Description = trim($_POST['description']);
+/*However js will try to prevent XSS but still cant tak rist. this will be only necessary when XSS is intended
+ * SO only prevent the attack noo need to care about question of this attacker.
+*/
+$Description = str_replace('<script>', '&lt;script>;', $Description);
 
 function fail($err, $lineno = __LINE__)
 {

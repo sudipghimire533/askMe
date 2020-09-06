@@ -9,8 +9,10 @@
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
     <link href='/ask/ask.css' type="text/css" rel="stylesheet" />
     <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
+    <link rel='stylesheet' type='text/css' href='/global/js/trix.css' />
 
     <script src='/ask/ask.js' type='text/javascript'></script>
+    <script src='/global/js/trix.js'></script>
 </head>
 
 <body onload='Ready()'>
@@ -45,33 +47,30 @@
         <form class='AskQuestion' method='POST' action='/server/post_question.php'>
             <div class='WriterContainer'>
                 <div class='inputContainer'>
-                    <input type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' onkeyup="titlePreview(this)" />
+                    <input class='inp' type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' onkeyup="titlePreview(this)" />
                 </div>
                 <div class=' inputContainer'>
-                    <div class='toolbar'>ToolBar</div>
-                    <textarea placeholder='Write Question Description Here..' id='QuestionBody' required='' minlength='20'></textarea>
-                    <textarea name='description' id='QuestionBodyReal' style='display:none;' value=''></textarea>
+                    <input type='hidden' name='description' id='QuestionBody' value='' />
+                    <div class='trixContainer'>
+                        <trix-editor input='QuestionBody'></trix-editor>
+                    </div>
                 </div>
                 <div class='tagComposer'>
                     <div class='inputContainer' style='display: none'>
-                        <input type='text' name='tags' placeholder='Tags' id='QuestionTags' required='' />
+                        <input class='inp' type='text' name='tags' placeholder='Tags' id='QuestionTags' required='' />
                     </div>
                     <div class='addTag inputContainer'>
                         <div class='addedTags'>
                         </div>
                         <i class='fas fa-plus addTag_icon' onclick='toggleAvailableTags(this)'>Add Tags</i>
                         <div class='availableTags'>
-                            <input type='text' id='searchAvailableTags' placeholder='filter tags' onkeyup='filterTag(this.value)' />
+                            <input class='inp' type='text' id='searchAvailableTags' placeholder='filter tags' onkeyup='filterTag(this.value)' />
                         </div>
                     </div>
                 </div>
             </div>
-            <div id='QuestionPreview'>
-                <div class='prev_title'></div>
-                <p class='prev_body'></p>
-            </div>
             <div class='inputContainer'>
-                <input type='submit' name='submit' value='Post Question' id='QuestionSubmit' onclick='submitForm()' />
+                <input class='inp' type='submit' name='submit' value='Post Question' id='QuestionSubmit' onclick='submitForm()' />
             </div>
         </form>
     </div>

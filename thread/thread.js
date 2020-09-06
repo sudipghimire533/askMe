@@ -4,7 +4,7 @@ function fillQuestion() {
     let title = Question.getElementsByClassName('titleText')[0];
     title.textContent = thisQuestion.title;
 
-    Question.getElementsByClassName('description')[0].firstElementChild.textContent =
+    Question.getElementsByClassName('description')[0].firstElementChild.innerHTML =
         thisQuestion.info;
 
     let tagContainer = Question.getElementsByClassName('tagContainer')[0];
@@ -75,7 +75,7 @@ let sampleAnswer;
 function fillAnswer(index) {
     let Answer = sampleAnswer.cloneNode(true);
 
-    Answer.getElementsByClassName('description')[0].firstElementChild.textContent =
+    Answer.getElementsByClassName('description')[0].firstElementChild.innerHTML =
         allAnswers[index].info;
 
     let nameContainer = Answer.getElementsByClassName('authorName')[0];

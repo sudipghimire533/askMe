@@ -58,10 +58,9 @@ $Tags = explode(',', $res['tags']);
             <div class='editBlock' id='editProfileImage'>
                 <div class='label'>You Profile Picture</div>
                 <img class='value profile_img' alt='Sudip Ghimire' title='Your Profile pcture...' src='/user.png' />
-                <i class='fas fa-pen edit_icon' title='Shange your Proifle picture...' onclick='editProfileImage(this)'></i>
+                <i class='fas fa-pen edit_icon' title='Shange your Proifle picture...' onclick='toggleEdit(this)'></i>
                 <div class='editor'>
-                    <input type='file' name='Name' id='ProfleImage' />
-                    <i class='fas fa-save save_icon' title='Save Your profile Picture...' onclick='editProfileImage(this)'></i>
+                    <p>Your profile picture will be same from your facebook</p>
                 </div>
             </div>
 
@@ -199,7 +198,7 @@ $Tags = explode(',', $res['tags']);
         if (save === true) {
             let showName = document.getElementById('Name');
             let newName = showName.value.trim();
-            sendData('ChangeName', newName, function() {
+            sendData('UpdateName', newName, function() {
                 document.getElementById('editName').getElementsByClassName('value')[0].textContent = newName;
                 notify('Nice Name!!' + newName);
             });
@@ -211,7 +210,7 @@ $Tags = explode(',', $res['tags']);
         if (save === true) {
             let showIntro = document.getElementById('Intro');
             let newIntro = showIntro.value.trim();
-            sendData('ChangeIntro', newIntro, function() {
+            sendData('UpdateIntro', newIntro, function() {
                 document.getElementById('editIntro').getElementsByClassName('value')[0].textContent = newIntro;
                 notify('You intro has been updated!!!');
             });
@@ -223,7 +222,7 @@ $Tags = explode(',', $res['tags']);
         if (save === true) {
             let showUserName = document.getElementById('UserName');
             let newuserName = showUserName.value.trim();
-            sendData('ChangeUserName', newuserName, function() {
+            sendData('UpdateUserName', newuserName, function() {
                 document.getElementById('editUserName').getElementsByClassName('value')[0].textContent = newuserName;
                 notify('UserName changed...');
             });
@@ -233,18 +232,27 @@ $Tags = explode(',', $res['tags']);
 
     function editTags(source, save = false) {
         if (save === true) {
+            let tagMap = new Map;
             /*Add all added tags textContent into the tag input filed by seperating them with (,) */
-            let inputTags = document.getElementsByClassName('addedTags')[0].getElementsByClassName('tag');
-            if (inputTags.length == 0) {
-                notify('You should atleast provide one tag', 2);
-                return; // return if no tags given
-            }
+            let inputTagsAll = document.getElementsByClassName('addedTags')[0].getElementsByClassName('tag');
+            let inputTags = new Array;
+
             let tagInput = document.getElementById('Tags');
             tagInput.value = '';
-            for (let i = 0; i < inputTags.length - 1; i++) {
-                tagInput.value += inputTags[i].textContent + ',';
+
+            for (let i = 0; i < inputTagsAll.length; ++i) {
+                if (!tagMap.has(inputTagsAll[i].textContent)) { // only unique tags
+                    tagMap.set(inputTagsAll[i].textContent, true);
+                    tagInput.value += inputTagsAll[i].textContent + ','; // keep filling the input text
+                    inputTags.push(inputTagsAll[i]);
+                }
             }
-            tagInput.value += inputTags[inputTags.length - 1].textContent; // no comma at the end
+            tagInput.value = tagInput.value.substr(0, tagInput.value.length - 1); // no comma at the end..
+
+            if (tagMap.length == 0) {
+                notify('You should atleast provide one tag', 2);
+                return;
+            }
 
             function sucess() {
                 let tagShow = document.getElementById('editTags').getElementsByClassName('value')[0];
@@ -252,29 +260,32 @@ $Tags = explode(',', $res['tags']);
                 for (let i = 0; i < inputTags.length; ++i) {
                     tagShow.appendChild(inputTags[i].cloneNode(true));
                 }
+                notify('Your Tags has been updated sucessfully...');
             }
             sendData('UpdateTags', tagInput.value, sucess);
         }
         toggleEdit(source);
     }
 
-    function editProfileImage(source, save = false) {
-        if (save == true) {}
-        toggleEdit(source);
-    }
-
     function sendData(param, data, sucess = function() {}) {
         let handler = new XMLHttpRequest;
+        handler.onerror = function() {
+            notify('Error while sending Request...');
+        };
         handler.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
-                sucess();
+                if (this.responseText == 0 || this.responseText == '0') {
+                    sucess();
+                } else {
+                    notify('Server returned an error...', 2);
+                    console.log(this.responseText);
+                }
             }
         }
         handler.open('POST', '/server/quick_action.php');
         handler.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         handler.send('param=' + param + '&data=' + data);
-        console.log('param=' + param + '&data=' + data);
+        console.log('param=' + param + '&data=' + (data));
     }
 </script>
 <?php
