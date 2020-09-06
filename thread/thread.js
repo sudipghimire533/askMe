@@ -44,7 +44,7 @@ function fillQuestion() {
     } else {
         clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
-    if (Question.authorId != thisUserId) { // if this is not written by current user. remove edit button
+    if (thisQuestion.authorId != thisUserId) { // if this is not written by current user. remove edit button
         Question.getElementsByClassName('edit_icon')[0].remove();
     } else { // this is question by the user currently active..
         Question.getElementsByClassName('edit_icon')[0].setAttribute('href', '/ask/ask.php?edit=1&id=' + thisQuestion.id);

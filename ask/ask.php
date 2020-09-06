@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once('../server/global.php');
 
 $thisuserId = 1;
@@ -7,7 +12,6 @@ $conn = get_connection();
 
 if (isset($_GET['edit']) && isset($_GET['id'])) {
     if (trim($_GET['edit']) == '1') {
-        $conn  = get_connection();
         $id = $conn->real_escape_string(trim($_GET['id']));
         $res = $conn->query("SELECT
                 qn.Title as title,
@@ -34,13 +38,14 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
             $description = $res['description'];
             $tags = $res['tags'];
             // set the varable...
-            echo
-                "<script>
+            echo "<script type='text/javascript'>
                     var editQnId = $id;
                     var edit = true;
-                    var title = '" . $title . "';
-                    var description = '" . $description . "';
-                    var tags = '" . $tags . "';
+                    var title = " . json_encode($title) . ";
+                    console.log(title);
+                    var description = " . json_encode($description) . ";
+                    var tags = " . json_encode($tags) . ";
+                    
                 </script>";
         }
     }

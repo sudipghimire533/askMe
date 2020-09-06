@@ -30,7 +30,7 @@ if (!isset($_GET['url'])) {
 }
 
 
-$thisUserId = 2;
+$thisUserId = 1;
 
 // set current userd in a global js var
 echo "<script>var thisUserId = $thisUserId;</script>";
