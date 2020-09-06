@@ -4,3 +4,6 @@ RewriteEngine on
 
 RewriteRule ^([a-zA-Z0-9\-]+)/$ /thread/thread.php?url=$1 [QSA] #this regex match thread/url/
 RewriteRule ^([a-zA-Z0-9\-]+)$ /thread/thread.php?url=$1 [QSA] $this regex match thread/url
+
+RewriteRule ^([a-zA-Z0-9\-]+)/edit$  /ask/thread.php?url=$1&edit=1 [QSA] #for editing
+RewriteRule ^([a-zA-Z0-9\-]+)/edit/$ /ask/thread.php?url=$1&edit=1 [QSA]

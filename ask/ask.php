@@ -1,3 +1,52 @@
+<?php
+require_once('../server/global.php');
+
+$thisuserId = 1;
+
+$conn = get_connection();
+
+if (isset($_GET['edit']) && isset($_GET['id'])) {
+    if (trim($_GET['edit']) == '1') {
+        $conn  = get_connection();
+        $id = $conn->real_escape_string(trim($_GET['id']));
+        $res = $conn->query("SELECT
+                qn.Title as title,
+                qn.Description as description,
+                qn.Author as author,
+                GROUP_CONCAT(tg.Name) as tags
+                FROM Question qn
+                LEFT JOIn
+                QuestionTag qt ON qt.Question=qn.Id
+                LEFT JOIN
+                Tags tg ON tg.Id=qt.Tag
+                WHERE qn.Id = $id
+            ;") or die($conn->error  . " in line " . __LINE__);
+
+        $res = $res->fetch_all(MYSQLI_ASSOC)[0];
+
+        $author =  $res['author'];
+        $title = $res['title'];
+        if ($res['title'] == null) {
+            echo "Question does not exist...";
+        } else if ($res['author'] != $thisuserId) {
+            echo "You do not have permission for this action...";
+        } else {
+            $description = $res['description'];
+            $tags = $res['tags'];
+            // set the varable...
+            echo
+                "<script>
+                    var editQnId = $id;
+                    var edit = true;
+                    var title = '" . $title . "';
+                    var description = '" . $description . "';
+                    var tags = '" . $tags . "';
+                </script>";
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +99,11 @@
                     <input class='inp' type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' onkeyup="titlePreview(this)" />
                 </div>
                 <div class=' inputContainer'>
-                    <input type='hidden' name='description' id='QuestionBody' value='' />
+                    <input type='hidden' name='description' id='QuestionBody' value='
+                    <?php // we cannot populate this from javascript because order of evaluation is not consistant. so direct push from here...
+                    echo isset($description) ? $description : '';
+                    ?>
+                    ' />
                     <div class='trixContainer'>
                         <trix-editor input='QuestionBody'></trix-editor>
                     </div>
@@ -79,10 +132,6 @@
     var allTags = new String;
 </script>
 <?php
-
-require_once('../server/global.php');
-
-$conn = get_connection();
 
 $allTags = $conn->query("SELECT GROUP_CONCAT(Name) FROM  Tags;") or die('There was an error...');
 $allTags = $allTags->fetch_array(MYSQLI_NUM)[0];

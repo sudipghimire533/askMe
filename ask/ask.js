@@ -26,6 +26,24 @@ function Ready() {
         new_tag.textContent = tag.toLowerCase();
         avtg.appendChild(new_tag);
     });
+
+    /*Is this editing request....*/
+    if (typeof (title) != undefined && typeof (tags) != undefined && typeof (description) != undefined && typeof (editQnId) != undefined) {
+        document.getElementById('QuestionTitle').value = title; // populate title
+        tags = tags.split(',');
+        let smtg = document.createElement('span');
+        smtg.classList.add('tag');
+        for (let i = 0; i < tags.length; ++i) {
+            smtg.textContent = tags[i];
+            addTag(smtg); // populate tags
+        }
+
+        smtg = document.createElement('input');
+        smtg.setAttribute('name', 'isEdit');
+        smtg.setAttribute('type', 'hidden'); // this should be hidden element
+        smtg.value = parseInt(editQnId);
+        document.getElementsByClassName('AskQuestion')[0].appendChild(smtg); // since it is hidden we can appedn anywhere inside form
+    }
 }
 
 function toggleAvailableTags(source) {

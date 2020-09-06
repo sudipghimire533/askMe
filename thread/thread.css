@@ -154,11 +154,16 @@ textarea{
   background: var(--Niagara) !important;
 }
 .meta{
+  position: relative;
   color: var(--LightDark) !important;
 }
 .Question{
   padding-bottom: 10px !important;
 }
+.edit_icon{
+  cursor: pointer;
+}
+
 
 .trixContainer{
   height: 300px;

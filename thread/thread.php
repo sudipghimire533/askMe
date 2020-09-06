@@ -95,6 +95,9 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                         <i class='fas fa-bookmark bookmarkIcon' onclick="bookmark(this, true, 'QuestionId')"></i>
                         <a href='#writeAnswer' class='fas fa-reply' onclick="notify('Go hit it!!')"></a>
                     </span>
+                    <span class='meta'>
+                        <a href='#edit' class='fas fa-pen edit_icon' title='Edit this post..'> Edit</a>
+                    </span>
                 </div>
             </div>
             <hr />

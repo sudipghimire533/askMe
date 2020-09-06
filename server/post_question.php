@@ -8,15 +8,13 @@ if (
     isset($_POST['tags'])
 ) {
     echo "This is the form Receiving page";
-
-    if (!(isset($_GET['test']))) {
-        exit;
-    }
 }
 
 $conn = get_connection();
-
 $errorMessage;
+
+$thisUserId = 1;
+$Author = $thisUserId;
 
 function fail($err)
 {
@@ -91,7 +89,35 @@ function validateTags(&$tags)
     return true;
 }
 
-$Author = 1;
+function validateEdit($editId)
+{
+    global $conn, $Author, $errorMessage;
+    $editId  = $conn->real_escape_string($editId);
+    $res = $conn->query("SELECT
+        Author FROM Question WHERE Id=$editId
+    ;") or fail($conn->error, __LINE__);
+    if ($res->num_rows == 0) {
+        $errorMessage = "You are editing non existing Question...";
+        return false;
+    }
+    $res = $res->fetch_all(MYSQLI_NUM)[0][0]; // get author of that question...
+
+    /*
+     * This is also checked in main page but user can add a input element manually so check it again...
+     * to prevent editingother question..
+     */
+    if ($res != $Author) {
+        $errorMessage = 'You do not have permission to edit that Question....';
+        return false;
+    }
+    return true;
+}
+
+
+$editId = '';
+if (isset($_POST['isEdit'])) { /*If edit request...*/
+    $editId = trim($_POST['isEdit']);
+}
 
 $Title =  $_POST['title'];
 $Description = $_POST['description'];
@@ -103,33 +129,63 @@ $Tags = $conn->real_escape_string(trim($Tags));
 
 function insertQuestion()
 {
-    global $conn, $Title, $Description, $Tags, $Author, $UserId, $URLTitle;
+    global $conn, $Title, $Description, $Tags, $Author, $UserId, $URLTitle, $editId;
 
     $conn->autocommit(false);
-    /*get Url title*/
-    $URLTitle = str_replace(" ", "-", strtolower($Title));
-    $URLTitle  = preg_replace("/[^A-Za-z0-9\-]/", '', $URLTitle);
 
-    $res = $conn->query("SELECT Id FROM Question WHERE URLTitle='$URLTitle' LIMIT 1;");
-    if ($res->num_rows != 0) {
-        $URLTitle .= $UserId;
-        $res = $conn->query("SELECT Id FROM Question WHERE URLTitle='$URLTitle' LIMIT 1;");
+    if ($editId == '') { // validate only if is not edit title-url as it is permanent
+        /*get Url title*/
+        $URLTitle = str_replace(" ", "-", strtolower($Title));
+        $URLTitle  = preg_replace("/[^A-Za-z0-9\-]/", '', $URLTitle);
+
+        $res = $conn->query("SELECT Id FROM Question WHERE URLTitle='$URLTitle';");
         if ($res->num_rows != 0) {
-            fail("Cannot Register Question. Had you already posted similar question?");
+            $URLTitle .= $UserId;
+            $res = $conn->query("SELECT Id FROM Question WHERE URLTitle='$URLTitle';");
+            if ($res->num_rows != 0) {
+                fail("You had already registered qustion with similar title. try updating that instead...");
+            }
         }
+    } else { // however we need utrltitle at last to redirect the user...
+        $URLTitle = $conn->query("SELECT URLTitle FROM Question WHERE Id=$editId;") or fail($conn->error, __LINE__);
+        $URLTitle = $URLTitle->fetch_array(MYSQLI_NUM)[0];
     }
 
-    $res = $conn->query("INSERT INTO
+    $QuestionId = -1; // this should be later set on either edit or insert request...
+
+    if ($editId != '') {
+        /*
+         * If this is an edit request then clean all assciated tags to this question for clean insertion of all input tags
+         * and update the values.. except question tag as it is same process for new question and edit
+         */
+
+        $editId = $conn->real_escape_string($editId);
+        /*
+         * Only title, description and last Mofdification date is to be updated(tags will updated later)
+         */
+        $conn->query("DELETE FROM
+                    QuestionTag WHERE Question = $editId;") or fail($conn->error, __LINE__);
+        $conn->query(" UPDATE Question SET
+                    Title='$Title',
+                    Description='$Description',
+                    ModifiedOn=Now()
+        ;") or fail($conn->error, __LINE__);
+
+        $QuestionId = $editId;
+    } else {
+        // if not edit then insert...
+        $res = $conn->query("INSERT INTO
             Question (Title, URLTitle, Author, Description)
             VALUES('$Title', '$URLTitle', '$Author', '$Description')
         ;") or fail("Cannot insert Data into Database Double check your Input and read the docs. Error: " . $conn->error);
 
-    $QuestionId = $conn->insert_id;
+        $QuestionId = $conn->insert_id;
+    }
 
     $linkTag = $conn->prepare("INSERT INTO
             QuestionTag (Question, Tag)
             VALUES ($QuestionId, ?)
-        ;") or fail($linkTag->error);
+        ;") or fail($conn->error);
 
     $tag = "";
     $linkTag->bind_param("i", $tag);
@@ -146,6 +202,11 @@ function insertQuestion()
     sucess($QuestionId);
 }
 
+if ($editId != '') { // before anything else check for edit permission(if request is edit)....
+    if (validateEdit($editId) == false) {
+        fail($errorMessage);
+    }
+}
 if (!(validateTitle($Title) &&
     validateDescription($Description) &&
     validateTags($Tags))) {

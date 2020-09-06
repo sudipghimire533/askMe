@@ -44,6 +44,8 @@ function fillQuestion() {
     } else {
         clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
+
+    Question.getElementsByClassName('edit_icon')[0].setAttribute('href', '/ask/ask.php?edit=1&id=' + thisQuestion.id);
 }
 function clapLastStep(source) {
     source.onclick = function () {
