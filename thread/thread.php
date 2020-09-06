@@ -29,9 +29,11 @@ if (!isset($_GET['url'])) {
     exit;
 }
 
-// See post_answer.php
-if (isset($_GET['answerPosted']) && $_GET['answerPosted'] == '1') {
-}
+
+$thisUserId = 2;
+
+// set current userd in a global js var
+echo "<script>var thisUserId = $thisUserId;</script>";
 
 require_once("../server/thread.php");
 
@@ -129,6 +131,9 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                             <span class='label'>Updated on:</span>
                             <span class='updated_on'></span>
                         </span>
+                        <span class='meta'>
+                            <a href='#writeAnswer' class='fas fa-pen edit_icon' title='Edit this Answer..' onclick='editAnswer(this)'> Edit</a>
+                        </span>
                     </div>
                 </div>
                 <a name='writeAnswer'></a>
@@ -139,7 +144,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                             <trix-editor input='QuestionBody'></trix-editor>
                         </div>
                     </div>
-                    <input type='text' name='QuestionId' value='<?php echo $id; ?>' style='display: none;' />
+                    <input type='hidden' name='QuestionId' value='<?php echo $id; ?>' />
                     <div class='inputContainer'>
                         <input class='inp' type="submit" name="submit" value='Post' id='PostSubmit' />
                     </div>

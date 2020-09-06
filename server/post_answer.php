@@ -20,9 +20,15 @@ if (
 $conn = get_connection();
 $errorMessage;
 
-$UserId = 2;
+$thisUserId = 2;
 $QuestionId = $conn->real_escape_string(trim($_POST['QuestionId']));
 $Description = trim($_POST['description']);
+
+$Editing = '';
+if (isset($_POST['editAns'])) {
+	$Editing = trim($_POST['editAns']);
+}
+
 /*However js will try to prevent XSS but still cant tak rist. this will be only necessary when XSS is intended
  * SO only prevent the attack noo need to care about question of this attacker.
 */
@@ -51,26 +57,42 @@ if (strlen($Description) < 20) {
 	fail("Less than 20 character in Description. current count:" . strlen($Description));
 }
 
-$res = $conn->multi_query("INSERT INTO
+$res = false;
+
+/*
+ * Do nott need transition for this small action...
+ * $conn->autocommit(false);
+ * Even if answer is updated/inserted but lastactive of question is not updated
+ * (It is very rare) still do not have that much effect
+*/
+
+if ($Editing != '') { // this is editing of old answer...
+	$Editing = $conn->real_escape_string($Editing);
+
+	$res = $conn->query("SELECT
+			Author FROM Answer
+			WHERE Id=$Editing 
+		;") or fail($conn->error, __LINE__);
+	if ($res->num_rows == 0 || $res->fetch_array(MYSQLI_NUM)[0] != $thisUserId) {
+		fail('You are editing answer that doesnot exist or you do not have permission to edit...', __LINE__);
+	}
+
+	$res = $conn->multi_query("UPDATE
+			Answer
+			SET Description='$Description'
+		;") or fail($conn->error, __LINE__);
+} else { // if this is not editing instead is a new answer....
+	$res = $conn->query("INSERT INTO
 			Answer(Author, WrittenFor, Description)
 			VALUES
-			($UserId, $QuestionId, '$Description');
-
-			UPDATE Question SET LastActive=NOW() WHERE Id=$QuestionId
-			") or fail($conn->error, __LINE__);
-if ($res == false) {
-	fail("error in query...", __LINE__);
+			($thisUserId, $QuestionId, '$Description')
+		;") or fail($conn->error, __LINE__);
 }
 
-do {
-	if ($r = $conn->store_result()) {
-		$r->free();
-	}
-	if (!$conn->more_results()) {
-		break;
-	}
-} while ($conn->next_result());
-
+// for both case update last active....
+$conn->query("UPDATE
+			Question SET LastActive=NOW() WHERE Id=$QuestionId
+		;") or fail($conn->error, __LINE__);
 
 sucess();
 

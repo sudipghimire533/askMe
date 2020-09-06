@@ -160,8 +160,14 @@ textarea{
 .Question{
   padding-bottom: 10px !important;
 }
+.edit_icon,
 .edit_icon{
   cursor: pointer;
+}
+.edit_icon{
+  color: inherit;
+  text-decoration: none;
+  float: right;
 }
 
 

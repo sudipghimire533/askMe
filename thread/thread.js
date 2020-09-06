@@ -44,8 +44,11 @@ function fillQuestion() {
     } else {
         clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
-
-    Question.getElementsByClassName('edit_icon')[0].setAttribute('href', '/ask/ask.php?edit=1&id=' + thisQuestion.id);
+    if (Question.authorId != thisUserId) { // if this is not written by current user. remove edit button
+        Question.getElementsByClassName('edit_icon')[0].remove();
+    } else { // this is question by the user currently active..
+        Question.getElementsByClassName('edit_icon')[0].setAttribute('href', '/ask/ask.php?edit=1&id=' + thisQuestion.id);
+    }
 }
 function clapLastStep(source) {
     source.onclick = function () {
@@ -79,6 +82,7 @@ function fillAnswer(index) {
 
     Answer.getElementsByClassName('description')[0].firstElementChild.innerHTML =
         allAnswers[index].info;
+    Answer.setAttribute('id', 'Answer' + allAnswers[index].id);
 
     let nameContainer = Answer.getElementsByClassName('authorName')[0];
     nameContainer.setAttribute('href', '/profile/' + allAnswers[index].authorPath);
@@ -109,25 +113,34 @@ function fillAnswer(index) {
     }
 
 
+    if (allAnswers[index].authorId != thisUserId) { // if this is not the answer written by current user. remove edit button
+        Answer.getElementsByClassName('edit_icon')[0].remove();
+    }
+
+
     sampleAnswer.parentElement.appendChild(Answer);
     allAnswers[index] = null;
 }
 
-let previewContainer;
-let prev_loop;
-let stop = true;
-function startPreview(elem, st = stop) {
-    if (st == true) { return; }
-    content = elem.value.trim();
+function editAnswer(source) {
+    let answer = source.parentElement;
+    while (!answer.classList.contains('Answer')) { // get the .Answer element
+        answer = answer.parentElement;
+    }
+    let value = answer.getElementsByClassName('description')[0].innerHTML.trim();
+    let trix = document.getElementsByTagName('trix-editor')[0];
 
-    previewContainer.textContent = content;
-    prev_loop = setTimeout(startPreview, 4 * 1000, elem, false);
-}
-function endPreview(elem) {
-    setTimeout(function () {
-        stop = true;
-        clearTimeout(prev_loop);
-        prev_loop = null;
-    }, 5 * 1000);
-    // When user stops typing and immeditly blur the input element then wait for next preview
+    /*Add content to input and also in editor...*/
+    document.getElementById('QuestionBody').value = value;
+    trix.editor.setSelectedRange([0, 0]); // at the beginning
+    trix.editor.insertHTML(value);
+
+    /*Add editing indecator*/
+    let ind = document.createElement('input');
+    ind.setAttribute('type', 'hidden');
+    ind.setAttribute('name', 'editAns');
+    ind.value = answer.id.replace('Answer', '');
+    document.getElementsByClassName('writerSection')[0].appendChild(ind); // append a editing indicator..
+
+    answer.remove(); // remove for answer list while editing...
 }
