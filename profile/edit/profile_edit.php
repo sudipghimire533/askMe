@@ -80,7 +80,7 @@ $Tags = explode(',', $res['tags']);
                         <!-- Initially this should be synchronous to .value element as in above -->
                         <?php
                         foreach ($Tags as $tag) {
-                            echo "<span class='tag'>$tag</span>";
+                            echo "<span class='tag' onclick='this.remove()'>$tag</span>";
                         }
                         ?>
                     </span>
