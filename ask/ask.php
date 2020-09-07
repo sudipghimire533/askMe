@@ -101,7 +101,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
         <form class='AskQuestion' method='POST' action='/server/post_question.php'>
             <div class='WriterContainer'>
                 <div class='inputContainer'>
-                    <input class='inp' type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' onkeyup="titlePreview(this)" />
+                    <input class='inp' type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' />
                 </div>
                 <div class=' inputContainer'>
                     <input type='hidden' name='description' id='QuestionBody' value='

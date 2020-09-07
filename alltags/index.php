@@ -30,8 +30,8 @@ $conn->close();
         <div class='searchContainer'>
             <div class='label'>
             </div>
-            <div class='searchBox'>
-                <input type='text' name='searchTag' placeholder='Fileter Tags...' id='searchTag' onkeyup='filter(this.value)' />
+            <div class='boxContainer'>
+                <input type='text' name='searchTag' placeholder='Fileter Tags...' id='searchTag' onkeyup='filter(this.value)' class='box_input' />
                 <i class='fas fa-search icon'></i>
             </div>
         </div>
@@ -83,7 +83,7 @@ $conn->close();
         margin-top: 30px;
     }
 
-    #searchTag {
+    .box_input {
         padding: 10px 20px;
         width: 500px;
         height: 45px;
@@ -102,16 +102,17 @@ $conn->close();
         border-bottom-left-radius: 10px;
     }
 
-    .searchBox {
+    .boxContainer {
         position: relative;
         display: inline-block;
     }
 
-    .searchBox .icon {
+    .boxContainer .icon {
         position: absolute;
         display: inline-block;
         background: var(--LightDark);
         line-height: 45px;
+        height: 45px;
         padding-left: 5px;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
@@ -149,7 +150,7 @@ $conn->close();
             }
             let newTag = sampleTag.cloneNode(true);
             newTag.textContent = tag.name;
-            newTag.setAttribute('href', '/home/home.php?taggedfor=' + tag.name);
+            newTag.setAttribute('href', '/taggedfor/' + tag.name);
             currentSection.appendChild(newTag);
         });
         document.getElementsByClassName('tagShowCase')[0].appendChild(currentSection);

@@ -142,6 +142,89 @@ function updateIntro($intro)
     $conn->query("UPDATE User SET Intro='$intro' WHERE Id=$thisUserId;") or die($conn->error);
     return 0;
 }
+function removeBookmark($id)
+{
+    global $conn, $thisUserId;
+    $id = $conn->real_escape_string($id);
+
+    /*
+     * No need to check for permission as
+     * in where clause User should be current user.
+     */
+    $conn->query("DELETE FROM 
+            UserBookmarks
+            WHERE (Question=$id) AND (User=$thisUserId)
+        ;") or die($conn->error);
+
+    /* if nothing was deleted that means either id do not exist or thisUser do not have permission*/
+    if ($conn->affected_rows == 0) {
+        return 1;
+    }
+    return 0;
+}
+function removeQuestion($id)
+{
+    global $conn, $thisUserId;
+    $id = $conn->real_escape_string($id);
+
+    $res = $conn->query("SELECT Author FROM Question WHERE Id=$id;") or die($conn->error);
+
+    /* Not the question of current user.. */
+    if ($res->num_rows == 0 || $res->fetch_all(MYSQLI_NUM)[0][0] != $thisUserId) {
+        return 1;
+    }
+
+
+    $ans = $conn->query("SELECT
+                GROUP_CONCAT(Id) FROM Answer WHERE
+                WrittenFor=$id
+            ;") or die($conn->error);
+    $ans = $ans->fetch_all(MYSQLI_NUM)[0][0];
+
+    if ($ans == null) {
+        $ans = -1;
+    }
+
+    $conn->autocommit(false);
+    /*TODO
+     * Make a single multiquery for following queries..
+    */
+    $conn->query("DELETE FROM UserBookmarks WHERE Question=$id;") or die($conn->error . " in line " . __LINE__);
+    $conn->query("DELETE FROM AnswerClaps WHERE Answer IN ($ans);") or die($conn->error . " in line " . __LINE__);
+    $conn->query("DELETE FROM Answer WHERE Id IN ($ans);") or die($conn->error . " in line " . __LINE__);
+    $conn->query("DELETE FROM QuestionClaps WHERE Question=$id;") or die($conn->error . " in line " . __LINE__);
+    $conn->query("DELETE FROM QuestionTag WHERE Question=$id;") or die($conn->error . " in line " . __LINE__);
+    $conn->query("DELETE FROM Question WHERE Id=$id;") or die($conn->error . " in line " . __LINE__);
+
+    $conn->commit() or die($conn->error);
+    $conn->autocommit(true);
+
+    return 0;
+}
+
+function removeAnswer($id)
+{
+    global $conn, $thisUserId;
+
+    $id = $conn->real_escape_string($id);
+
+    $res = $conn->query("SELECT Author FROM Answer WHERE Id=$id;") or die($conn->error);
+    if ($res->num_rows == 0 || $res->fetch_all(MYSQLI_NUM)[0][0] != $thisUserId) {
+        return 1;
+    }
+
+    $conn->autocommit(false);
+    /*TODO
+     * Make a single multiquery for following queries..
+    */
+    $conn->query("DELETE FROM AnswerClaps WHERE Answer=$id;") or die($conn->error);
+    $conn->query("DELETE FROM Answer WHERE Id=$id;") or die($conn->error);
+
+    $conn->commit() or fail($conn->error);
+    $conn->autocommit(true);
+
+    return 0;
+}
 
 if (isset($_GET['target'])) { /*FOr action like clap and bookmark target is must*/
     if (isset($_GET['clapQuestion'])) {
@@ -152,6 +235,14 @@ if (isset($_GET['target'])) { /*FOr action like clap and bookmark target is must
         echo bookMark($_GET['target']);
     } else if (isset($_GET['follow'])) {
         echo follow($_GET['target']);
+    } else if (isset($_GET['removeBookMark'])) {
+        echo removeBookmark($_GET['target']);
+    } else if (isset($_GET['removeQuestion'])) {
+        echo removeQuestion($_GET['target']);
+    } else if (isset($_GET['removeAnswer'])) {
+        echo removeAnswer($_GET['target']);
+    } else {
+        echo 1;
     }
 } else if (isset($_POST['param']) && isset($_POST['data'])) { /*For profile editing action param is must*/
     $_POST['data'] = urlencode($_POST['data']);

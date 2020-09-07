@@ -64,6 +64,8 @@ body {
   border-radius: 10px;
   flex: 1;
   min-width: 250px;
+  flex-basis: 45%;
+  box-sizing: border-box;
 }
 .label {
   font-weight: bold;
@@ -243,4 +245,30 @@ body {
 }
 .edit_icon:hover{
   color: var(--White);
+}
+.Question:first-of-type{
+  display:none;
+}
+.Question{
+  margin: 20px 0;
+  font-size:var(--fontSmall);
+}
+
+.Question .title{
+  text-decoration: none;
+  color: var(--White);
+  opacity: .7;
+  transition: opacity .3s;
+}
+.Question .title:hover,
+.Question .title:focus{
+  opacity: 1;
+}
+.Question .pin_trash{
+  color: var(--LightDark);
+  cursor: pointer;
+  margin-left: 20px;
+}
+.Question .pin_trash:hover{
+  color: var(--Red);
 }

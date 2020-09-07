@@ -18,7 +18,6 @@ function fail($err, $line = 0)
 $thisUserId = 1;
 
 
-
 if (isset($_GET['username'])) {
     $uname = $conn->real_escape_string(trim(urldecode($_GET['username'])));
 } else {
@@ -121,6 +120,28 @@ $res = $conn->query("SELECT
         ") or fail($conn->error, __LINE__);
 $UserTags = $res->fetch_all(MYSQLI_NUM)[0][0];
 $UserTags = explode(",", $UserTags);
+
+$res = $conn->query("SELECT
+            qn.Id as id,
+            qn.Title as title,
+            qn.URLTitle as url,
+            qn.Author as author
+            FROM UserBookmarks ub
+            LEFT JOIN
+            Question qn
+            ON (ub.Question=qn.Id) AND (ub.User = $thisUserId)
+        ;") or fail($conn->error, __LINE__);
+$userBookMarks = json_encode($res->fetch_all(MYSQLI_ASSOC));
+
+$res = $conn->query("SELECT
+        qn.Id as id,
+        qn.Title as title,
+        qn.URLTitle as url,
+        qn.Author as author
+        FROM Question qn
+        WHERE qn.Author=$UserId
+    ;");
+$userQuestions = json_encode($res->fetch_all(MYSQLI_ASSOC));
 
 $conn->close();
 ?>
@@ -244,6 +265,20 @@ $conn->close();
                     </div>
                 </div>
             </div>
+            <div class='infoBlock' id='pinnedQuestion'>
+                <div class='label'>Pinned Question</div>
+                <div class='Question'>
+                    <a href='#' title='visit this Question' class='title'></a>
+                    <i class='fas fa-trash pin_trash' onclick="removeBookMark(this, 'id')" title='Remove ths Question from Your Bokmark List..'></i>
+                </div>
+            </div>
+            <div class='infoBlock' id='askedQuestion'>
+                <div class='label'>askedQuestion</div>
+                <div class='Question'>
+                    <a href='#' title='visit this Question' class='title'></a>
+                    <i class='fas fa-trash pin_trash' onclick="removeBookMark(this, 'id')" title='Remove ths Question from Your Bokmark List..'></i>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -252,6 +287,51 @@ $conn->close();
     </div>
 </body>
 <script>
+    var thisUser;
+
+    let userBookMarks = <?php echo $userBookMarks ?>;
+    let userQuestions = <?php echo $userQuestions ?>;
+    let bookmarkCount = 0;
+    let questionSample;
+
+    let npq, npqt, npqi;
+
+    function fillQuestion(qn, parent, sample) {
+        npq = questionSample.cloneNode(true);
+        npqt = npq.getElementsByClassName('title')[0];
+        npqt.setAttribute('href', '/thread/' + qn.url);
+        npqt.textContent = qn.title;
+        npqi = npq.getElementsByClassName('pin_trash')[0];
+        if (qn.author == thisUser && parent.id == 'pinnedQuestion') {
+            npqi.setAttribute('onclick', "removeBookMark(this, " + qn.id + ")");
+        } else if (qn.author == thisUser && parent.id == 'askedQuestion') {
+            npqi.setAttribute('onclick', "removeQuestion(this, " + qn.id + ")");
+        } else {
+            npqi.remove();
+        }
+        parent.appendChild(npq);
+        console.log(npq);
+    }
+
+    function Ready() {
+        thisUser = <?php echo json_encode($thisUserId); ?>;
+
+        questionSample = document.getElementsByClassName('Question')[0];
+
+        let p = document.getElementById('pinnedQuestion');
+        userBookMarks.forEach(qn => {
+            if (qn.title != null) {
+                fillQuestion(qn, p);
+            }
+        });
+        p = document.getElementById('askedQuestion');
+        userQuestions.forEach(qn => {
+            fillQuestion(qn, p);
+        });
+
+        notification = document.getElementsByClassName('notify')[0];
+    }
+
     function followLastStep(source) {
         source.classList.add('active');
         source.classList.remove('inactive');
@@ -274,8 +354,27 @@ $conn->close();
         }
     }
 
-    function Ready() {
-        notification = document.getElementsByClassName('notify')[0];
+    function removeBookMark(source, id) {
+        quickAction('removeBookMark', id, function() {
+            while (!source.classList.contains('Question')) {
+                source = source.parentElement;
+            }
+            source.remove();
+            notify('Question had been removed from your list...');
+        })
+    }
+
+    function removeQuestion(source, id) {
+        if (!confirm('Do you really want to delete this Question...')) {
+            return 1;
+        }
+        quickAction('removeQuestion', id, function() {
+            while (!source.classList.contains('Question')) {
+                source = source.parentElement;
+            }
+            source.remove();
+            notify('That Question had been deleted');
+        });
     }
 </script>
 

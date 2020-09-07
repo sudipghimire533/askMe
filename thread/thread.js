@@ -44,7 +44,7 @@ function fillQuestion() {
     } else {
         clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
-    if (thisQuestion.authorId != thisUserId) { // if this is not written by current user. remove edit button
+    if (thisQuestion.authorId != thisUserId) { // if this is not written by current user. remove edit buttons
         Question.getElementsByClassName('edit_icon')[0].remove();
     } else { // this is question by the user currently active..
         Question.getElementsByClassName('edit_icon')[0].setAttribute('href', '/ask/ask.php?edit=1&id=' + thisQuestion.id);
@@ -115,6 +115,7 @@ function fillAnswer(index) {
 
     if (allAnswers[index].authorId != thisUserId) { // if this is not the answer written by current user. remove edit button
         Answer.getElementsByClassName('edit_icon')[0].remove();
+        Answer.getElementsByClassName('ans_trash')[0].remove();
     }
 
 
@@ -143,4 +144,19 @@ function editAnswer(source) {
     document.getElementsByClassName('writerSection')[0].appendChild(ind); // append a editing indicator..
 
     answer.remove(); // remove for answer list while editing...
+}
+
+function removeAnswer(source) {
+    if (!confirm('Do you permanently want to delete this answer...')) {
+        return;
+    }
+    let answer = source.parentElement;
+    while (!answer.classList.contains('Answer')) {
+        answer = answer.parentElement;
+    }
+    let id = answer.id.replace('Answer', '');
+    quickAction('removeAnswer', id, function () {
+        answer.remove();
+        notify('Answer Deleted!!!');
+    });
 }

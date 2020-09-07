@@ -15,18 +15,16 @@ function notify(text, type = 0, keep_for = 3) {
     }, (keep_for + 1) * 1000);
 }
 function quickAction(action, id, sucessCallBack) {
-    if (action != 'clapAnswer' && action != 'clapQuestion' && action != 'bookmark' && action != 'follow') {
+    if (action != 'clapAnswer' && action != 'clapQuestion' && action != 'bookmark' && action != 'follow' && action != 'removeBookMark' && action != 'removeQuestion' && action != 'removeAnswer') {
         notify('No such Action...');
         return;
     }
     let req = new XMLHttpRequest;
-    req.timeout = 5 * 1000;
     req.onerror = function () {
         console.log(this);
         notify('We were unable to perform that action', 2);
         return -1;
     }
-    req.ontimeout = req.onerror;
     req.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             if (this.responseText == 0 || this.responseText == '0') {

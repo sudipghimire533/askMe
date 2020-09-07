@@ -134,6 +134,9 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                         <span class='meta'>
                             <a href='#writeAnswer' class='fas fa-pen edit_icon' title='Edit this Answer..' onclick='editAnswer(this)'> Edit</a>
                         </span>
+                        <span class='meta'>
+                            <i class='fas fa-trash ans_trash' title='Delete this Answer...' onclick='removeAnswer(this)'> Delete</i>
+                        </span>
                     </div>
                 </div>
                 <a name='writeAnswer'></a>
