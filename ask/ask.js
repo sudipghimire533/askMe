@@ -12,30 +12,30 @@ function submitForm() {
     tagInput.value += inputTags[inputTags.length - 1].textContent; // no comma at the end
 }
 
+/*
+ * This hash help not to add the tags that were already present( while editing question)
+*/
 let tagMap = new Map;
 
+let availableTag;
+let addedTagSample;
+let availableTagSample;
 function Ready() {
-
-    let tg = document.createElement('span');
-    tg.classList.add('tag');
-    tg.setAttribute('onclick', 'addTag(this)');
-    let avtg = document.getElementsByClassName('availableTags')[0];
-    let new_tag;
-    allTags.split(',').forEach(function (tag) {
-        new_tag = tg.cloneNode();
-        new_tag.textContent = tag.toLowerCase();
-        avtg.appendChild(new_tag);
-    });
+    addedTagSample = document.createElement('span');
+    addedTagSample.classList.add('tag');
+    addedTagSample.setAttribute('onclick', 'removeTag(this)');
+    availableTagSample = addedTagSample.cloneNode(true);
+    availableTagSample.setAttribute('onclick', 'addTag(this)');
 
     /*Is this editing request....*/
     if (typeof (title) != undefined && typeof (tags) != undefined && typeof (description) != undefined && typeof (editQnId) != undefined) {
         document.getElementById('QuestionTitle').value = title; // populate title
         tags = tags.split(',');
-        let smtg = document.createElement('span');
-        smtg.classList.add('tag');
+        let smtg = addedTagSample.cloneNode(true);
         for (let i = 0; i < tags.length; ++i) {
             smtg.textContent = tags[i];
             addTag(smtg); // populate tags
+            tagMap.set(tags[i], true);
         }
 
         smtg = document.createElement('input');
@@ -44,6 +44,16 @@ function Ready() {
         smtg.value = parseInt(editQnId);
         document.getElementsByClassName('AskQuestion')[0].appendChild(smtg); // since it is hidden we can appedn anywhere inside form
     }
+
+    availableTag = document.getElementsByClassName('availableTags')[0];
+    let new_tag;
+    allTags.split(',').forEach(tag => {
+        if (tagMap.has(tag)) return; // do not insert in available tags if it is already in added tags(when editing...)
+        new_tag = availableTagSample.cloneNode();
+        new_tag.textContent = tag;
+        availableTag.appendChild(new_tag);
+        tagMap.set(tag, true);
+    });
 }
 
 function toggleAvailableTags(source) {
@@ -52,9 +62,18 @@ function toggleAvailableTags(source) {
     source.classList.toggle('fa-add');
     document.getElementsByClassName('availableTags')[0].classList.toggle('active');
 }
+let ntg;
+function removeTag(source) {
+    ntg = source.cloneNode(true);
+    ntg.setAttribute('onclick', 'addTag(this)');
+    ntg.classList.remove('added');
+    availableTag.appendChild(ntg);
+    source.remove();
+}
 function addTag(source) {
     let tag = source.cloneNode(true);
-    tag.setAttribute('onclick', '');
+    // After removal again put that on available tag list
+    tag.setAttribute('onclick', 'removeTag(this)');
     document.getElementsByClassName('addedTags')[0].appendChild(tag);
     source.classList.add('added');
 }

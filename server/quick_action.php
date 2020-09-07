@@ -73,12 +73,14 @@ function updateTags($tags)
     $id = '';
     $insertStmt->bind_param('i', $id);
 
+    /*
     $tagMap = ''; // hash table to prevent insertion try for duplicate entry
+    * the same process will be done by js in front end
+    * if they are modifying it manually then domn't care...
+    */
     foreach ($tags as &$tag) {
         $tag = $conn->real_escape_string(trim($tag));
-        if (strlen($tag) == 0 || isset($tagMap[$tag])) continue;
-
-        $tagMap[$tag] = true;
+        if (strlen($tag) == 0) continue;
 
         $res = $conn->query("SELECT Id FROM Tags WHERE Name='$tag'") or die($conn->error . " in line " . __LINE__);
         if ($res->num_rows == 0) {

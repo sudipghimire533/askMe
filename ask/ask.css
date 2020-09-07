@@ -21,7 +21,7 @@
 .topInform a{
   color: inherit;
 }
-/* do not touch the input of navbar */
+/* do not touch :9; the input of navbar */
 #Main form{
   max-width: 930px;
 }
@@ -68,6 +68,7 @@ textarea{
   text-transform: lowercase;
   display: inline-block;
   margin:  3px;
+  cursor: pointer;
 }
 /*Win the selector for input #Main input*/
 .inputContainer #QuestionSubmit{
@@ -95,10 +96,14 @@ textarea{
   right: 15px;
   top: 15px;
   cursor: pointer;
+  font-size: var(--fontSmall);
 }
 .addedTags{
   min-height: 30px;
   padding-right: 20px;
+}
+.addedTags .tag:hover{
+  background: var(--Red);
 }
 .availableTags{
   display: none;
@@ -118,7 +123,6 @@ textarea{
   user-select: none;
 }
 .availableTags .tag{
-  cursor: pointer;
   transition: opacity .3s;
 }
 .availableTags .tag.inactive,
@@ -146,16 +150,3 @@ textarea{
   position: relative;
   display: block;
 }
-trix-editor h1,
-.description h1{
-  font-size: 1.5em;
-}
-
-trix-editor blockquote{
-  border-right: 3px solid var(--Niagara);
-  padding: 10px;
-  text-align: right;
-}
- trix-editor a{
-   color: var(--Purple);
- }

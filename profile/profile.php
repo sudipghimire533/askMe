@@ -96,15 +96,17 @@ $AnswerCount = count(explode(',', $res['answers']));
 $QuestionCount = $res['questionCount'];
 
 $questionClapsCount = $res['questionClapCount'];
+$answerClapCount  = 0;
 
-$res = $conn->query("SELECT
+if (strlen($allAnswers) > 0) { // only when user had ever given answer...
+    $res = $conn->query("SELECT
             COUNT(ac.User) as answerClapCount
             FROM
             AnswerClaps ac
             WHERE ac.Answer IN ($allAnswers)
         ;") or fail($conn->error, __LINE__);
-
-$answerClapCount = $res->fetch_all(MYSQLI_NUM)[0][0];
+    $answerClapCount = $res->fetch_all(MYSQLI_NUM)[0][0];
+}
 
 $ClapsCount = $questionClapsCount + $answerClapCount;
 
@@ -136,11 +138,6 @@ $conn->close();
     <link href='/profile/profile.css' type='text/css' rel='stylesheet' />
 
     <script type='text/javascript' src='/global/global.js'></script>
-    <?php
-    if ($thisUserId == $UserId) {
-        echo "<script type='text/javascript' src='/profile/profile_editor.js'></script>";
-    }
-    ?>
 </head>
 
 <body onload='Ready()'>

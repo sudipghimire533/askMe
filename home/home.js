@@ -20,8 +20,11 @@ function createQuestion(Question) {
     target.getElementsByClassName('reply_icon')[0].
         setAttribute('href', '/thread/' + Question.url + '#writeAnswer');
 
+
+    let decomposer = document.createElement('div');
+    decomposer.innerHTML = Question.info; // ony extract the text. (without html tags)
     target.getElementsByClassName('description')[0].firstElementChild.textContent =
-        Question.info + '...';
+        decomposer.textContent + '...';
 
     for (let i = 0, tags = Question.tag.split(','); i < tags.length; i++) {
         let tag = sample_tag_element.cloneNode(true);

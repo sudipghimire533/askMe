@@ -91,6 +91,9 @@
   font-family: Rubik, sans-serif;
   text-align: center;
 }
+.addedTags .tag:hover{
+  background: var(--Red);
+}
 .availableTags{
   border: 1px solid var(--White);
   position: absolute;

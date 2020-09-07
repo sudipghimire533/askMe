@@ -131,13 +131,13 @@ $Tags = explode(',', $res['tags']);
 </body>
 <script>
     var allTags = new String;
-    let addedTagsShow;
+    let addedTagsShow, availableTagShow;
 
     function Ready() {
         notification = document.getElementsByClassName('notify')[0];
 
         addedTagsShow = document.getElementsByClassName('addedTags')[0];
-        let avts = document.getElementsByClassName('availableTags')[0];
+        availableTagShow = document.getElementsByClassName('availableTags')[0];
         let stg = document.createElement('span');
         stg.classList.add('tag');
         stg.setAttribute('onclick', 'addTag(this)')
@@ -145,15 +145,24 @@ $Tags = explode(',', $res['tags']);
         allTags.split(',').forEach(function(tag) {
             new_tag = stg.cloneNode(true);
             new_tag.textContent = tag.trim();
-            avts.appendChild(new_tag);
+            availableTagShow.appendChild(new_tag);
         });
     }
 
     function addTag(source) {
         let new_tag = source.cloneNode(true);
-        new_tag.setAttribute('onclick', '');
+        new_tag.setAttribute('onclick', 'removeTag(this)');
         addedTagsShow.appendChild(new_tag);
         source.classList.add('added');
+    }
+    let ntg;
+
+    function removeTag(source) {
+        ntg = source.cloneNode(true);
+        ntg.setAttribute('onclick', 'addTag(this)');
+        ntg.classList.remove('added');
+        availableTagShow.appendChild(ntg);
+        source.remove();
     }
 
     function toggleAddTag(source) {
