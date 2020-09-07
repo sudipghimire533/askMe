@@ -58,7 +58,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ask a New Question</title>
+    <title>Askme | Ask a New Question</title>
 
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
     <link href='/ask/ask.css' type="text/css" rel="stylesheet" />
@@ -101,7 +101,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
         <form class='AskQuestion' method='POST' action='/server/post_question.php'>
             <div class='WriterContainer'>
                 <div class='inputContainer'>
-                    <input class='inp' type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='200' />
+                    <input class='inp' type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='150' />
                 </div>
                 <div class=' inputContainer'>
                     <input type='hidden' name='description' id='QuestionBody' value='

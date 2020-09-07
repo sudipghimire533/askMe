@@ -234,6 +234,8 @@ $Tags = explode(',', $res['tags']);
             sendData('UpdateUserName', newuserName, function() {
                 document.getElementById('editUserName').getElementsByClassName('value')[0].textContent = newuserName;
                 notify('UserName changed...');
+            }, function(msg) {
+                notify('An error occured. Try another username...');
             });
         }
         toggleEdit(source);
@@ -276,7 +278,7 @@ $Tags = explode(',', $res['tags']);
         toggleEdit(source);
     }
 
-    function sendData(param, data, sucess = function() {}) {
+    function sendData(param, data, sucess = function() {}, error = null) {
         let handler = new XMLHttpRequest;
         handler.onerror = function() {
             notify('Error while sending Request...');
@@ -286,8 +288,12 @@ $Tags = explode(',', $res['tags']);
                 if (this.responseText == 0 || this.responseText == '0') {
                     sucess();
                 } else {
-                    notify('Server returned an error...', 2);
-                    console.log(this.responseText);
+                    if (error == null) {
+                        notify('Server returned an error...', 2);
+                        console.log(this.responseText);
+                    } else {
+                        error(this.textContent);
+                    }
                 }
             }
         }

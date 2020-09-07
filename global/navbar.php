@@ -24,8 +24,8 @@
 			<i class='fas fa-caret-down' onclick='toggleDropDown()'></i>
 			<div id='navDropDown'>
 				<a href='/profile/profile.php'>My Profile</a><br />
-				<a href="/home/home.php?questionby=">My Questions</a><br />
-				<a href='/home/home.php?bookmarkedby='>My Bokmarks</a><br />
+				<a href="/home/home.php/(username)/#askedQuestion">My Questions</a><br />
+				<a href='/home/profile/(username)/#pinnedQuestion='>My Pins</a><br />
 				<hr />
 				<a href='/ask/ask.php?ref=dropdown'>Ask Community</a><br />
 				<hr />

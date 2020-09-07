@@ -122,53 +122,45 @@ body {
     padding-right: 5px;
   }
 }
-
-    .profileContainer{
-        margin: 20px 10px !important;
-        border-radius: 10px;
-        text-align: center;
-        padding: 20px;
-          background: var(--Shaft);
-
-    }
-    .profileContainer .impr{
-      max-width: 200px;
-    }
-
-    .profileContainer img {
-        width: 200px;
-        border-radius: 50%;
-        padding: 7px;
-        border: 5px solid transparent;
-        border-bottom-color: var(--Yellow);
-        border-right-color: var(--Red);
-        max-width: 100%;
-        position: relative;
-        transition: border .5s;
-    }
-
-    .profileContainer img:hover {
-        border-right-color: var(--Yellow);
-        border-top-color: var(--Red);
-        border-left-color: var(--Niagara);
-        border-bottom-color: var(--Purple);
-    }
-    .profileContainer .profileName {
-        font-size: var(--fontLarge);
-    }
-
-    .profileContainer .profileIntro {
-        font-size: var(--fontSmall);
-        color: var(--ShaftI);
-    }
-
-    .profileIdentity {
-        margin-top: 10px;
-        margin-bottom: 20px;
-        display: inline-block;
-    }
-
-
+.profileContainer{
+  margin: 20px 10px !important;
+  border-radius: 10px;
+  text-align: center;
+  padding: 20px;
+  background: var(--Shaft);
+}
+.profileContainer .impr{
+  max-width: 200px;
+}
+.profileContainer img {
+  width: 200px;
+  border-radius: 50%;
+  padding: 7px;
+  border: 5px solid transparent;
+  border-bottom-color: var(--Yellow);
+  border-right-color: var(--Red);
+  max-width: 100%;
+  position: relative;
+  transition: border .5s;
+}
+.profileContainer img:hover {
+  border-right-color: var(--Yellow);
+  border-top-color: var(--Red);
+  border-left-color: var(--Niagara);
+  border-bottom-color: var(--Purple);
+}
+.profileContainer .profileName {
+  font-size: var(--fontLarge);
+}
+.profileContainer .profileIntro {
+  font-size: var(--fontSmall);
+  color: var(--ShaftI);
+}
+.profileIdentity {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
 .followBtn,
 .profileName{
   display: inline-block;
@@ -246,14 +238,12 @@ body {
 .edit_icon:hover{
   color: var(--White);
 }
-.Question:first-of-type{
-  display:none;
-}
 .Question{
   margin: 20px 0;
   font-size:var(--fontSmall);
+  border-bottom: 1px solid var(--LightDark);
+  padding-bottom: 5px;
 }
-
 .Question .title{
   text-decoration: none;
   color: var(--White);
@@ -268,7 +258,12 @@ body {
   color: var(--LightDark);
   cursor: pointer;
   margin-left: 20px;
+  float: right;
 }
 .Question .pin_trash:hover{
   color: var(--Red);
+}
+
+.Question:first-of-type{
+  display: none;
 }

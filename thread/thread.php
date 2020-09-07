@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help me for Homework</title>
+    <title>Askme | </title>
 
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
     <link href='/thread/question_entity.css' type="text/css" rel="stylesheet" />
@@ -94,7 +94,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                         <span class='visited_for'></span>
                     </span>
                     <span class='meta quickAction'>
-                        <i class='fas fa-bookmark bookmarkIcon' onclick="bookmark(this, true, 'QuestionId')"></i>
+                        <i class='fas fa-star bookmarkIcon' onclick="bookmark(this, true, 'QuestionId')"></i>
                         <a href='#writeAnswer' class='fas fa-reply' onclick="notify('Go hit it!!')"></a>
                     </span>
                     <span class='meta'>
@@ -184,6 +184,11 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
             console.log(document.getElementById('PostBodyReal').value =
                 document.getElementById('PostBody').value);
         };
+
+        document.getElementById('PostSubmit').parentElement.style.display='none'; // hide until editor gains focus
+        addEventListener('trix-focus', function(){
+            document.getElementById('PostSubmit').parentElement.style.display='block';
+        });
     }
 </script>
 

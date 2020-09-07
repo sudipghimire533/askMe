@@ -3,6 +3,7 @@ function fillQuestion() {
 
     let title = Question.getElementsByClassName('titleText')[0];
     title.textContent = thisQuestion.title;
+    document.title += thisQuestion.title;
 
     Question.getElementsByClassName('description')[0].firstElementChild.innerHTML =
         thisQuestion.info;
@@ -40,7 +41,7 @@ function fillQuestion() {
     let clapIcon = Question.getElementsByClassName('clap_icon')[0];
     if (thisQuestion.isClapped != null) { // is question clapped?
         clapIcon.classList.add('active');
-        clap(clapIcon, false);
+        clap(clapIcon, false, 'qn', thisQuestion.id);
     } else {
         clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
@@ -50,29 +51,42 @@ function fillQuestion() {
         Question.getElementsByClassName('edit_icon')[0].setAttribute('href', '/ask/ask.php?edit=1&id=' + thisQuestion.id);
     }
 }
-function clapLastStep(source) {
+function unclap(source, type, id = -1) {
+    quickAction(type == 'qn' ? 'unclapQuestion' : 'unclapAnswer', id, function () {
+        notify('You took your clap back :(');
+        let counterText = source.parentElement.getElementsByClassName('clapCount')[0];
+        counterText.textContent = parseInt(counterText.textContent) - 1; // decrease the number
+        source.classList.add('inactive');
+        source.classList.remove('active');
+        source.onclick = function () {
+            clap(source, true, type, id);
+        };
+    });
+}
+function clapLastStep(source, type, id = -1) {
+    source.removeAttribute('onclick');
     source.onclick = function () {
-        notify('You already clapped this item. Visit your profile for more action.', 1);
+        unclap(source, type, id);
     };
     source.classList.add('active');
     source.classList.remove('inactive');
 }
 
-function clap(source, alsoSend = false, type = 'ans', id = 0) {
+function clap(source, alsoSend = false, type, id = 0) {
     if (alsoSend === true) {
         if (type == 'qn' || type == 'ans') {
             quickAction((type == 'qn') ? "clapQuestion" : "clapAnswer", id, function () {
                 notify('Yummy! Tasty clap');
                 let counterText = source.parentElement.getElementsByClassName('clapCount')[0];
                 counterText.textContent = parseInt(counterText.textContent) + 1; //  increase the counter
-                clapLastStep(source);
+                clapLastStep(source, type, id);
             });
         } else {
             notify('Unknown Request....', 2);
             return;
         }
     } else {
-        clapLastStep(source);
+        clapLastStep(source, type, id);
     }
 }
 
@@ -105,9 +119,9 @@ function fillAnswer(index) {
         allAnswers[index].claps;
 
     let clapIcon = Answer.getElementsByClassName('clap_icon')[0];
-    if (allAnswers[index].isClapped != null) { // is question clapped?
+    if (allAnswers[index].isClapped != null) { // is question clapped or not?
         clapIcon.classList.add('active');
-        clap(clapIcon, false);
+        clap(clapIcon, false, 'ans', allAnswers[index].id);
     } else {
         clapIcon.setAttribute("onclick", "clap(this, true, 'ans', " + allAnswers[index].id + ")");
     }

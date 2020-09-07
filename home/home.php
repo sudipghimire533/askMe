@@ -41,7 +41,7 @@ if (isset($_GET['query'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help me for Homework</title>
+    <title>Askme | Help me for Homework</title>
 
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
     <link href='/home/home.css' type="text/css" rel="stylesheet" />
@@ -64,8 +64,7 @@ if (isset($_GET['query'])) {
                 <div class='questionTitle'>
                     <a href='#' class='titleText'></a>
                     <span class='quickAction'>
-                        <i class='fas fa-bookmark bookmarkIcon' title='Bookmark this question to visit later..' onclick="bookmark(this, true, 'QuestionId')"></i>
-                        <i class='fas fa-star'></i>
+                        <i class='fas fa-star bookmarkIcon' title='Pin this Question..' onclick="bookmark(this, true, 'QuestionId')"></i>
                         <a href='#' class='fas fa-reply reply_icon' title='Give answer to this Question...' onclick='notify("Go hit it!!")'></a>
                     </span>
                 </div>

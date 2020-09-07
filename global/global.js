@@ -15,10 +15,6 @@ function notify(text, type = 0, keep_for = 3) {
     }, (keep_for + 1) * 1000);
 }
 function quickAction(action, id, sucessCallBack) {
-    if (action != 'clapAnswer' && action != 'clapQuestion' && action != 'bookmark' && action != 'follow' && action != 'removeBookMark' && action != 'removeQuestion' && action != 'removeAnswer') {
-        notify('No such Action...');
-        return;
-    }
     let req = new XMLHttpRequest;
     req.onerror = function () {
         console.log(this);
@@ -37,8 +33,9 @@ function quickAction(action, id, sucessCallBack) {
         }
     };
 
-    req.open('GET', '/server/quick_action.php?' + action + '=true&target=' + id);
-    req.send();
+    req.open('POST', '/server/quick_action.php');
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    req.send(action + "=true&target=" + id);
 }
 function bookmarkLastStep(source) {
     source.onclick = function () {

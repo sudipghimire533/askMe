@@ -45,7 +45,7 @@ $res = $conn->query("SELECT
             user.Phone as phone,
             user.Location as location,
             user.Intro as intro,
-            COUNT(qn.Id) as questionCount,
+            GROUP_CONCAT(qn.Id) as questions,
             (COUNT(uf.FollowedBy) != 0) as isFollowing,
             (
                 SELECT COUNT(FollowedTo) FROM UserFollow WHERE FollowedTo=user.Id
@@ -55,10 +55,8 @@ $res = $conn->query("SELECT
             ) AS following,
             (
                 SELECT GROUP_CONCAT(ans.Id) FROM Answer ans WHERE ans.Author=user.Id
-            ) AS answers,
-            (
-                 (SELECT COUNT(User) FROM QuestionClaps WHERE Question IN (qn.Id))
-            ) AS questionClapCount
+            ) AS answers
+
             FROM User user
             
             LEFT JOIN
@@ -69,12 +67,15 @@ $res = $conn->query("SELECT
             UserFollow uf
             ON (uf.FollowedBy = $thisUserId) AND (uf.FollowedTo=user.Id)
 
-            Where user.UserName = '$uname';
-        ") or fail($conn->error, __LINE__);
+            Where user.UserName = '$uname'
+;        ") or fail($conn->error, __LINE__);
 
 $res = $res->fetch_all(MYSQLI_ASSOC)[0];
-
 $allAnswers = $res['answers'];
+$allQuestions = $res['questions'];
+
+$allAnswers = ($allAnswers == null) ? -1 : $allAnswers;
+$allQuestions = ($allQuestions == null) ? -1 : $allQuestions;
 
 $UserId = $res['id'];
 if ($UserId == null) { // There is no such User.....
@@ -82,6 +83,7 @@ if ($UserId == null) { // There is no such User.....
     $conn->close();
     exit;
 }
+
 
 $UserName = $res['fullName'];
 $UserEmail = $res['email'];
@@ -91,23 +93,22 @@ $UserPhone = $res['phone'];
 $isFollowing = ($res['isFollowing'] == 1) ? true : false;
 $FollowersCount = $res['followers'];
 $FollowingCount = $res['following'];
-$AnswerCount = count(explode(',', $res['answers']));
-$QuestionCount = $res['questionCount'];
+$AnswerCount = ($allAnswers == -1) ? 0 : count(explode(',', $allAnswers));
+$QuestionCount = ($allQuestions == -1) ? 0 : count(explode(',', $allQuestions));
 
-$questionClapsCount = $res['questionClapCount'];
-$answerClapCount  = 0;
-
+$ClapsCount = 0;
 if (strlen($allAnswers) > 0) { // only when user had ever given answer...
     $res = $conn->query("SELECT
-            COUNT(ac.User) as answerClapCount
+            COUNT(ac.User)+COUNT(qc.User) as answerClapCount
             FROM
             AnswerClaps ac
+            LEFT JOIN
+            QuestionClaps qc
+            ON qc.Question IN ($allQuestions)
             WHERE ac.Answer IN ($allAnswers)
         ;") or fail($conn->error, __LINE__);
-    $answerClapCount = $res->fetch_all(MYSQLI_NUM)[0][0];
+    $ClapsCount = $res->fetch_all(MYSQLI_NUM)[0][0];
 }
-
-$ClapsCount = $questionClapsCount + $answerClapCount;
 
 
 $res = $conn->query("SELECT
@@ -129,7 +130,7 @@ $res = $conn->query("SELECT
             FROM UserBookmarks ub
             LEFT JOIN
             Question qn
-            ON (ub.Question=qn.Id) AND (ub.User = $thisUserId)
+            ON (ub.Question=qn.Id) AND (ub.User = $UserId)
         ;") or fail($conn->error, __LINE__);
 $userBookMarks = json_encode($res->fetch_all(MYSQLI_ASSOC));
 
@@ -152,7 +153,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help me for Homework</title>
+    <title> Askme | <?php echo $UserName; ?> </title>
 
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
     <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
@@ -162,10 +163,10 @@ $conn->close();
 </head>
 
 <body onload='Ready()'>
+    <?php
+    echo file_get_contents('../global/navbar.php');
+    ?>
     <div id='Main'>
-        <?php
-        echo file_get_contents('../global/navbar.php');
-        ?>
         <div class='profileContainer'>
             <?php
             if ($thisUserId == $UserId) { // visiting own profile..
@@ -180,7 +181,7 @@ $conn->close();
                     <div class='profileName'>
                         <?php echo $UserName; ?>
                     </div>
-                    <div class='followBtn <?php echo (($isFollowing == 0) ? 'inactive' : 'active'); ?>' onclick='follow(this, true, " . <?php $UserId ?>. ")' style='display: <?php echo ($thisUserId == $UserId) ? 'none' : 'inline-block'; ?>'>
+                    <div class='followBtn'>
                         <i class='fa fa-heart follow_icon'></i>
                         <span></span>
                     </div>
@@ -188,7 +189,7 @@ $conn->close();
                     <span class='profileIntro'><?php echo $UserIntro; ?></span>
                 </div>
                 <div class='impressionContainer'>
-                    <a href="/questionby/<?php echo $uname; ?>" class='questionCount impr hv_border'>
+                    <a href="#askedQuestion" class='questionCount impr hv_border'>
                         <b class='count'>
                             <?php echo $QuestionCount; ?>
                         </b>
@@ -202,7 +203,7 @@ $conn->close();
                         <span>Following</span>
                         <div class='hoverlay'>See users <?php echo $UserName; ?> is following</div>
                     </a>
-                    <a href="/home/home.php?questionby=<?php echo $UserId; ?>" class='clapCount impr hv_border'>
+                    <a href="#askedQuestion" class='clapCount impr hv_border'>
                         <b class='count'>
                             <?php echo $ClapsCount; ?>
                         </b>
@@ -243,7 +244,7 @@ $conn->close();
                 </div>
             </div>
             <div class='infoBlock' id='contactMe'>
-                <div class='label'>Contact: </div>
+                <div class='label'>Contact:</div>
                 <div class='innerBlock'>
                     <div>
                         <i class='fas fa-envelope'></i>
@@ -266,31 +267,28 @@ $conn->close();
                 </div>
             </div>
             <div class='infoBlock' id='pinnedQuestion'>
-                <div class='label'>Pinned Question</div>
+                <a name='pinnedQuestion'></a>
+                <div class='label'><i class='fas fa-star'></i> Pinned Question</div>
                 <div class='Question'>
                     <a href='#' title='visit this Question' class='title'></a>
                     <i class='fas fa-trash pin_trash' onclick="removeBookMark(this, 'id')" title='Remove ths Question from Your Bokmark List..'></i>
                 </div>
             </div>
             <div class='infoBlock' id='askedQuestion'>
-                <div class='label'>askedQuestion</div>
-                <div class='Question'>
-                    <a href='#' title='visit this Question' class='title'></a>
-                    <i class='fas fa-trash pin_trash' onclick="removeBookMark(this, 'id')" title='Remove ths Question from Your Bokmark List..'></i>
-                </div>
+                <a name='askedQuestion'></a>
+                <div class='label'><i class='fas fa-comment'></i> Asked Question</div>
             </div>
         </div>
     </div>
-
     <div class='notifyCenter'>
         <div class='notify' style='display: none;'></div>
     </div>
 </body>
 <script>
-    var thisUser;
+    var thisUser, profileUser;
 
-    let userBookMarks = <?php echo $userBookMarks ?>;
-    let userQuestions = <?php echo $userQuestions ?>;
+    let userBookMarks = <?php echo $userBookMarks; ?>;
+    let userQuestions = <?php echo $userQuestions; ?>;
     let bookmarkCount = 0;
     let questionSample;
 
@@ -310,47 +308,90 @@ $conn->close();
             npqi.remove();
         }
         parent.appendChild(npq);
-        console.log(npq);
     }
 
     function Ready() {
         thisUser = <?php echo json_encode($thisUserId); ?>;
+        profileUser = <?php echo json_encode($UserId); ?>
+
+        let followBtn = document.getElementsByClassName('followBtn')[0];
+        if (thisUser == profileUser) {
+            followBtn.remove();
+        } else if (<?php echo json_encode($isFollowing); ?> == true) {
+            follow(followBtn, false, profileUser);
+            followBtn.classList.add('active');
+        } else {
+            followBtn.classList.add('inactive');
+            followBtn.onclick = function() {
+                follow(followBtn, true, profileUser);
+            };
+        }
+
+
 
         questionSample = document.getElementsByClassName('Question')[0];
 
         let p = document.getElementById('pinnedQuestion');
+        let count = 0;
         userBookMarks.forEach(qn => {
             if (qn.title != null) {
                 fillQuestion(qn, p);
+                count++;
             }
         });
+        if (count == 0) {
+            let txt = document.createElement('p');
+            txt.textContent = 'No any pinned Question...';
+            p.appendChild(txt);
+        }
+        count = 0;
         p = document.getElementById('askedQuestion');
         userQuestions.forEach(qn => {
             fillQuestion(qn, p);
+            count++;
         });
+        if (count == 0) {
+            let txt = document.createElement('p');
+            txt.textContent = 'No any Question yet...';
+            p.appendChild(txt);
+        }
 
         notification = document.getElementsByClassName('notify')[0];
     }
 
-    function followLastStep(source) {
+    function unfollow(source, id) {
+        quickAction('unfollow', id, function() {
+            notify('You took your follow back :( ');
+            let followersCounter = document.getElementsByClassName('followersCount')[0].getElementsByClassName('count')[0];
+            followersCounter.textContent = parseInt(followersCounter.textContent) - 1;
+            source.classList.add('inactive');
+            source.classList.remove('active');
+            source.onclick = function() {
+                follow(source, true, id);
+            };
+        });
+    }
+
+    function followLastStep(source, id = -1) {
+        source.removeAttribute('onclick');
         source.classList.add('active');
         source.classList.remove('inactive');
         source.onclick = function() {
-            notify('You are already following ' + '<?php echo $UserName; ?>', 1);
+            unfollow(source, id);
         };
     }
 
-    function follow(source, sendAlso = false, id) {
+    function follow(source, sendAlso = false, id = -1) {
         if (sendAlso === true) {
             quickAction("follow", id, function() {
                 notify("You are now following " + '<?php echo $UserName; ?>');
-                followLastStep(source);
+                followLastStep(source, id);
                 let followersCounter = document.getElementsByClassName('followersCount')[0].getElementsByClassName('count')[0];
                 followersCounter.textContent = parseInt(followersCounter.textContent) + 1;
             });
 
         } else {
-            followLastStep(source);
+            followLastStep(source, id);
         }
     }
 

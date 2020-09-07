@@ -29,6 +29,21 @@ function clapQuestion($postId)
     return 0;
 }
 
+function unclapQuestion($postId)
+{
+    global $conn, $thisUserId;
+    $postId = $conn->real_escape_string(trim($postId));
+
+    $conn->query("DELETE FROM
+        QuestionClaps
+        WHERE (Question=$postId) AND (User=$thisUserId)
+    ;") or die($conn->error);
+    if ($conn->affected_rows == 0) {
+        return 1;
+    }
+    return 0;
+}
+
 function clapAnswer($postId)
 {
     global $conn, $thisUserId;
@@ -38,6 +53,22 @@ function clapAnswer($postId)
         AnswerClaps  (Answer, User)
         VALUES ($postId,$thisUserId)
     ;") or die($conn->error);
+    return 0;
+}
+
+function unclapAnswer($postId)
+{
+    global $conn, $thisUserId;
+    $postId = $conn->real_escape_string(trim($postId));
+
+    $conn->query("DELETE FROM
+        AnswerClaps
+        WHERE (Answer=$postId) AND (User=$thisUserId)
+    ;") or die($conn->error);
+
+    if ($conn->affected_rows == 0) {
+        return 1;
+    }
     return 0;
 }
 
@@ -52,7 +83,18 @@ function follow($userId)
                 UserFollow
                 (FollowedBy, FollowedTO)
                 VALUES ($thisUserId, $userId)
-        ;") or die($conn->error);
+        ;") or die($conn->error . " in line " . __LINE__);
+    return 0;
+}
+
+function unfollow($userId)
+{
+    global $conn, $thisUserId;
+    $userId = $conn->real_escape_string(trim($userId));
+    $conn->query("DELETE
+        FROM UserFollow
+        WHERE (FollowedBy=$thisUserId) AND (FollowedTo=$userId)
+    ;") or die($conn->error . " in line " . __LINE__);
     return 0;
 }
 
@@ -109,7 +151,11 @@ function updateName($name)
     $firstName = $conn->real_escape_string(htmlentities(htmlspecialchars(trim($name[0]))));
     $lastName = $conn->real_escape_string(htmlentities(htmlspecialchars(trim($name[1]))));
 
-    $conn->query("UPDATE User SET FirstName='$firstName', LastName='$lastName' WHERE Id=$thisUserId;") or die($conn->error);
+    $conn->query("UPDATE User 
+            SET FirstName='$firstName',
+            LastName='$lastName'
+            WHERE Id=$thisUserId
+        ;") or die($conn->error . " in line " . __LINE__);
     return 0;
 }
 
@@ -124,8 +170,10 @@ function updateUserName($userName)
     if (strlen($userName) < 4) {
         return 1;
     }
-
-    $conn->query("UPDATE User SET UserName='$userName' WHERE Id=$thisUserId;") or die($conn->error);
+    $conn->query("UPDATE User
+            SET UserName='$userName' 
+            WHERE Id=$thisUserId
+    ;") or die($conn->error . " in line " . __LINE__);
     return 0;
 }
 
@@ -139,7 +187,10 @@ function updateIntro($intro)
         return 1;
     }
 
-    $conn->query("UPDATE User SET Intro='$intro' WHERE Id=$thisUserId;") or die($conn->error);
+    $conn->query("UPDATE User
+            SET Intro='$intro'
+            WHERE Id=$thisUserId
+    ;") or die($conn->error . " in line " . __LINE__);
     return 0;
 }
 function removeBookmark($id)
@@ -154,7 +205,7 @@ function removeBookmark($id)
     $conn->query("DELETE FROM 
             UserBookmarks
             WHERE (Question=$id) AND (User=$thisUserId)
-        ;") or die($conn->error);
+        ;") or die($conn->error . " in line " . __LINE__);
 
     /* if nothing was deleted that means either id do not exist or thisUser do not have permission*/
     if ($conn->affected_rows == 0) {
@@ -167,7 +218,11 @@ function removeQuestion($id)
     global $conn, $thisUserId;
     $id = $conn->real_escape_string($id);
 
-    $res = $conn->query("SELECT Author FROM Question WHERE Id=$id;") or die($conn->error);
+    $res = $conn->query("SELECT
+            Author
+            FROM Question 
+            WHERE Id=$id
+        ;") or die($conn->error . " in line " . __LINE__);
 
     /* Not the question of current user.. */
     if ($res->num_rows == 0 || $res->fetch_all(MYSQLI_NUM)[0][0] != $thisUserId) {
@@ -178,7 +233,7 @@ function removeQuestion($id)
     $ans = $conn->query("SELECT
                 GROUP_CONCAT(Id) FROM Answer WHERE
                 WrittenFor=$id
-            ;") or die($conn->error);
+            ;") or die($conn->error . " in line " . __LINE__);
     $ans = $ans->fetch_all(MYSQLI_NUM)[0][0];
 
     if ($ans == null) {
@@ -196,7 +251,7 @@ function removeQuestion($id)
     $conn->query("DELETE FROM QuestionTag WHERE Question=$id;") or die($conn->error . " in line " . __LINE__);
     $conn->query("DELETE FROM Question WHERE Id=$id;") or die($conn->error . " in line " . __LINE__);
 
-    $conn->commit() or die($conn->error);
+    $conn->commit();
     $conn->autocommit(true);
 
     return 0;
@@ -208,7 +263,7 @@ function removeAnswer($id)
 
     $id = $conn->real_escape_string($id);
 
-    $res = $conn->query("SELECT Author FROM Answer WHERE Id=$id;") or die($conn->error);
+    $res = $conn->query("SELECT Author FROM Answer WHERE Id=$id;") or die($conn->error . " in line " . __LINE__);
     if ($res->num_rows == 0 || $res->fetch_all(MYSQLI_NUM)[0][0] != $thisUserId) {
         return 1;
     }
@@ -217,30 +272,36 @@ function removeAnswer($id)
     /*TODO
      * Make a single multiquery for following queries..
     */
-    $conn->query("DELETE FROM AnswerClaps WHERE Answer=$id;") or die($conn->error);
-    $conn->query("DELETE FROM Answer WHERE Id=$id;") or die($conn->error);
+    $conn->query("DELETE FROM AnswerClaps WHERE Answer=$id;") or die($conn->error . " in line " . __LINE__);
+    $conn->query("DELETE FROM Answer WHERE Id=$id;") or die($conn->error . " in line " . __LINE__);
 
-    $conn->commit() or fail($conn->error);
+    $conn->commit() or fail($conn->error . " in line " . __LINE__);
     $conn->autocommit(true);
 
     return 0;
 }
 
-if (isset($_GET['target'])) { /*FOr action like clap and bookmark target is must*/
-    if (isset($_GET['clapQuestion'])) {
-        clapQuestion($_GET['target']);
-    } else if (isset($_GET['clapAnswer'])) {
-        clapAnswer($_GET['target']);
-    } else if (isset($_GET['bookmark'])) {
-        echo bookMark($_GET['target']);
-    } else if (isset($_GET['follow'])) {
-        echo follow($_GET['target']);
-    } else if (isset($_GET['removeBookMark'])) {
-        echo removeBookmark($_GET['target']);
-    } else if (isset($_GET['removeQuestion'])) {
-        echo removeQuestion($_GET['target']);
-    } else if (isset($_GET['removeAnswer'])) {
-        echo removeAnswer($_GET['target']);
+if (isset($_POST['target'])) { /*FOr action like clap and bookmark target is must*/
+    if (isset($_POST['clapQuestion'])) {
+        clapQuestion($_POST['target']);
+    } else if (isset($_POST['unclapQuestion'])) {
+        unclapQuestion($_POST['target']);
+    } else if (isset($_POST['clapAnswer'])) {
+        clapAnswer($_POST['target']);
+    } else if (isset($_POST['unclapAnswer'])) {
+        unclapAnswer($_POST['target']);
+    } else if (isset($_POST['bookmark'])) {
+        echo bookMark($_POST['target']);
+    } else if (isset($_POST['follow'])) {
+        echo follow($_POST['target']);
+    } else if ($_POST['unfollow']) {
+        echo unfollow($_POST['target']);
+    } else if (isset($_POST['removeBookMark'])) {
+        echo removeBookmark($_POST['target']);
+    } else if (isset($_POST['removeQuestion'])) {
+        echo removeQuestion($_POST['target']);
+    } else if (isset($_POST['removeAnswer'])) {
+        echo removeAnswer($_POST['target']);
     } else {
         echo 1;
     }
@@ -259,7 +320,6 @@ if (isset($_GET['target'])) { /*FOr action like clap and bookmark target is must
     }
 } else {
     echo "What you want to do?";
-    echo 1;
 }
 
 $conn->close();
