@@ -128,7 +128,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                 </div>
             </div>
             <div class='inputContainer'>
-                <input class='inp' type='submit' name='submit' value='Post Question' id='QuestionSubmit' onclick='submitForm()' />
+                <input class='inp' type='submit' name='submit' value="<?php echo isset($description) ? 'Update' : 'Post'; ?> Question" id='QuestionSubmit' onclick='submitForm()' />
             </div>
         </form>
     </div>

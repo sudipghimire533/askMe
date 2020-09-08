@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once('global.php');
 
 if (
@@ -24,7 +28,7 @@ function fail($err)
 
     exit;
 }
-function sucess($QuestionId)
+function sucess()
 {
     global $conn;
     global $URLTitle;
@@ -133,6 +137,8 @@ function insertQuestion()
 
     $conn->autocommit(false);
 
+    $editId = $conn->real_escape_string($editId);
+
     if ($editId == '') { // validate only if is not edit title-url as it is permanent
         /*get Url title*/
         $URLTitle = str_replace(" ", "-", strtolower($Title));
@@ -158,17 +164,16 @@ function insertQuestion()
          * If this is an edit request then clean all assciated tags to this question for clean insertion of all input tags
          * and update the values.. except question tag as it is same process for new question and edit
          */
-
-        $editId = $conn->real_escape_string($editId);
         /*
          * Only title, description and last Mofdification date is to be updated(tags will updated later)
          */
         $conn->query("DELETE FROM
                     QuestionTag WHERE Question = $editId;") or fail($conn->error, __LINE__);
-        $conn->query(" UPDATE Question SET
+        $conn->query("UPDATE Question SET
                     Title='$Title',
                     Description='$Description',
                     ModifiedOn=Now()
+                    WHERE Id=$editId
         ;") or fail($conn->error, __LINE__);
 
         $QuestionId = $editId;
@@ -199,7 +204,7 @@ function insertQuestion()
     $conn->commit();
     $conn->autocommit(true);
 
-    sucess($QuestionId);
+    sucess();
 }
 
 if ($editId != '') { // before anything else check for edit permission(if request is edit)....

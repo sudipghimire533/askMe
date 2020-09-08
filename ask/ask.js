@@ -2,6 +2,7 @@ function submitForm() {
     /*Add all added tags textContent into the tag input filed by seperating them with (,) */
     let inputTags = document.getElementsByClassName('addedTags')[0].getElementsByClassName('tag');
     if (inputTags.length == 0) {
+        alert('Add at least one tag...');
         return; // return if no tags given
     }
     let tagInput = document.getElementById('QuestionTags');

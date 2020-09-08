@@ -297,7 +297,7 @@ $Tags = explode(',', $res['tags']);
                 }
             }
         }
-        handler.open('POST', '/server/quick_action.php');
+        handler.open('POST', '/server/quick_action.php', true);
         handler.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         handler.send('param=' + param + '&data=' + encodeURIComponent(data));
         console.log('param=' + param + '&data=' + (data));

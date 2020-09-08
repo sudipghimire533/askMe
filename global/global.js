@@ -33,7 +33,7 @@ function quickAction(action, id, sucessCallBack) {
         }
     };
 
-    req.open('POST', '/server/quick_action.php');
+    req.open('POST', '/server/quick_action.php', true);
     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     req.send(action + "=true&target=" + id);
 }
