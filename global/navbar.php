@@ -2,7 +2,6 @@
 	<div id='navLeft'>
 		<a href='/home?ref=navbar' id='navHome'>
 			<i class='fas fa-home'></i>
-			<span>Posts</span>
 		</a>
 		<span id='navAsk'>
 			<a href='/ask/ask.php?ref=navbar' id='navAskBtn'>Ask</a>

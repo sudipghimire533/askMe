@@ -62,11 +62,11 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
 
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
     <link href='/ask/ask.css' type="text/css" rel="stylesheet" />
-    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
-    <link rel='stylesheet' type='text/css' href='/global/js/trix.css' />
+    <link rel='stylesheet' type='text/css' href='/global/fonts/all.css' />
+    <link rel='stylesheet' type='text/css' href='/global/trix/trix.css' />
 
     <script src='/ask/ask.js' type='text/javascript'></script>
-    <script src='/global/js/trix.js'></script>
+    <script src='/global/trix/trix.js'></script>
 </head>
 
 <body onload='Ready()'>

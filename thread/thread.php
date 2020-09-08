@@ -9,12 +9,12 @@
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
     <link href='/thread/question_entity.css' type="text/css" rel="stylesheet" />
     <link href='/thread/thread.css' type="text/css" rel="stylesheet" />
-    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
-    <link rel='stylesheet' type='text/css' href='/global/js/trix.css' />
+    <link rel='stylesheet' type='text/css' href='/global/fonts/all.css' />
+    <link rel='stylesheet' type='text/css' href='/global/trix/trix.css' />
 
     <script src='/global/global.js' type='text/javascript'></script>
     <script src='/thread/thread.js' type='text/javascript'></script>
-    <script src='/global/js/trix.js'></script>
+    <script src='/global/trix/trix.js'></script>
 </head>
 
 
@@ -185,9 +185,9 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                 document.getElementById('PostBody').value);
         };
 
-        document.getElementById('PostSubmit').parentElement.style.display='none'; // hide until editor gains focus
-        addEventListener('trix-focus', function(){
-            document.getElementById('PostSubmit').parentElement.style.display='block';
+        document.getElementById('PostSubmit').parentElement.style.display = 'none'; // hide until editor gains focus
+        addEventListener('trix-focus', function() {
+            document.getElementById('PostSubmit').parentElement.style.display = 'block';
         });
     }
 </script>

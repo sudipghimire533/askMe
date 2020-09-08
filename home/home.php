@@ -46,7 +46,7 @@ if (isset($_GET['query'])) {
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
     <link href='/home/home.css' type="text/css" rel="stylesheet" />
     <link href='/thread/question_entity.css' type='text/css' rel='stylesheet' />
-    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
+    <link rel='stylesheet' type='text/css' href='/global/fonts/all.css' />
     <script type='text/javascript' src='/global/global.js'></script>
 
     <script type='text/javascript' src='/home/home.js'></script>

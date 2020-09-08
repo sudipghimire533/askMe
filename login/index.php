@@ -21,8 +21,9 @@
             <div class='right'>
                 <div class='facebook_login_btn login_btn'>Login With Facebook
                 </div>
-                <div class='google_login_btn login_btn'>Login With Google
-                </div>
+                <p class='terms'>
+                    <a href='/terms'>Terms and Condition</a>
+                </p>
             </div>
         </div>
     </div>

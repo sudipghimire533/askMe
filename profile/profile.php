@@ -156,7 +156,7 @@ $conn->close();
     <title> Askme | <?php echo $UserName; ?> </title>
 
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
-    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
+    <link rel='stylesheet' type='text/css' href='/global/fonts/all.css' />
     <link href='/profile/profile.css' type='text/css' rel='stylesheet' />
 
     <script type='text/javascript' src='/global/global.js'></script>

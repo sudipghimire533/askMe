@@ -181,8 +181,7 @@ function updateIntro($intro)
 {
     global $conn, $thisUserId;
 
-    $intro = $conn->real_escape_string(trim(htmlentities(htmlspecialchars(urldecode($intro)))));
-
+    $intro = $conn->real_escape_string(trim(htmlentities(htmlspecialchars(($intro)))));
     if (strlen($intro) < 5) {
         return 1;
     }
@@ -294,7 +293,7 @@ if (isset($_POST['target'])) { /*FOr action like clap and bookmark target is mus
         echo bookMark($_POST['target']);
     } else if (isset($_POST['follow'])) {
         echo follow($_POST['target']);
-    } else if ($_POST['unfollow']) {
+    } else if (isset($_POST['unfollow'])) {
         echo unfollow($_POST['target']);
     } else if (isset($_POST['removeBookMark'])) {
         echo removeBookmark($_POST['target']);
@@ -306,7 +305,6 @@ if (isset($_POST['target'])) { /*FOr action like clap and bookmark target is mus
         echo 1;
     }
 } else if (isset($_POST['param']) && isset($_POST['data'])) { /*For profile editing action param is must*/
-    $_POST['data'] = urlencode($_POST['data']);
     if ($_POST['param'] == 'UpdateTags') {
         echo updateTags($_POST['data']);
     } else if ($_POST['param'] == 'UpdateName') {

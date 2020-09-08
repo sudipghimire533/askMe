@@ -92,19 +92,8 @@
   outline: none;
   box-sizing: border-box;
 }
-.toolbar{
-  display: block;
-  padding: 5px 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  margin-top: 15px;
-  border: 1px solid var(--LightDark);
-}
-textarea{
-  height: 250px;
-  margin-top: 0;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+#answerForm{
+  max-width: 100%;
 }
 #PostSubmit{
   background: var(--Niagara);

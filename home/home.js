@@ -68,7 +68,6 @@ function loadMore(loadQuestion, count = 5, param = 'null') {
     }
     handler.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
             if (this.responseText == '1' || this.responseText == 1) { // end of feed
                 notify('You reached  the end', 1);
                 loadMore = function () { notify('You ate all of our feed..', 1); }; // at the end destroy self

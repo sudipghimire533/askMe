@@ -30,7 +30,7 @@
 .login_btn{
   padding: 10px 30px;
   border-radius: 2px solid red;
-  border-radius: 20px;
+  border-radius: 10px;
   margin: 40px 0;
   cursor: pointer;
   transition: all .5s;
@@ -44,16 +44,20 @@
   background: var(--Blue);
   border: 1px solid var(--Blue);
 }
-.google_login_btn{
-  background: var(--Red);
-  border: 1px solid var(--Red);
-}
 .imgContainer{
   border-radius: 0;
 }
 img{
   width: 300px;
   max-width: 95vw;
+}
+.terms a{
+  color: var(--LightDark);
+  transition: color .4s;
+}
+.terms a:hover,
+.terms a:focus{
+  color: var(--White);
 }
 @media only screen and (max-width: 360px){
   .left,.right{

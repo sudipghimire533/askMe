@@ -1,5 +1,8 @@
 
-@font-face { font-family: Rubik;src:url('Rubik.ttf'); }     
+@font-face {
+  font-family: Rubik;
+  src:url('./fonts/Rubik.ttf');
+}
 
 :root{
 	--Blue: #2C45A3;

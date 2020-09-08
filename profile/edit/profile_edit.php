@@ -43,7 +43,7 @@ $Tags = explode(',', $res['tags']);
     <title>Edit your profile....</title>
 
     <link href='/global/global.css' type="text/css" rel="stylesheet" />
-    <link rel='stylesheet' type='text/css' href='/global/fs_css/all.css' />
+    <link rel='stylesheet' type='text/css' href='/global/fonts/all.css' />
     <script type='text/javascript' src='/global/global.js'></script>
 
     <link rel='stylesheet' type='text/css' href='/profile/edit/profile_edit.css' />
@@ -58,7 +58,7 @@ $Tags = explode(',', $res['tags']);
             <div class='editBlock' id='editProfileImage'>
                 <div class='label'>You Profile Picture</div>
                 <img class='value profile_img' alt='Sudip Ghimire' title='Your Profile pcture...' src='/user.png' />
-                <i class='fas fa-pen edit_icon' title='Shange your Proifle picture...' onclick='toggleEdit(this)'></i>
+                <i class='fas fa-pen edit_icon' title='Change your Proifle picture...' onclick='toggleEdit(this)'></i>
                 <div class='editor'>
                     <p>Your profile picture will be same from your facebook</p>
                 </div>
@@ -85,7 +85,7 @@ $Tags = explode(',', $res['tags']);
                         ?>
                     </span>
                     <input type='text' name='Tags' id='Tags' value='' style='display: none;' />
-                    <i class='fas fa-save save_icon' title='Save my Tags..' onclick='editTags(this, true)'></i>
+                    <i class='fas fa-save save_icon' title='Save my Tags..' onclick='editTags(this, true)'> save</i>
                     <div class='availableTags'>
                         <input type='text' placeholder='Filter Tags..' id='searchAvailableTags' onkeyup='filterTag(this.value)' />
                         <br />
@@ -99,7 +99,7 @@ $Tags = explode(',', $res['tags']);
                 <i class='fas fa-pen edit_icon' title='Edit Your Name' onclick='editName(this, false)'></i>
                 <div class='editor'>
                     <input type='text' id='Name' placeholder='Your Name' value='<?php echo $FirstName . " " . $LastName; ?>' />
-                    <i class='fas fa-save save_icon' title='Save My Name' onclick='editName(this,true)'></i>
+                    <i class='fas fa-save save_icon' title='Save My Name' onclick='editName(this,true)'> save</i>
                 </div>
             </div>
 
@@ -109,7 +109,7 @@ $Tags = explode(',', $res['tags']);
                 <i class='fas fa-pen edit_icon' title='Edit Your Username' onclick='editName(this, false)'></i>
                 <div class='editor'>
                     <input type='text' name='UserName' id='UserName' placeholder='New Username' value='<?php echo $UserName; ?>' />
-                    <i class='fas fa-save save_icon' title='Save this Username' onclick='editUserName(this, true)'></i>
+                    <i class='fas fa-save save_icon' title='Save this Username' onclick='editUserName(this, true)'> save</i>
                 </div>
             </div>
 
@@ -119,7 +119,7 @@ $Tags = explode(',', $res['tags']);
                 <i class='fas fa-pen edit_icon' title='Edit your Intro Text' onclick='editIntro(this, false)'></i>
                 <div class='editor'>
                     <input type='text' name='Intro' id='Intro' placeholder='You short Intro..' value='<?php echo $Intro; ?>' />
-                    <i class='fas fa-save save_icon' title='Save Your Intro Text..' onclick='editIntro(this, true);'></i>
+                    <i class='fas fa-save save_icon' title='Save Your Intro Text..' onclick='editIntro(this, true);'> save</i>
                 </div>
             </div>
 
@@ -219,7 +219,7 @@ $Tags = explode(',', $res['tags']);
         if (save === true) {
             let showIntro = document.getElementById('Intro');
             let newIntro = showIntro.value.trim();
-            sendData('UpdateIntro', newIntro, function() {
+            sendData('UpdateIntro', decodeURI(newIntro), function() {
                 document.getElementById('editIntro').getElementsByClassName('value')[0].textContent = newIntro;
                 notify('You intro has been updated!!!');
             });
@@ -281,7 +281,7 @@ $Tags = explode(',', $res['tags']);
     function sendData(param, data, sucess = function() {}, error = null) {
         let handler = new XMLHttpRequest;
         handler.onerror = function() {
-            notify('Error while sending Request...');
+            notify('Error while sending Request...', 2);
         };
         handler.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -299,7 +299,7 @@ $Tags = explode(',', $res['tags']);
         }
         handler.open('POST', '/server/quick_action.php');
         handler.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        handler.send('param=' + param + '&data=' + data);
+        handler.send('param=' + param + '&data=' + encodeURIComponent(data));
         console.log('param=' + param + '&data=' + (data));
     }
 </script>
