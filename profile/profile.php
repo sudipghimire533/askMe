@@ -195,12 +195,12 @@ $conn->close();
                         <span>Questions</span>
                         <div class='hoverlay'>See Question by <?php echo $UserName; ?></div>
                     </a>
-                    <a href='/user/user.php?followedby=<?php echo $UserId; ?>' class='followingCount impr hv_border'>
+                    <a href='#' class='followingCount impr hv_border'>
                         <b class='count'>
                             <?php echo $FollowingCount; ?>
                         </b>
                         <span>Following</span>
-                        <div class='hoverlay'>See users <?php echo $UserName; ?> is following</div>
+                        <div class='hoverlay'>Currently <?php echo $UserName; ?> is following <?php echo $FollowingCount; ?> Users </div>
                     </a>
                     <a href="#askedQuestion" class='clapCount impr hv_border'>
                         <b class='count'>
@@ -209,12 +209,12 @@ $conn->close();
                         <span>Claps</span>
                         <div class='hoverlay'>See All Posts <?php echo $UserName; ?> got clapped</div>
                     </a>
-                    <a href="/user/user.php?followersof=<?php echo $UserId; ?>" class='followersCount impr hv_border'>
+                    <a href="#" class='followersCount impr hv_border'>
                         <b class='count'>
                             <?php echo $FollowersCount;  ?>
                         </b>
                         <span>Followers</span>
-                        <div class='hoverlay'>See users following <?php echo $UserName; ?></div>
+                        <div class='hoverlay'>Currently <?php echo $FollowersCount; ?> Users are following <?php echo $UserName; ?></div>
                     </a>
                     <a href="/answerby/<?php echo $uname; ?>" class='answerCount impr hv_border'>
                         <b class='count'>

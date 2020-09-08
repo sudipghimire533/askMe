@@ -157,6 +157,8 @@ function editAnswer(source) {
     ind.value = answer.id.replace('Answer', '');
     document.getElementsByClassName('writerSection')[0].appendChild(ind); // append a editing indicator..
 
+    document.getElementById('PostSubmit').value = 'Save Edit';
+
     answer.remove(); // remove for answer list while editing...
 }
 
