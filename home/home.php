@@ -116,11 +116,11 @@ if (isset($_GET['query'])) {
         let param = "<?php echo $param; ?>"
 
         document.getElementById('loadMoreBtn').onclick = function() {
-            loadMore(loadQuestion, 2, param);
+            loadMore(loadQuestion, 5, param);
         };
 
         // Only load few posts at first
-        loadMore(loadQuestion, 2, param);
+        loadMore(loadQuestion, 10, param);
 
         notification = document.getElementsByClassName('notify')[0];
 

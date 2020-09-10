@@ -179,12 +179,6 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
         allAnswers = null;
         thisQuestion = null;
 
-        previewContainer = document.getElementById('PostPreview');
-        document.getElementById('answerForm').onsubmit = function(ev) {
-            console.log(document.getElementById('PostBodyReal').value =
-                document.getElementById('PostBody').value);
-        };
-
         document.getElementById('PostSubmit').parentElement.style.display = 'none'; // hide until editor gains focus
         addEventListener('trix-focus', function() {
             document.getElementById('PostSubmit').parentElement.style.display = 'block';

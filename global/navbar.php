@@ -91,6 +91,7 @@
 
 	.navTriggerIcon {
 		display: none !important;
+		margin: 0 !important;
 	}
 
 	.navSearchIcon:hover {
@@ -232,6 +233,19 @@
 			content: 'cancel';
 		}
 
+	}
+
+	@media only screen and (max-width: 360px) {
+
+		#navUser {
+			display: none;
+		}
+	}
+
+	@media only screen and (max-width: 300px) {
+		#navAskBtn {
+			display: none;
+		}
 	}
 </style>
 <script type='text/javascript'>

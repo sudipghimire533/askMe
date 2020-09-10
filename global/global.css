@@ -30,13 +30,20 @@
     --fontSmall: 14px;
   }
 }
+@media only screen and (max-width: 360px){
+  :root{
+    --fontLarge: 22px;
+    --fontPrimary: 14px;
+    --fontSmall: 12px;
+  }
+}
 
 body {
-    background: #343434;
-    color: var(--White);
-    margin: 0;
-    padding: 0;
-    font-size: var(--fontPrimary);
+  background: #343434;
+  color: var(--White);
+  margin: 0;
+  padding: 0;
+  font-size: var(--fontPrimary);
   font-family: Rubik, sans-serif;
 }
 .imgContainer{

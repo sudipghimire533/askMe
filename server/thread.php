@@ -42,7 +42,7 @@ class showQuestion
         */
         $res = $this->conn->query("SELECT
                     qn.Title AS title,
-                    qn.Id as id,
+                    qn.Id AS id,
                     qn.Description AS info,
                     qn.AddedOn AS addedOn,
                     qn.VisitCount AS visit,
@@ -77,6 +77,13 @@ class showQuestion
             return false;
         }
         $id = $response[0]['id']; // set the id for further processing
+
+
+        $this->conn->query("UPDATE Question
+            SET VisitCount=VisitCount+1 
+            WHERE Id=$id
+            ;") or die($this->conn->error . " in lie " . __LINE__);
+
         $response = json_encode($response);
         return true;
     }
@@ -94,7 +101,7 @@ class showQuestion
                     user.Intro AS authorIntro,
                     user.UserName AS authorPath,
                     ans.Description AS info,
-                    ans.Id as id,
+                    ans.Id AS id,
                     ans.AddedOn AS addedOn,
                     ans.ModifiedOn As updatedOn,
                     ac.Answer As isClapped,
@@ -108,7 +115,7 @@ class showQuestion
                     LEFT JOIN
                     User user On ans.Author=user.Id
                     WHERE ans.WrittenFor=$id
-                    ORDER BY ans.ModifiedOn ASC
+                    ORDER BY ans.ModifiedOn
                 ;") or die($this->conn->error);
         if ($res->num_rows == 0) {
             $response = 0;
