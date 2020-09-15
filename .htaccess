@@ -1,5 +1,8 @@
 RewriteEngine on
 
+RewriteRule ^$ /login?taketo=/home [QSA]
+RewriteRule ^/$ /login?taketo=/home [QSA]
+
 RewriteRule ^taggedfor/([0-9a-zA-Z_\-\/\.\+]+)/$ /home/home.php?taggedfor=$1 [QSA]
 RewriteRule ^taggedfor/([0-9a-zA-Z_\-\/\.\+]+)$ /home/home.php?taggedfor=$1 [QSA]
 

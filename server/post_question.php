@@ -4,6 +4,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+if(!session_id()){
+    session_start();
+}
+
 require_once('global.php');
 
 if (
@@ -17,7 +21,8 @@ if (
 $conn = get_connection();
 $errorMessage;
 
-$thisUserId = 1;
+$thisUserId = (int)$_SESSION['userId'];
+
 $Author = $thisUserId;
 
 function fail($err)

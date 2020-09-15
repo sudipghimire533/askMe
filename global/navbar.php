@@ -28,7 +28,7 @@
 				<hr />
 				<a href='/ask/ask.php?ref=dropdown'>Ask Community</a><br />
 				<hr />
-				<a href="#">Log out</a>
+				<a href="/login/logout.php?taketo=/home">Log out</a>
 			</div>
 		</span>
 	</div>

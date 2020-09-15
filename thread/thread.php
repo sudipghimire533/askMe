@@ -24,14 +24,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+if(!session_id()){
+    session_start();
+}
+
 if (!isset($_GET['url'])) {
     echo "<i style='color:red;'>We need a thread to show..</i>";
     exit;
 }
 
 
-$thisUserId = 1;
-
+$thisUserId = isset($_SESSION['userId'])? $_SESSION['userId'] : -1;
 // set current userd in a global js var
 echo "<script>var thisUserId = $thisUserId;</script>";
 

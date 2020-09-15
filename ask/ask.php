@@ -4,9 +4,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+if(!session_id()){
+    session_start();
+}
+if(!isset($_SESSION['userId'])){
+    echo "<a href='/login'>Login to ask a question</a>";
+    exit;
+}
+
 require_once('../server/global.php');
 
-$thisuserId = 1;
+$thisuserId = $_SESSION['userId'];
 
 $conn = get_connection();
 
