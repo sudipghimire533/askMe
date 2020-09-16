@@ -332,7 +332,8 @@ trix-editor .attachment__metadata {
     font-size: 0.9em;
     margin: 0;
     padding: 0.5em;
-    background-color: var(--LightDark);
+    white-space: pre;
+    background-color: #eee;
     overflow-x: auto; }
   .trix-content ul, .trix-content ol, .trix-content li {
     margin: 0;
@@ -429,4 +430,7 @@ trix-editor pre{
   display: inline-block;
   overflow: auto;
   max-height: 400px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
 }

@@ -108,11 +108,11 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                     <input class='inp' type='text' value='' name='title' placeholder='Write Question Title Here..' id='QuestionTitle' required='' minlength='10' maxlength='150' />
                 </div>
                 <div class=' inputContainer'>
-                    <input type='hidden' name='description' id='QuestionBody' value='
+                    <input type='hidden' name='description' id='QuestionBody' value="
                     <?php // we cannot populate this from javascript because order of evaluation is not consistant. so direct push from here...
                     echo isset($description) ? $description : '';
                     ?>
-                    ' />
+                    " />
                     <div class='trixContainer'>
                         <trix-editor input='QuestionBody' placeholder='Write Detailed Description Here..'></trix-editor>
                     </div>

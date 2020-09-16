@@ -91,6 +91,7 @@ if ($Editing != '') { // this is editing of old answer...
 	$res = $conn->multi_query("UPDATE
 			Answer
 			SET Description='$Description'
+			WHERE Id=$Editing
 		;") or fail($conn->error, __LINE__);
 } else { // if this is not editing instead is a new answer....
 	$res = $conn->query("INSERT INTO
