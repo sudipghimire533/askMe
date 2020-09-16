@@ -3,7 +3,12 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+if(!session_id()){
+    session_start();
+}
+
 require_once("../server/global.php");
+
 
 $conn = get_connection();
 
@@ -15,7 +20,7 @@ function fail($err, $line = 0)
     exit;
 }
 
-$thisUserId = 1;
+$thisUserId = isset($_SESSION['userId'])? $_SESSION['userId'] : -1;
 
 
 if (isset($_GET['username'])) {
@@ -45,6 +50,7 @@ $res = $conn->query("SELECT
             user.Phone as phone,
             user.Location as location,
             user.Intro as intro,
+            user.Picture as picture,
             GROUP_CONCAT(qn.Id) as questions,
             (COUNT(uf.FollowedBy) != 0) as isFollowing,
             (
@@ -68,7 +74,7 @@ $res = $conn->query("SELECT
             ON (uf.FollowedBy = $thisUserId) AND (uf.FollowedTo=user.Id)
 
             Where user.UserName = '$uname'
-;        ") or fail($conn->error, __LINE__);
+        ;") or fail($conn->error, __LINE__);
 
 $res = $res->fetch_all(MYSQLI_ASSOC)[0];
 $allAnswers = $res['answers'];
@@ -89,6 +95,7 @@ $UserName = $res['fullName'];
 $UserEmail = $res['email'];
 $UserIntro = $res['intro'];
 $UserLocation = $res['location'];
+$UserPicture = $res['picture'];
 $UserPhone = $res['phone'];
 $isFollowing = ($res['isFollowing'] == 1) ? true : false;
 $FollowersCount = $res['followers'];
@@ -169,11 +176,11 @@ $conn->close();
         <div class='profileContainer'>
             <?php
             if ($thisUserId == $UserId) { // visiting own profile..
-                echo "<a class='editProfile' href='/profile/edit/profile_edit.php' style='color: white'>edit</a>";
+                echo "<a class='editProfile' href='/profile_edit/profile_edit.php' style='color: white'>edit</a>";
             }
             ?>
             <div class='profileImage'>
-                <img src='/user.png'></img>
+                <img src='<?php echo $UserPicture; ?>'></img>
             </div>
             <div class='profileInfo'>
                 <div class='profileIdentity'>

@@ -1,10 +1,16 @@
 <?php
-
+if(!session_id()){
+    session_start();
+}
 require_once('global.php');
 
-$conn = get_connection();
+if(!isset($_SESSION['userId'])){
+    echo -1;
+    return 1;
+}
+$thisUserId = $_SESSION['userId'];
 
-$thisUserId = 1;
+$conn = get_connection();
 
 function bookMark($questionId)
 {

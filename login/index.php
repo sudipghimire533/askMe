@@ -13,7 +13,7 @@ if(getLoginStatus() == true){
         header("Location: ".$_GET['taketo']."?apple=true");
         exit;
     }
-    echo "You are already logged in..";
+    echo "You are already logged in..<a href='/home'>go home</a>";
     exit;
 }
 

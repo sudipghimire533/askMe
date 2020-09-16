@@ -1,3 +1,13 @@
+<?php
+require_once '../server/global.php';
+if(!session_id()){
+	session_start();
+}
+$profileImage = null;
+$proiflePath = null;
+if(getLoginStatus()){
+}
+?>
 <div id='NavBar'>
 	<div id='navLeft'>
 		<a href='/home?ref=navbar' id='navHome'>
@@ -13,12 +23,12 @@
 	</form>
 	<i class='fas fa-search navTriggerIcon' onclick='triggerSearch(this)'></i>
 	<div id='navRight'>
-		<a href='/profile/profile.php' id='navUser'>
-			<img src='/user.png' alt='Profile Image' title='Visit My Profile' id='navMe' />
-		</a>
 		<span id='navHelp'>
 			<i class='fas fa-question-circle'></i>
 		</span>
+		<a href='/profile/profile.php' id='navUser'>
+			<img src='/user.png' alt='Profile Image' title='Visit My Profile' id='navMe' />
+		</a>
 		<span id='navMenu'>
 			<i class='fas fa-caret-down' onclick='toggleDropDown()'></i>
 			<div id='navDropDown'>
@@ -28,7 +38,7 @@
 				<hr />
 				<a href='/ask/ask.php?ref=dropdown'>Ask Community</a><br />
 				<hr />
-				<a href="/login/logout.php?taketo=/home">Log out</a>
+				<a href="/login/logout.php?taketo=/login">Log out</a>
 			</div>
 		</span>
 	</div>

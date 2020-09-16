@@ -3,9 +3,14 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../../server/global.php');
+require_once('../server/global.php');
 
-$thisUserId = 1;
+if(!getLoginStatus()){
+    echo "<a href='/login'>sign in to get your profile page...</a>";
+    exit;
+}
+
+$thisUserId = $_SESSION['userId'];
 
 $conn = get_connection(); // close this connection later.(at end of this file)
 
@@ -46,12 +51,12 @@ $Tags = explode(',', $res['tags']);
     <link rel='stylesheet' type='text/css' href='/global/fonts/all.css' />
     <script type='text/javascript' src='/global/global.js'></script>
 
-    <link rel='stylesheet' type='text/css' href='/profile/edit/profile_edit.css' />
+    <link rel='stylesheet' type='text/css' href='/profile_edit/profile_edit.css' />
 </head>
 
 <body onload='Ready()'>
     <?php
-    echo file_get_contents('../../global/navbar.php');
+    echo file_get_contents('../global/navbar.php');
     ?>
     <div id='Main'>
         <div id='ProfileEditor'>

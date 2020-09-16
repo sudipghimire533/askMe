@@ -4,20 +4,19 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once '../server/global.php';
+
 if(!session_id()){
     session_start();
 }
-if(!isset($_SESSION['userId'])){
+if(!getLoginStatus()){
     echo "<a href='/login'>Login to ask a question</a>";
     exit;
 }
 
-require_once('../server/global.php');
-
 $thisuserId = $_SESSION['userId'];
 
 $conn = get_connection();
-
 if (isset($_GET['edit']) && isset($_GET['id'])) {
     if (trim($_GET['edit']) == '1') {
         $id = $conn->real_escape_string(trim($_GET['id']));

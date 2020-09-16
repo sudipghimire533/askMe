@@ -33,8 +33,10 @@ if (!isset($_GET['url'])) {
     exit;
 }
 
+require_once '../server/global.php';
 
-$thisUserId = isset($_SESSION['userId'])? $_SESSION['userId'] : -1;
+getLoginStatus();
+
 // set current userd in a global js var
 echo "<script>var thisUserId = $thisUserId;</script>";
 
