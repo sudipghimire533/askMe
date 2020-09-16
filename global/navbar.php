@@ -1,12 +1,14 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once '../server/global.php';
 if(!session_id()){
 	session_start();
 }
-$profileImage = null;
-$proiflePath = null;
-if(getLoginStatus()){
-}
+$isLoggedIn = getLoginStatus();
+
 ?>
 <div id='NavBar'>
 	<div id='navLeft'>
@@ -14,7 +16,16 @@ if(getLoginStatus()){
 			<i class='fas fa-home'></i>
 		</a>
 		<span id='navAsk'>
-			<a href='/ask/ask.php?ref=navbar' id='navAskBtn'>Ask</a>
+		<?php
+		if($isLoggedIn)
+			echo"
+				<a href='/ask/ask.php?ref=navbar' class='navBtn'>Ask</a>
+			";
+		else
+			echo"
+				<a href='/login?ref=navbar' class='navBtn'>Login</a>
+			";
+		?>
 		</span>
 	</div>
 	<form id='navMiddle' method='GET' action='/home'>
@@ -26,21 +37,27 @@ if(getLoginStatus()){
 		<span id='navHelp'>
 			<i class='fas fa-question-circle'></i>
 		</span>
-		<a href='/profile/profile.php' id='navUser'>
-			<img src='/user.png' alt='Profile Image' title='Visit My Profile' id='navMe' />
+		<?php
+		if ($isLoggedIn){
+			echo "
+		<a href='/profile/".$_SESSION['userName']."' id='navUser'>
+			<img src='".$_SESSION['picture']."' alt='Profile Image' title='Visit My Profile' id='navMe' />
 		</a>
 		<span id='navMenu'>
 			<i class='fas fa-caret-down' onclick='toggleDropDown()'></i>
 			<div id='navDropDown'>
-				<a href='/profile/profile.php'>My Profile</a><br />
-				<a href="/home/home.php/(username)/#askedQuestion">My Questions</a><br />
-				<a href='/home/profile/(username)/#pinnedQuestion='>My Pins</a><br />
+				<a href='/profile/".$_SESSION['userName']."'>My Profile</a><br />
+				<a href='/profile/".$_SESSION['userName']."#askedQuestion'>My Questions</a><br />
+				<a href='/profile/".$_SESSION['userName']."#pinnedQuestion'>My Pins</a><br />
 				<hr />
 				<a href='/ask/ask.php?ref=dropdown'>Ask Community</a><br />
 				<hr />
-				<a href="/login/logout.php?taketo=/login">Log out</a>
+				<a href='/login/logout.php?taketo=/home'>Log out</a>
 			</div>
 		</span>
+		";
+		}
+		?>
 	</div>
 </div>
 <style>
@@ -149,7 +166,7 @@ if(getLoginStatus()){
 		opacity: 1;
 	}
 
-	#navAskBtn {
+	.navBtn {
 		background: var(--Niagara);
 		color: var(--White);
 		padding: 3px 20px;
@@ -162,8 +179,7 @@ if(getLoginStatus()){
 		border-radius: 5px;
 	}
 
-	#navAskBtn:hover,
-	#navAskBtn:focus {
+	.navBtn:hover{
 		background: transparent;
 	}
 

@@ -4,7 +4,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+if(!session_id){
+	session_start();
+}
+
 require_once('global.php');
+
+
+if(!getLoginStatus()){
+	echo "login to post a answer";
+	exit;	
+}
 
 if (
 	(isset($_POST['description']) == false) ||
@@ -20,9 +30,10 @@ if (
 $conn = get_connection();
 $errorMessage;
 
-$thisUserId = 2;
+
+$thisUserId = $_SESSION['userId'];
 $QuestionId = $conn->real_escape_string(trim($_POST['QuestionId']));
-$Description = trim($_POST['description']);
+$Description = $conn->real_escape_string(trim($_POST['description']));
 
 $Editing = '';
 if (isset($_POST['editAns'])) {

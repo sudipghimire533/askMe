@@ -19,19 +19,19 @@ $conn->close();
 
     <link href='../global/global.css' type="text/css" rel="stylesheet" />
     <link href='../thread/question_entity.css' type='text/css' rel='stylesheet' />
-    <link rel='stylesheet' type='text/css' href='../global/fs_css/all.css' />
+    <link rel='stylesheet' type='text/css' href='../global/fonts/all.css' />
 </head>
 
 <body onload='Ready();'>
     <?php
-    echo file_get_contents('../global/navbar.php');
+    include('../global/navbar.php');
     ?>
     <div id='Main'>
         <div class='searchContainer'>
             <div class='label'>
             </div>
             <div class='boxContainer'>
-                <input type='text' name='searchTag' placeholder='Fileter Tags...' id='searchTag' onkeyup='filter(this.value)' class='box_input' />
+                <input type='text' name='searchTag' placeholder='Filter Tags...' id='searchTag' onkeyup='filter(this.value)' class='box_input' />
                 <i class='fas fa-search icon'></i>
             </div>
         </div>

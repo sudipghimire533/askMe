@@ -9,13 +9,12 @@ require_once '../server/global.php';
 if(!session_id()){
     session_start();
 }
-if(!getLoginStatus()){
+if(getLoginStatus()){
+    $thisuserId = $_SESSION['userId'];}
+else {
     echo "<a href='/login'>Login to ask a question</a>";
     exit;
 }
-
-$thisuserId = $_SESSION['userId'];
-
 $conn = get_connection();
 if (isset($_GET['edit']) && isset($_GET['id'])) {
     if (trim($_GET['edit']) == '1') {
@@ -47,10 +46,8 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
             // set the varable...
             echo "<script type='text/javascript'>
                     var editQnId = $id;
-                    var edit = true;
+                    var isEditing = true;
                     var title = " . json_encode($title) . ";
-                    console.log(title);
-                    var description = " . json_encode($description) . ";
                     var tags = " . json_encode($tags) . ";
                     
                 </script>";
@@ -78,7 +75,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
 
 <body onload='Ready()'>
     <?php
-    echo file_get_contents('../global/navbar.php');
+    require('../global/navbar.php');
     ?>
     <div id='Main'>
         <div class='topInform'>
@@ -113,7 +110,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                 <div class=' inputContainer'>
                     <input type='hidden' name='description' id='QuestionBody' value='
                     <?php // we cannot populate this from javascript because order of evaluation is not consistant. so direct push from here...
-                    //echo isset($description) ? $description : '';
+                    echo isset($description) ? $description : '';
                     ?>
                     ' />
                     <div class='trixContainer'>

@@ -100,6 +100,7 @@ class showQuestion
                     user.Id AS authorId,
                     user.Intro AS authorIntro,
                     user.UserName AS authorPath,
+                    user.Picture AS authorPicture,
                     ans.Description AS info,
                     ans.Id AS id,
                     ans.AddedOn AS addedOn,

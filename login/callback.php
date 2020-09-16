@@ -89,7 +89,7 @@ $user = $response->getGraphUser();
 require_once('../server/global.php');
 $conn = get_connection();
 
-$id = $conn->real_escape_string((string)$user['id'] );
+$id = $conn->real_escape_string($user['id'] );
 
 $res = $conn->query("SELECT LocalId FROM UserLogin WHERE RemoteId='$id';") or die($conn->error);
 
@@ -102,7 +102,7 @@ if($res->num_rows == 0){
   $last_name = $conn->real_escape_string($last_name);
   $location = !isset($user['address'])?'':(string)$user['address'];
   $location = $conn->real_escape_string($location);
-  $email = (!isset($user['email']))? 'inalid@localhost' : $user['email'];
+  $email = isset($user['email'])? $user['email'] : 'inalid@localhost';
   $email = $conn->real_escape_string($email);
   $userName = str_replace(" ", "-", strtolower($first_name.$last_name));
   $userName  = preg_replace("/[^A-Za-z0-9\-\.]/", '', $userName);
@@ -118,7 +118,7 @@ if($res->num_rows == 0){
   if(!file_exists($localPathUrl)){
     touch($localPathUrl);
   }
-  $localPath = fopen($localPathUrl, "w") or die("Unable to open file at file ".__FILE__." in line ".__LINE__);
+  $localPath = fopen($localPathUrl, "w") or die("Unable to open file at file");
   fwrite($localPath, file_get_contents($userProfileUrl));
   $localPathUrl = substr($localPathUrl, 2);
   $localPathUrl = $conn->real_escape_string($localPathUrl);
@@ -132,16 +132,17 @@ if($res->num_rows == 0){
   $conn->commit();
   $conn->autocommit(true);
 } else {
-  $userId = $res->fetch_array()[0][0];
+  $userId = $res->fetch_array()[0];
 }
 
 $_SESSION['userId'] = $userId;
 $_SESSION['token'] = $accessToken->getValue();
 $fb->setDefaultAccessToken($accessToken);
 
-$res = $conn->query("SELECT UserName FROM User WHERE Id=$userId;") or die($conn->error);
-$res = $res->fetch_array(MYSQLI_NUM)[0];
-
-header("Location: /profile/$res");
+if(!getLoginStatus()){ // will set the more session variable;
+  echo "Login Failed...";
+  exit;
+}
+header("Location: /profile/".$_SESSION['userName']);
 
 $conn->close();

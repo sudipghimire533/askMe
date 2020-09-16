@@ -35,7 +35,11 @@ if (!isset($_GET['url'])) {
 
 require_once '../server/global.php';
 
-getLoginStatus();
+$thisUserId = -1;
+
+if(getLoginStatus()){
+    $thisUserId = $_SESSION['userId'];
+}
 
 // set current userd in a global js var
 echo "<script>var thisUserId = $thisUserId;</script>";
@@ -64,7 +68,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
 
 <body onload='Ready();'>
     <?php
-    echo file_get_contents('../global/navbar.php');
+    include('../global/navbar.php');
     ?>
     <div id='Main'>
         <div class='threadSection'>

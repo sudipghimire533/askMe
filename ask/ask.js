@@ -29,7 +29,7 @@ function Ready() {
     availableTagSample.setAttribute('onclick', 'addTag(this)');
 
     /*Is this editing request....*/
-    if (typeof (title) != 'undefined' && typeof (tags) != 'undefined' && typeof (description) != 'undefined' && typeof (editQnId) != 'undefined') {
+    if (typeof(isEditing) != 'undefined') {
         document.getElementById('QuestionTitle').value = title; // populate title
         tags = tags.split(',');
         let smtg = addedTagSample.cloneNode(true);

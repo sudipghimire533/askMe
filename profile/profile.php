@@ -170,7 +170,7 @@ $conn->close();
 
 <body onload='Ready()'>
     <?php
-    echo file_get_contents('../global/navbar.php');
+    require('../global/navbar.php');
     ?>
     <div id='Main'>
         <div class='profileContainer'>

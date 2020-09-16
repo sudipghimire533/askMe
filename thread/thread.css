@@ -135,11 +135,10 @@
     background: var(--Shaft);
     box-shadow: 5px 5px 10px 2px rgba(141, 141, 141,.1);
     transition-duration: .3s;
-    transition-property: transform, background, scale;
+    transition-property: transform, background;
 }
 .clap_icon.inactive:hover{
-    scale: 1.2;
-    transform: rotateZ(-30deg);
+    transform: rotateZ(-30deg) scale(1.2);
     background: var(--Niagara);
 }
 .clap_icon.active{

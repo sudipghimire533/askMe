@@ -107,7 +107,7 @@ function fillAnswer(index) {
 
     let authorAvatar =
         Answer.getElementsByClassName('avatarContainer')[0].getElementsByTagName('img')[0];
-    authorAvatar.setAttribute('src', '/user.png');
+    authorAvatar.setAttribute('src', allAnswers[index].authorPicture);
     authorAvatar.setAttribute('alt', allAnswers[index].authorName);
     authorAvatar.setAttribute('title', allAnswers[index].authorName);
 
