@@ -19,6 +19,7 @@ $res = $conn->query("SELECT
             user.LastName as lastName,
             user.UserName as userName,
             user.Intro as intro,
+            user.Picture as picture,
             GROUP_CONCAT(tg.Name) as tags
             FROM User user
             LEFT JOIN
@@ -34,7 +35,7 @@ $LastName = $res['lastName'];
 $UserName = $res['userName'];
 $Intro = $res['intro'];
 $Tags = explode(',', $res['tags']);
-
+$picture = $res['picture'];
 
 ?>
 
@@ -56,13 +57,13 @@ $Tags = explode(',', $res['tags']);
 
 <body onload='Ready()'>
     <?php
-    echo file_get_contents('../global/navbar.php');
+    include('../global/navbar.php');
     ?>
     <div id='Main'>
         <div id='ProfileEditor'>
             <div class='editBlock' id='editProfileImage'>
                 <div class='label'>You Profile Picture</div>
-                <img class='value profile_img' alt='Sudip Ghimire' title='Your Profile pcture...' src='/user.png' />
+                <img class='value profile_img' alt='Sudip Ghimire' title='Your Profile pcture...' src='<?php echo $picture ?>' />
                 <i class='fas fa-pen edit_icon' title='Change your Proifle picture...' onclick='toggleEdit(this)'></i>
                 <div class='editor'>
                     <p>Your profile picture will be same from your facebook</p>

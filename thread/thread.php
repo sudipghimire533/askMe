@@ -1,23 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Askme | </title>
-
-    <link href='/global/global.css' type="text/css" rel="stylesheet" />
-    <link href='/thread/question_entity.css' type="text/css" rel="stylesheet" />
-    <link href='/thread/thread.css' type="text/css" rel="stylesheet" />
-    <link rel='stylesheet' type='text/css' href='/global/fonts/all.css' />
-    <link rel='stylesheet' type='text/css' href='/global/trix/trix.css' />
-
-    <script src='/global/global.js' type='text/javascript'></script>
-    <script src='/thread/thread.js' type='text/javascript'></script>
-    <script src='/global/trix/trix.js'></script>
-</head>
-
-
 <?php
 
 ini_set('display_errors', 1);
@@ -37,7 +17,9 @@ require_once '../server/global.php';
 
 $thisUserId = -1;
 
+$isLoggedIn = false;
 if(getLoginStatus()){
+    $isLoggedIn = true;
     $thisUserId = $_SESSION['userId'];
 }
 
@@ -65,6 +47,30 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
     $AnswerInformation = $response;
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Askme | </title>
+
+    <link href='/global/global.css' type="text/css" rel="stylesheet" />
+    <link href='/thread/question_entity.css' type="text/css" rel="stylesheet" />
+    <link href='/thread/thread.css' type="text/css" rel="stylesheet" />
+    <link rel='stylesheet' type='text/css' href='/global/fonts/all.css' />
+
+    <script src='/global/global.js' type='text/javascript'></script>
+    <script src='/thread/thread.js' type='text/javascript'></script>
+    <?php
+    if($isLoggedIn)
+        echo"
+        <script src='/global/trix/trix.js'></script>
+        <link rel='stylesheet' type='text/css' href='/global/trix/trix.css' />
+        ";
+    ?>
+</head>
 
 <body onload='Ready();'>
     <?php
@@ -149,18 +155,26 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                     </div>
                 </div>
                 <a name='writeAnswer'></a>
+                <?php
+                if($isLoggedIn)
+                    /* Prevent load for non logged in user */
+                    echo "
                 <form class='writerSection' method='POST' action='/server/post_answer.php' id='answerForm'>
                     <div class=' inputContainer'>
                         <input type='hidden' name='description' id='QuestionBody' value='' />
                         <div class='trixContainer'>
-                            <trix-editor input='QuestionBody'></trix-editor>
+                                <trix-editor input='QuestionBody'></trix-editor>
                         </div>
                     </div>
                     <input type='hidden' name='QuestionId' value='<?php echo $id; ?>' />
                     <div class='inputContainer'>
-                        <input class='inp' type="submit" name="submit" value='Post' id='PostSubmit' />
+                        <input class='inp' type='submit' name='submit' value='Post' id='PostSubmit' />
                     </div>
                 </form>
+                ";
+                else
+                    echo "<a href='/login' style='color: red;'>signin to answer</a>";
+                ?>
             </div>
         </div>
     </div>
