@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.5
+-- version 4.9.5deb2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Sep 01, 2020 at 09:04 PM
--- Server version: 10.3.22-MariaDB-1
--- PHP Version: 7.3.15-3
+-- Host: localhost:3306
+-- Generation Time: Sep 17, 2020 at 01:29 AM
+-- Server version: 10.3.23-MariaDB-1
+-- PHP Version: 7.4.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -97,8 +97,7 @@ CREATE TABLE `QuestionTag` (
 
 CREATE TABLE `Tags` (
   `Id` int(11) NOT NULL,
-  `Name` varchar(20) NOT NULL,
-  `UseCount` int(11) NOT NULL DEFAULT 0
+  `Name` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -113,10 +112,11 @@ CREATE TABLE `User` (
   `FirstName` varchar(20) NOT NULL,
   `LastName` varchar(20) NOT NULL,
   `Email` varchar(150) NOT NULL,
-  `Phone` varchar(15) NOT NULL,
+  `Phone` varchar(15) NOT NULL DEFAULT '0000000000',
   `Location` varchar(30) DEFAULT NULL,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp(),
-  `Intro` varchar(50) NOT NULL
+  `Intro` varchar(50) NOT NULL DEFAULT 'I am big fan of this site',
+  `Picture` varchar(300) NOT NULL DEFAULT '/resource/user.png'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -139,6 +139,17 @@ CREATE TABLE `UserBookmarks` (
 CREATE TABLE `UserFollow` (
   `FollowedBy` int(11) NOT NULL,
   `FollowedTo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `UserLogin`
+--
+
+CREATE TABLE `UserLogin` (
+  `LocalId` int(11) NOT NULL,
+  `RemoteId` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -223,6 +234,13 @@ ALTER TABLE `UserFollow`
   ADD KEY `FollowedTo` (`FollowedTo`);
 
 --
+-- Indexes for table `UserLogin`
+--
+ALTER TABLE `UserLogin`
+  ADD PRIMARY KEY (`LocalId`),
+  ADD UNIQUE KEY `RemoteId` (`RemoteId`);
+
+--
 -- Indexes for table `UserTag`
 --
 ALTER TABLE `UserTag`
@@ -256,6 +274,12 @@ ALTER TABLE `Tags`
 --
 ALTER TABLE `User`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `UserLogin`
+--
+ALTER TABLE `UserLogin`
+  MODIFY `LocalId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -296,6 +320,12 @@ ALTER TABLE `QuestionClaps`
 ALTER TABLE `QuestionTag`
   ADD CONSTRAINT `QuestionTag_ibfk_1` FOREIGN KEY (`Question`) REFERENCES `Question` (`Id`),
   ADD CONSTRAINT `QuestionTag_ibfk_2` FOREIGN KEY (`Tag`) REFERENCES `Tags` (`Id`);
+
+--
+-- Constraints for table `User`
+--
+ALTER TABLE `User`
+  ADD CONSTRAINT `User` FOREIGN KEY (`Id`) REFERENCES `UserLogin` (`LocalId`);
 
 --
 -- Constraints for table `UserBookmarks`
