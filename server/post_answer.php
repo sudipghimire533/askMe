@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-if(!session_id){
+if(!session_id()){
 	session_start();
 }
 
@@ -33,7 +33,7 @@ $errorMessage;
 
 $thisUserId = $_SESSION['userId'];
 $QuestionId = $conn->real_escape_string(trim($_POST['QuestionId']));
-$Description = $conn->real_escape_string(trim($_POST['description']));
+$Description = (trim($_POST['description']));
 
 $Editing = '';
 if (isset($_POST['editAns'])) {
@@ -77,6 +77,7 @@ $res = false;
  * (It is very rare) still do not have that much effect
 */
 
+$Description = $conn->real_escape_string($Description);
 if ($Editing != '') { // this is editing of old answer...
 	$Editing = $conn->real_escape_string($Editing);
 
@@ -95,7 +96,7 @@ if ($Editing != '') { // this is editing of old answer...
 		;") or fail($conn->error, __LINE__);
 } else { // if this is not editing instead is a new answer....
 	$res = $conn->query("INSERT INTO
-			Answer(Author, WrittenFor, Description)
+			Answer (Author, WrittenFor, Description)
 			VALUES
 			($thisUserId, $QuestionId, '$Description')
 		;") or fail($conn->error, __LINE__);

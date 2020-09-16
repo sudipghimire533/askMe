@@ -166,7 +166,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                                 <trix-editor input='QuestionBody'></trix-editor>
                         </div>
                     </div>
-                    <input type='hidden' name='QuestionId' value='<?php echo $id; ?>' />
+                    <input type='hidden' name='QuestionId' value='".$id."' />
                     <div class='inputContainer'>
                         <input class='inp' type='submit' name='submit' value='Post' id='PostSubmit' />
                     </div>
