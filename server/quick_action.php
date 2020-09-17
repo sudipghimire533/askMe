@@ -107,12 +107,12 @@ function unfollow($userId)
 function updateTags($tags)
 {
     global $conn, $thisUserId;
-    $tags = explode(urlencode(','), trim($tags));
+    $tags = explode(',', trim($tags));
 
     /*Delete all previous tags for clean insertion (no error for duplicate insertion)*/
+    $conn->autocommit(false);
     $conn->query("DELETE FROM UserTag WHERE User=$thisUserId;") or die($conn->error . " in line " . __LINE__);
 
-    $conn->autocommit(false);
 
     $insertStmt = $conn->prepare("INSERT INTO
                 UserTag (User, Tag) VALUES ($thisUserId, ?)
@@ -165,17 +165,30 @@ function updateName($name)
     return 0;
 }
 
+function checkUserName(&$userName){
+    
+    return true;
+}
+
 function updateUserName($userName)
 {
     global $conn, $thisUserId;
-    /*
-     * TODO:
-     * Validate all character
-    */
-    $userName = $conn->real_escape_string(htmlentities(htmlspecialchars(trim($userName))));
-    if (strlen($userName) < 4) {
+
+    /***********************************/
+    $userName  = preg_replace("/[^A-Za-z0-9\-]/", '', $userName);
+    if(strlen($userName) < 4){
         return 1;
     }
+    $userName = $conn->real_escape_string((htmlentities(htmlspecialchars(trim($userName)))));
+    $res = $conn->query("SELECT Id FROM User WHERE UserName='$userName';") or die($conn->error  . " in line ".__LINE__);
+    if($res->num_rows != 0){
+        return 1;
+    }
+    /***********************************/
+
+
+    $userName = $conn->real_escape_string($userName);
+
     $conn->query("UPDATE User
             SET UserName='$userName' 
             WHERE Id=$thisUserId
@@ -310,7 +323,7 @@ if (isset($_POST['target'])) { /*FOr action like clap and bookmark target is mus
     } else {
         echo 1;
     }
-} else if (isset($_POST['param']) && isset($_POST['data'])) { /*For profile editing action param is must*/
+} else if (isset($_POST['param']) && isset($_POST['data'])) {
     if ($_POST['param'] == 'UpdateTags') {
         echo updateTags($_POST['data']);
     } else if ($_POST['param'] == 'UpdateName') {

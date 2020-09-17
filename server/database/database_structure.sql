@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 17, 2020 at 01:29 AM
+-- Generation Time: Sep 17, 2020 at 09:42 PM
 -- Server version: 10.3.23-MariaDB-1
 -- PHP Version: 7.4.5
 
@@ -99,6 +99,13 @@ CREATE TABLE `Tags` (
   `Id` int(11) NOT NULL,
   `Name` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `Tags`
+--
+
+INSERT INTO `Tags` (`Id`, `Name`) VALUES
+(1, 'askme');
 
 -- --------------------------------------------------------
 
@@ -267,7 +274,7 @@ ALTER TABLE `Question`
 -- AUTO_INCREMENT for table `Tags`
 --
 ALTER TABLE `Tags`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `User`

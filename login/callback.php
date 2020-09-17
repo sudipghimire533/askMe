@@ -75,8 +75,9 @@ if (! $accessToken->isLongLived()) {
 
 try {
   // Returns a `Facebook\FacebookResponse` object
-  $response = $fb->get('/me?fields=id, first_name, email, last_name, middle_name, address, picture',
+  $response = $fb->get('/me?fields=id,first_name, email, last_name, middle_name, address, picture',
       $accessToken);
+
 } catch(Facebook\Exceptions\FacebookResponseException $e) {
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
@@ -84,6 +85,7 @@ try {
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
 }
+
 $user = $response->getGraphUser();
 
 require_once('../server/global.php');
@@ -104,7 +106,7 @@ if($res->num_rows == 0){
   $location = $conn->real_escape_string($location);
   $email = isset($user['email'])? $user['email'] : 'inalid@localhost';
   $email = $conn->real_escape_string($email);
-  $userName = str_replace(" ", "-", strtolower($first_name.$last_name));
+  $userName = $first_name.$last_name;
   $userName  = preg_replace("/[^A-Za-z0-9\-\.]/", '', $userName);
   $userName = $conn->real_escape_string($userName);
   $userProfileUrl = $user['picture']->getUrl();
@@ -114,18 +116,21 @@ if($res->num_rows == 0){
   $conn->query("INSERT INTO UserLogin (RemoteId) VALUES($id);") or die($conn->error);
   $userId = $conn->insert_id;
 
+  $userName = $userName."$userId";
+
   $localPathUrl = "../resource/profileImages/".base64_encode($userId).'.jpeg';
   if(!file_exists($localPathUrl)){
     touch($localPathUrl);
   }
-  $localPath = fopen($localPathUrl, "w") or die("Unable to open file at file");
+  $localPath = fopen($localPathUrl, "w") or die("Unable to open file at ".__LINE__);
   fwrite($localPath, file_get_contents($userProfileUrl));
   $localPathUrl = substr($localPathUrl, 2);
   $localPathUrl = $conn->real_escape_string($localPathUrl);
+  fclose($localPath);
 
   $conn->query("INSERT INTO
           User (Id, FirstName, LastName, Location, UserName, Email, Picture)
-          VALUES('$userId', '$first_name', '$last_name', '$location', '$userName', '$email', '$localPathUrl');
+          VALUES('$userId', '$first_name', '$last_name', '$location', '$userName', '$email', '$localPathUrl')
     ;") or die($conn->error);
   $conn->query("INSERT INTO UserTag (User, Tag) VALUES ($userId, (SELECT Id FROM Tags WHERE Name='askme' LIMIT 1))") or die($conn->error);
 

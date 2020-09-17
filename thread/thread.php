@@ -173,7 +173,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                 </form>
                 ";
                 else
-                    echo "<a href='/login' style='color: red;'>signin to answer</a>";
+                    echo "<a href='/login' style='color: var(--White);margin: 20px 0;background: var(--Niagara);padding: 10px 15px; text-align: center;'>signin to answer</a>";
                 ?>
             </div>
         </div>

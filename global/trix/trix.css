@@ -389,7 +389,10 @@ trix-editor .attachment__metadata {
       max-width: 50%; }
 
 
-      /* Costum rules */
+/*
+  Costum rules
+  The following rules and rules under thread/thread.css should be synchronous
+*/
 trix-editor blockquote,
 .description blockquote{
   border-left: 3px solid var(--Niagara);
@@ -397,15 +400,13 @@ trix-editor blockquote,
   margin: 0;
 }
 
-trix-editor h1,
-.description h1{
+trix-editor h1{
   font-size: 1.5em;
   line-height: 1.2em;
   letter-spacing: 2px;
 }
 
-trix-editor a,
-.description a{
+trix-editor a{
    color: var(--Purple);
  }
 
@@ -413,8 +414,7 @@ figure{
   position: relative;
   display: inline-block;
 }
-figure img,
-.description img{
+figure img{
    max-width: 200px;
 }
 figcaption{
@@ -422,7 +422,6 @@ figcaption{
   position: relative;;
   display: inline-block;
 }
-.description pre,
 trix-editor pre{
   padding: 10px;
   border-radius: 5px;

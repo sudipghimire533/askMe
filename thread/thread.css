@@ -125,17 +125,17 @@
   float: right;
 }
 .clap_icon{
-    padding: 10px;
-    margin-bottom: 5px;
-    border: 1px solid var(--LightDark);
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: var(--fontPrimary);
-    color: var(--White);
-    background: var(--Shaft);
-    box-shadow: 5px 5px 10px 2px rgba(141, 141, 141,.1);
-    transition-duration: .3s;
-    transition-property: transform, background;
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid var(--LightDark);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: var(--fontPrimary);
+  color: var(--White);
+  background: var(--Shaft);
+  box-shadow: 5px 5px 10px 2px rgba(141, 141, 141,.1);
+  transition-duration: .3s;
+  transition-property: transform, background;
 }
 .clap_icon.inactive:hover{
     transform: rotateZ(-30deg) scale(1.2);
@@ -166,7 +166,6 @@
   color: var(--Red);
 }
 
-
 .trixContainer{
   height: 300px;
   overflow: auto;
@@ -174,4 +173,31 @@
   margin: 30px 0;
   position: relative;
   display: block;
+}
+
+/*
+  The following component on .description should be synchrounous
+  to global/trix/trix.css
+*/
+.description blockquote{
+  border-left: 3px solid var(--Niagara);
+  padding: 20px 10px;
+  margin: 0;
+}
+.description a{
+   color: var(--Purple);
+ }
+ .description img{
+   max-width: 200px;
+}
+.description pre{
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--LightDark);
+  display: inline-block;
+  overflow: auto;
+  max-height: 400px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
 }

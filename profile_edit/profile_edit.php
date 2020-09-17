@@ -237,11 +237,17 @@ $picture = $res['picture'];
         if (save === true) {
             let showUserName = document.getElementById('UserName');
             let newuserName = showUserName.value.trim();
+
+            if(newuserName !== newuserName.replace(/[^A-Za-z0-9_]/), '.'){
+                notify("only alphanumeric character is allowed in username", 2, 5);
+                return;
+            }
+
             sendData('UpdateUserName', newuserName, function() {
                 document.getElementById('editUserName').getElementsByClassName('value')[0].textContent = newuserName;
                 notify('UserName changed...');
             }, function(msg) {
-                notify('An error occured. Try another username...');
+                notify('An error occured. Try another username...', 2);
             });
         }
         toggleEdit(source);
@@ -265,9 +271,8 @@ $picture = $res['picture'];
                 }
             }
             tagInput.value = tagInput.value.substr(0, tagInput.value.length - 1); // no comma at the end..
-
-            if (tagMap.length == 0) {
-                notify('You should atleast provide one tag', 2);
+            if (inputTags.length == 0) {
+                notify('You should at least provide one tag', 2);
                 return;
             }
 
