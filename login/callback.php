@@ -7,6 +7,8 @@ if(!session_id()){
 	session_start();
 }
 
+echo "Processing...<hr>";
+
 include_once 'fb_config.php';
 
 $helper = $fb->getRedirectLoginHelper();
@@ -75,7 +77,7 @@ if (! $accessToken->isLongLived()) {
 
 try {
   // Returns a `Facebook\FacebookResponse` object
-  $response = $fb->get('/me?fields=id,first_name, email, last_name, middle_name, address, picture',
+  $response = $fb->get('/me?fields=id,first_name, email, last_name, middle_name, address, picture.width(300)',
       $accessToken);
 
 } catch(Facebook\Exceptions\FacebookResponseException $e) {
@@ -111,6 +113,36 @@ if($res->num_rows == 0){
   $userName = $conn->real_escape_string($userName);
   $userProfileUrl = $user['picture']->getUrl();
 
+  $Picture = null;
+  $PictureReal = null;
+
+  $key = "9c3ca2206f6f351c5b84e6ac26087c15";
+  $img = base64_encode(file_get_contents($userProfileUrl));
+  $ch = curl_init();
+
+  curl_setopt($ch, CURLOPT_URL, "https://api.imgbb.com/1/upload?key=$key");
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, ['image' => "$img"]);
+
+  $result = curl_exec($ch);
+  if (curl_errno($ch)) {
+      echo 'Error:' . curl_error($ch);
+      // TODO:
+      // if uploding to remote server failed. then upload in local server
+  } else {
+    $result = json_decode($result);
+
+    if($result->status == 200 && $result->success == true){
+      $result = $result->data;
+      $Picture = $conn->real_escape_string($result->thumb->url);
+      $PictureReal = $conn->real_escape_string($result->image->url);
+    } else {
+      // TODO:
+      // Upload to local server...
+    }
+  }
+
   $conn->autocommit(false);
   
   $conn->query("INSERT INTO UserLogin (RemoteId) VALUES($id);") or die($conn->error);
@@ -118,19 +150,9 @@ if($res->num_rows == 0){
 
   $userName = $userName."$userId";
 
-  $localPathUrl = "../resource/profileImages/".base64_encode($userId).'.jpeg';
-  if(!file_exists($localPathUrl)){
-    touch($localPathUrl);
-  }
-  $localPath = fopen($localPathUrl, "w") or die("Unable to open file at ".__LINE__);
-  fwrite($localPath, file_get_contents($userProfileUrl));
-  $localPathUrl = substr($localPathUrl, 2);
-  $localPathUrl = $conn->real_escape_string($localPathUrl);
-  fclose($localPath);
-
   $conn->query("INSERT INTO
-          User (Id, FirstName, LastName, Location, UserName, Email, Picture)
-          VALUES('$userId', '$first_name', '$last_name', '$location', '$userName', '$email', '$localPathUrl')
+          User (Id, FirstName, LastName, Location, UserName, Email, Picture, PictureReal)
+          VALUES('$userId', '$first_name', '$last_name', '$location', '$userName', '$email', '$Picture', '$PictureReal')
     ;") or die($conn->error);
   $conn->query("INSERT INTO UserTag (User, Tag) VALUES ($userId, (SELECT Id FROM Tags WHERE Name='askme' LIMIT 1))") or die($conn->error);
 

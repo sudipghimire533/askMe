@@ -19,7 +19,7 @@ $res = $conn->query("SELECT
             user.LastName as lastName,
             user.UserName as userName,
             user.Intro as intro,
-            user.Picture as picture,
+            user.PictureReal as picture,
             GROUP_CONCAT(tg.Name) as tags
             FROM User user
             LEFT JOIN

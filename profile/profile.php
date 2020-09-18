@@ -50,7 +50,7 @@ $res = $conn->query("SELECT
             user.Phone as phone,
             user.Location as location,
             user.Intro as intro,
-            user.Picture as picture,
+            user.PictureReal as picture,
             GROUP_CONCAT(qn.Id) as questions,
             (COUNT(uf.FollowedBy) != 0) as isFollowing,
             (

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 17, 2020 at 09:42 PM
+-- Generation Time: Sep 18, 2020 at 06:15 AM
 -- Server version: 10.3.23-MariaDB-1
 -- PHP Version: 7.4.5
 
@@ -123,7 +123,8 @@ CREATE TABLE `User` (
   `Location` varchar(30) DEFAULT NULL,
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp(),
   `Intro` varchar(50) NOT NULL DEFAULT 'I am big fan of this site',
-  `Picture` varchar(300) NOT NULL DEFAULT '/resource/user.png'
+  `Picture` varchar(200) NOT NULL DEFAULT '/resource/user.png',
+  `PictureReal` varchar(200) NOT NULL DEFAULT '/resource/user.png'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
