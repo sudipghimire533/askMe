@@ -180,7 +180,7 @@ $conn->close();
             }
             ?>
             <div class='profileImage'>
-                <img src='<?php echo $UserPicture; ?>'></img>
+                <img src='<?php echo $UserPicture; ?>' loading='lazy' height='200' widht='200'></img>
             </div>
             <div class='profileInfo'>
                 <div class='profileIdentity'>

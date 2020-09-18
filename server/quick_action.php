@@ -110,9 +110,9 @@ function updateTags($tags)
     $tags = explode(',', trim($tags));
 
     /*Delete all previous tags for clean insertion (no error for duplicate insertion)*/
-    $conn->autocommit(false);
     $conn->query("DELETE FROM UserTag WHERE User=$thisUserId;") or die($conn->error . " in line " . __LINE__);
-
+    
+    $conn->autocommit(false);
 
     $insertStmt = $conn->prepare("INSERT INTO
                 UserTag (User, Tag) VALUES ($thisUserId, ?)
@@ -150,7 +150,8 @@ function updateName($name)
     /*
      * Todo Validate all characters.
     */
-    $name = explode(urlencode(' '), $name);
+    $name = str_replace("  ", ' ', $name);
+    $name = explode(' ', $name);
     if (count($name) != 2) {
         return 1;
     }

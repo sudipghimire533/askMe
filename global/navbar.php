@@ -41,7 +41,7 @@ $isLoggedIn = getLoginStatus();
 		if ($isLoggedIn){
 			echo "
 		<a href='/profile/".$_SESSION['userName']."' id='navUser'>
-			<img src='".$_SESSION['picture']."' alt='Profile Image' title='Visit My Profile' id='navMe' />
+			<img src='".$_SESSION['picture']."' alt='Profile Image' title='Visit My Profile' id='navMe' loading='lazy'/>
 		</a>
 		<span id='navMenu'>
 			<i class='fas fa-caret-down' onclick='toggleDropDown()'></i>

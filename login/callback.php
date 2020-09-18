@@ -115,6 +115,7 @@ if($res->num_rows == 0){
 
   $Picture = null;
   $PictureReal = null;
+  $deleteUrl = null;
 
   $key = "9c3ca2206f6f351c5b84e6ac26087c15";
   $img = base64_encode(file_get_contents($userProfileUrl));

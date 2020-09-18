@@ -39,7 +39,7 @@ function quickAction(action, id, sucessCallBack) {
 }
 function bookmarkLastStep(source) {
     source.onclick = function () {
-        notify('You had already bookmarked that question. Visit your profile for mpre aftion...', 1);
+        notify('Visit your ptofil to remove bookmark', 1);
     };
     source.classList.add('active');
     source.classList.remove('inactive');

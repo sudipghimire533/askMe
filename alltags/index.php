@@ -68,10 +68,11 @@ $conn->close();
 
     .tagLetter {
         border-bottom: 2px solid var(--LightDark);
+        text-transform: uppercase;
     }
 
     .tagLetter:before {
-        content: '#';
+        content: '# ';
     }
 
     .tagCategory .tag {

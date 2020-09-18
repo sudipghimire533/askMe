@@ -4,21 +4,24 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+if(!session_id()){
+    session_start();
+}
+
 require_once('global.php');
 
-
-/*
- * TODO:
- * In below query $thisUserId is used to get the id of user browsing the data
- * This means some work is to be done for annonomous user(who is not signed in)
- */
 class showQuestion
 {
-    private $conn;
+    private $conn, $thisUserId;
 
     public function  __construct()
     {
         $this->conn = get_connection();
+        
+        $this->thisUserId = -1;
+        if(getLoginStatus()){
+            $this->thisUserId = $this->conn->real_escape_string($_SESSION['userId']);
+        }
     }
     public function __destruct()
     {
@@ -29,11 +32,6 @@ class showQuestion
     public function getQuestionByUrl($url, &$response, &$id)
     {
         $url = $this->conn->real_escape_string(trim(urldecode($url)));
-        /*
-         * In below query 'thisUserId refers to the id of user browing this thread'
-         * set that accordingly after implementing login
-        */
-        $thisUserId = 1;
         /*
          * TODO:
          * OPTIMIZE This Query...
@@ -54,8 +52,13 @@ class showQuestion
                     user.Id AS authorId,
                     user.UserName AS authorPath,
                     GROUP_CONCAT(tg.Name) As tag,
-                    ub.Question As isBookmarked,
-                    uc.Question AS isClapped
+                    (
+                        SELECT (COUNT(Question) > 0) FROM UserBookmarks WHERE (User=$this->thisUserId) AND (Question=qn.Id)
+                    ) as isBookmarked,
+                    (
+                        SELECT (COUNT(User) > 0) FROM QuestionClaps WHERE (User=$this->thisUserId) AND (Question=qn.Id)
+                    ) as isClapped
+
                     FROM
                     Question qn
                     LEFT JOIN
@@ -64,10 +67,6 @@ class showQuestion
                     Tags tg ON qt.Tag=tg.Id
                     LEFT JOIN
                     User user ON qn.Author=user.Id
-                    LEFT JOIN
-                    UserBookmarks ub ON (ub.Question = qn.Id) AND (ub.User = $thisUserId)
-                    LEFT JOIN
-                    QuestionClaps uc ON (uc.Question = qn.Id) AND (uc.User = $thisUserId)
                     WHERE qn.URLTitle = '$url'
                     GROUP BY qn.Id
                 ;") or die($this->conn->error);
@@ -90,11 +89,7 @@ class showQuestion
     public function getAnswerFor($id, &$response)
     {
         $id = $this->conn->real_escape_string($id);
-        /*
-         * In below query 'thisUserId refers to the id of user browing this thread'
-         * set that accordingly after implementing login
-        */
-        $thisUserId = 1;
+
         $res = $this->conn->query("SELECT
                     CONCAT(user.FirstName,' ', user.LastName) AS authorName,
                     user.Id AS authorId,
@@ -105,14 +100,14 @@ class showQuestion
                     ans.Id AS id,
                     ans.AddedOn AS addedOn,
                     ans.ModifiedOn As updatedOn,
-                    ac.Answer As isClapped,
                     (
                         SELECT COUNT(User) FROM AnswerClaps WHERE Answer=ans.Id
-                    ) AS claps
+                    ) AS claps,
+                    (
+                        SELECT (COUNT(User) > 0) FROM AnswerClaps WHERE (Answer=ans.Id) AND (User=$this->thisUserId)
+                    ) as isClapped
                     FROM
                     Answer ans
-                    LEFT JOIN
-                    AnswerClaps ac ON (ac.User = $thisUserId) AND (ac.Answer=ans.Id)
                     LEFT JOIN
                     User user On ans.Author=user.Id
                     WHERE ans.WrittenFor=$id

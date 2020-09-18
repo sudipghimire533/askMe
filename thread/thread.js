@@ -31,7 +31,7 @@ function fillQuestion() {
         thisQuestion.claps;
 
     let bookmarkIcon = Question.getElementsByClassName('bookmarkIcon')[0];
-    if (thisQuestion.isBookmarked != null) { // is question bookmarked?
+    if (thisQuestion.isBookmarked == 1) { // is question bookmarked?
         bookmarkIcon.classList.add('active');
         bookmark(bookmarkIcon, false);
     } else {
@@ -39,12 +39,13 @@ function fillQuestion() {
     }
 
     let clapIcon = Question.getElementsByClassName('clap_icon')[0];
-    if (thisQuestion.isClapped != null) { // is question clapped?
+    if (thisQuestion.isClapped == 1) { // is question clapped?
         clapIcon.classList.add('active');
         clap(clapIcon, false, 'qn', thisQuestion.id);
     } else {
         clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
+    console.log(thisQuestion.isClapped);
     if (thisQuestion.authorId != thisUserId) { // if this is not written by current user. remove edit buttons
         Question.getElementsByClassName('edit_icon')[0].remove();
     } else { // this is question by the user currently active..
@@ -119,7 +120,7 @@ function fillAnswer(index) {
         allAnswers[index].claps;
 
     let clapIcon = Answer.getElementsByClassName('clap_icon')[0];
-    if (allAnswers[index].isClapped != null) { // is question clapped or not?
+    if (allAnswers[index].isClapped == 1) { // is question clapped or not?
         clapIcon.classList.add('active');
         clap(clapIcon, false, 'ans', allAnswers[index].id);
     } else {

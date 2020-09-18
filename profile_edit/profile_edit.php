@@ -217,6 +217,16 @@ $picture = $res['picture'];
         if (save === true) {
             let showName = document.getElementById('Name');
             let newName = showName.value.trim();
+            newName = newName.replace("  ", " ");
+            showName.value = newName;
+            if(newName.indexOf(' ') != newName.lastIndexOf(' ')){
+                notify('Only one space is allowed...', 1);
+                return;
+            }
+            if(newName.length < 4){
+                notify("Too short name...", 1);
+                return;
+            }
             sendData('UpdateName', newName, function() {
                 document.getElementById('editName').getElementsByClassName('value')[0].textContent = newName;
                 notify('Nice Name!!' + newName);
@@ -242,7 +252,7 @@ $picture = $res['picture'];
             let showUserName = document.getElementById('UserName');
             let newuserName = showUserName.value.trim();
 
-            if(newuserName !== newuserName.replace(/[^A-Za-z0-9_]/), '.'){
+            if(newuserName !== newuserName.replace(/[^A-Za-z0-9_]/), ''){
                 notify("only alphanumeric character is allowed in username", 2, 5);
                 return;
             }
