@@ -77,7 +77,7 @@ if (! $accessToken->isLongLived()) {
 
 try {
   // Returns a `Facebook\FacebookResponse` object
-  $response = $fb->get('/me?fields=id,first_name, email, last_name, middle_name, address, picture.width(300)',
+  $response = $fb->get('/me?fields=id,first_name, email, last_name, middle_name, address, picture.width(220)',
       $accessToken);
 
 } catch(Facebook\Exceptions\FacebookResponseException $e) {
@@ -137,6 +137,7 @@ if($res->num_rows == 0){
       $result = $result->data;
       $Picture = $conn->real_escape_string($result->thumb->url);
       $PictureReal = $conn->real_escape_string($result->image->url);
+      $deleteUrl = $conn->real_escape_string($result->delete_url);
     } else {
       // TODO:
       // Upload to local server...
@@ -154,7 +155,23 @@ if($res->num_rows == 0){
           User (Id, FirstName, LastName, Location, UserName, Email, Picture, PictureReal)
           VALUES('$userId', '$first_name', '$last_name', '$location', '$userName', '$email', '$Picture', '$PictureReal')
     ;") or die($conn->error);
-  $conn->query("INSERT INTO UserTag (User, Tag) VALUES ($userId, (SELECT Id FROM Tags WHERE Name='askme' LIMIT 1))") or die($conn->error);
+  
+  $conn->query("INSERT INTO
+                UserTag (User, Tag)
+              VALUES (
+                $userId,
+                  (
+                    SELECT Id FROM Tags WHERE Name='askme' LIMIT 1
+                  )
+                )
+          ;") or die($conn->error);
+
+  $conn->query("INSERT INTO
+                pictureDelete (pictureURL,deleteURL)
+                VALUES
+                ('$PictureReal','$deleteURL'),
+                ('$Picture', '$deleteURL')
+          ;") or die($conn->error);
 
   $conn->commit();
   $conn->autocommit(true);
@@ -166,7 +183,7 @@ $_SESSION['userId'] = $userId;
 $_SESSION['token'] = $accessToken->getValue();
 $fb->setDefaultAccessToken($accessToken);
 
-if(!getLoginStatus()){ // will set the more session variable;
+if(!getLoginStatus()){ // getLoginStatus() will set the more session variable;
   echo "Login Failed...";
   exit;
 }

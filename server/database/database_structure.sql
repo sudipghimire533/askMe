@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 18, 2020 at 06:15 AM
+-- Generation Time: Sep 18, 2020 at 08:00 PM
 -- Server version: 10.3.23-MariaDB-1
 -- PHP Version: 7.4.5
 
@@ -46,6 +46,18 @@ CREATE TABLE `Answer` (
 CREATE TABLE `AnswerClaps` (
   `User` int(11) NOT NULL,
   `Answer` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pictureDelete`
+--
+
+CREATE TABLE `pictureDelete` (
+  `pictureURL` varchar(200) NOT NULL,
+  `deleteURL` int(11) NOT NULL,
+  `now` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -124,7 +136,8 @@ CREATE TABLE `User` (
   `CreatedOn` timestamp NOT NULL DEFAULT current_timestamp(),
   `Intro` varchar(50) NOT NULL DEFAULT 'I am big fan of this site',
   `Picture` varchar(200) NOT NULL DEFAULT '/resource/user.png',
-  `PictureReal` varchar(200) NOT NULL DEFAULT '/resource/user.png'
+  `PictureReal` varchar(200) NOT NULL DEFAULT '/resource/user.png',
+  `pictureDelete` varchar(401) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
