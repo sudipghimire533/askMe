@@ -253,19 +253,19 @@ $conn->close();
                 <div class='label'>Contact:</div>
                 <div class='innerBlock'>
                     <div>
-                        <i class='fas fa-envelope'></i>
+                        <i class='fa-envelope'></i>
                         <a href="mailto:<?php echo $UserEmail; ?>" id='Email' class='hv_border'>
                             <?php echo $UserEmail; ?>
                         </a>
                     </div>
                     <div>
-                        <i class='fas fa-phone'></i>
+                        <i class='fa-phone'></i>
                         <a href='#' id='Phone' class='hv_border'>
                             <?php echo $UserPhone; ?>
                         </a>
                     </div>
                     <div>
-                        <i class='fas fa-map-marker-alt'></i>
+                        <i class='fa-map-marker-alt'></i>
                         <a href='#' id='Location' class='hv_border'>
                             <?php echo $UserLocation; ?>
                         </a>
@@ -274,15 +274,15 @@ $conn->close();
             </div>
             <div class='infoBlock' id='pinnedQuestion'>
                 <a name='pinnedQuestion'></a>
-                <div class='label'><i class='fas fa-star'></i> Pinned Question</div>
+                <div class='label'><i class='fa-star'></i> Pinned Question</div>
                 <div class='Question'>
                     <a href='#' title='visit this Question' class='title'></a>
-                    <i class='fas fa-trash pin_trash' onclick="removeBookMark(this, 'id')" title='Remove ths Question from Your Bokmark List..'></i>
+                    <i class='fa-trash pin_trash' onclick="removeBookMark(this, 'id')" title='Remove ths Question from Your Bokmark List..'></i>
                 </div>
             </div>
             <div class='infoBlock' id='askedQuestion'>
                 <a name='askedQuestion'></a>
-                <div class='label'><i class='fas fa-comment'></i> Asked Question</div>
+                <div class='label'><i class='fa-comment'></i> Asked Question</div>
             </div>
         </div>
     </div>

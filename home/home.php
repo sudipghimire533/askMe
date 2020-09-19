@@ -64,8 +64,8 @@ if (isset($_GET['query'])) {
                 <div class='questionTitle'>
                     <a href='#' class='titleText'></a>
                     <span class='quickAction'>
-                        <i class='fas fa-star bookmarkIcon' title='Pin this Question..' onclick="bookmark(this, true, 'QuestionId')"></i>
-                        <a href='#' class='fas fa-reply reply_icon' title='Give answer to this Question...' onclick='notify("Go hit it!!")'></a>
+                        <i class='fa-star bookmarkIcon' title='Pin this Question..' onclick="bookmark(this, true, 'QuestionId')"></i>
+                        <a href='#' class='fa-reply reply_icon' title='Give answer to this Question...' onclick='notify("Go hit it!!")'></a>
                     </span>
                 </div>
                 <div class='description'>

@@ -137,8 +137,8 @@
   transition-duration: .3s;
   transform: rotateZ(-30deg);
 }
-.clap_icon:hover:before{
-  transform: rotateZ(-20deg);
+.clap_icon.inactive:hover:before{
+  transform: rotateZ(-20deg) scale(0.95);
   color: var(--Niagara);
 }
 .clap_icon.active:before{

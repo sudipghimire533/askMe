@@ -82,7 +82,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                 <div class='questionTitle'>
                     <span class='titleText'></span>
                     <span class='clapIcon' title='Claps Count'>
-                        <i class='fas fa-clap clap_icon inactive' title='Give a Clap to this Post' onclick="clap()"></i>
+                        <i class='fa-clap clap_icon inactive' title='Give a Clap to this Post' onclick="clap()"></i>
                         <br>
                         <span class='clapCount'></span>
                     </span>
@@ -97,23 +97,23 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                         <a href='#' class='asker_name' onclick="notify('Getting you to '+this.textContent+' Profile')"></a>
                     </span>
                     <span class='meta' title='First Registered on'>
-                        <i class='fas fa-calendar'></i>
+                        <i class='fa-calendar'></i>
                         <span class='added_on'></span>
                     </span>
                     <span class='meta' title='Last updated on'>
-                        <i class='fas fa-calendar-alt'></i>
+                        <i class='fa-calendar-alt'></i>
                         <span class='updated_on'></span>
                     </span>
                     <span class='meta' title='Viewed for'>
-                        <i class='fas fa-eye'></i>
+                        <i class='fa-eye'></i>
                         <span class='visited_for'></span>
                     </span>
                     <span class='meta quickAction'>
-                        <i class='fas fa-star bookmarkIcon' onclick="bookmark(this, true, 'QuestionId')"></i>
-                        <a href='#writeAnswer' class='fas fa-reply' onclick="notify('Go hit it!!')"></a>
+                        <i class='fa-star bookmarkIcon' onclick="bookmark(this, true, 'QuestionId')"></i>
+                        <a href='#writeAnswer' class='fa-reply' onclick="notify('Go hit it!!')"></a>
                     </span>
                     <span class='meta'>
-                        <a href='#edit' class='fas fa-pen edit_icon' title='Edit this post..'> Edit</a>
+                        <a href='#edit' class='fa-pen edit_icon' title='Edit this post..'> Edit</a>
                     </span>
                 </div>
             </div>
@@ -125,7 +125,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                             <img src='' alt='' title='' class='avatar' loading='lazy'/>
                         </span>
                         <span class='clapIcon' title='Clpas Count'>
-                            <i class='fas fa-clap clap_icon inactive' title='Give a Clap to this Post' onclick="clap('params....')"></i>
+                            <i class='fa-clap clap_icon inactive' title='Give a Clap to this Post' onclick="clap('params....')"></i>
                             <br>
                             <span class='clapCount'></span>
                         </span>
@@ -147,10 +147,10 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                             <span class='updated_on'></span>
                         </span>
                         <span class='meta'>
-                            <a href='#writeAnswer' class='fas fa-pen edit_icon' title='Edit this Answer..' onclick='editAnswer(this)'> Edit</a>
+                            <a href='#writeAnswer' class='fa-pen edit_icon' title='Edit this Answer..' onclick='editAnswer(this)'> Edit</a>
                         </span>
                         <span class='meta'>
-                            <i class='fas fa-trash ans_trash' title='Delete this Answer...' onclick='removeAnswer(this)'> Delete</i>
+                            <i class='fa-trash ans_trash' title='Delete this Answer...' onclick='removeAnswer(this)'> Delete</i>
                         </span>
                     </div>
                 </div>

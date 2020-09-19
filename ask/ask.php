@@ -79,7 +79,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
     ?>
     <div id='Main'>
         <div class='topInform'>
-            <i class='fas fa-times' onclick='this.parentElement.remove()' style='cursor: pointer;position: absolute;right: 20px;'></i>
+            <i class='fa-times' onclick='this.parentElement.remove()' style='cursor: pointer;position: absolute;right: 20px;'></i>
             <h2>Ask A Question</h2>
             <h3>
                 Ask a Question with full information and easy to understand language by all. As you write your question
@@ -124,7 +124,7 @@ if (isset($_GET['edit']) && isset($_GET['id'])) {
                     <div class='addTag inputContainer'>
                         <div class='addedTags'>
                         </div>
-                        <i class='fas fa-plus addTag_icon' onclick='toggleAvailableTags(this)'>Add Tags</i>
+                        <i class='fa-plus addTag_icon' onclick='toggleAvailableTags(this)'>Add Tags</i>
                         <div class='availableTags'>
                             <input class='inp' type='text' id='searchAvailableTags' placeholder='filter tags' onkeyup='filterTag(this.value)' />
                         </div>

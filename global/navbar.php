@@ -30,12 +30,12 @@ $isLoggedIn = getLoginStatus();
 	</div>
 	<form id='navMiddle' method='GET' action='/home'>
 		<input type='text' placeholder='What You Want To Find Today?' title='What You Want to Find Today' id='navSearch' name='query' />
-		<i class='fas fa-search navSearchIcon' onclick='topSearch()'></i>
+		<i class='fa-search navSearchIcon' onclick='topSearch()'></i>
 	</form>
-	<i class='fas fa-search navTriggerIcon' onclick='triggerSearch(this)'></i>
+	<i class='fa-search navTriggerIcon' onclick='triggerSearch(this)'></i>
 	<div id='navRight'>
 		<span id='navHelp'>
-			<i class='fas fa-question-circle'></i>
+			<i class='fa-question-circle'></i>
 		</span>
 		<?php
 		if ($isLoggedIn){
@@ -44,7 +44,7 @@ $isLoggedIn = getLoginStatus();
 			<img src='".$_SESSION['picture']."' alt='Profile Image' title='Visit My Profile' id='navMe' loading='lazy'/>
 		</a>
 		<span id='navMenu'>
-			<i class='fas fa-caret-down' onclick='toggleDropDown()'></i>
+			<i class='fa-caret-down' onclick='toggleDropDown()'></i>
 			<div id='navDropDown'>
 				<a href='/profile/".$_SESSION['userName']."'>My Profile</a><br />
 				<a href='/profile/".$_SESSION['userName']."#askedQuestion'>My Questions</a><br />

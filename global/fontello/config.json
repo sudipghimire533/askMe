@@ -125,6 +125,12 @@
       ]
     },
     {
+      "uid": "2626e3a1bbcd90e45849af3b58a1d594",
+      "css": "trash",
+      "code": 59399,
+      "src": "entypo"
+    },
+    {
       "uid": "ef986afae0d783312587112e97ed5cf4",
       "css": "heart",
       "code": 61444,

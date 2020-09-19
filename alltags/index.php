@@ -32,7 +32,7 @@ $conn->close();
             </div>
             <div class='boxContainer'>
                 <input type='text' name='searchTag' placeholder='Filter Tags...' id='searchTag' onkeyup='filter(this.value)' class='box_input' />
-                <i class='fas fa-search icon'></i>
+                <i class='fa-search icon'></i>
             </div>
         </div>
         <div class='tagShowCase'>

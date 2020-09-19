@@ -68,7 +68,7 @@ $picture = $res['picture'];
             <div class='editBlock' id='editProfileImage'>
                 <div class='label'>You Profile Picture</div>
                 <img class='value profile_img' alt='Sudip Ghimire' title='Your Profile pcture...' src='<?php echo $picture ?>' />
-                <i class='fas fa-pen edit_icon' title='Change your Proifle picture...' onclick='toggleEdit(this)'></i>
+                <i class='fa-pen edit_icon' title='Change your Proifle picture...' onclick='toggleEdit(this)'></i>
                 <div class='editor'>
                     <p>Your profile picture will be same from your facebook</p>
                 </div>
@@ -83,9 +83,9 @@ $picture = $res['picture'];
                     }
                     ?>
                 </div>
-                <i class='fas fa-pen edit_icon' title='Edit your faviourate Tags' onclick='editTags(this, false)'></i>
+                <i class='fa-pen edit_icon' title='Edit your faviourate Tags' onclick='editTags(this, false)'></i>
                 <div class='editor'>
-                    <i class='fas fa-plus addtag_icon' onclick='toggleAddTag(this)'></i>
+                    <i class='fa-plus addtag_icon' onclick='toggleAddTag(this)'></i>
                     <span class='addedTags'>
                         <!-- Initially this should be synchronous to .value element as in above -->
                         <?php
@@ -95,7 +95,7 @@ $picture = $res['picture'];
                         ?>
                     </span>
                     <input type='text' name='Tags' id='Tags' value='' style='display: none;' />
-                    <i class='fas fa-save save_icon' title='Save my Tags..' onclick='editTags(this, true)'> save</i>
+                    <i class='fa-save save_icon' title='Save my Tags..' onclick='editTags(this, true)'> save</i>
                     <div class='availableTags'>
                         <input type='text' placeholder='Filter Tags..' id='searchAvailableTags' onkeyup='filterTag(this.value)' />
                         <br />
@@ -106,30 +106,30 @@ $picture = $res['picture'];
             <div class='editBlock' id='editName'>
                 <div class='label'>You Name</div>
                 <div class='value'><?php echo $FirstName . " " . $LastName; ?></div>
-                <i class='fas fa-pen edit_icon' title='Edit Your Name' onclick='editName(this, false)'></i>
+                <i class='fa-pen edit_icon' title='Edit Your Name' onclick='editName(this, false)'></i>
                 <div class='editor'>
                     <input type='text' id='Name' placeholder='Your Name' value='<?php echo $FirstName . " " . $LastName; ?>' />
-                    <i class='fas fa-save save_icon' title='Save My Name' onclick='editName(this,true)'> save</i>
+                    <i class='fa-save save_icon' title='Save My Name' onclick='editName(this,true)'> save</i>
                 </div>
             </div>
 
             <div class='editBlock' id='editUserName'>
                 <div class='label'>You UserName</div>
                 <div class='value'><?php echo $UserName; ?></div>
-                <i class='fas fa-pen edit_icon' title='Edit Your Username' onclick='editName(this, false)'></i>
+                <i class='fa-pen edit_icon' title='Edit Your Username' onclick='editName(this, false)'></i>
                 <div class='editor'>
                     <input type='text' name='UserName' id='UserName' placeholder='New Username' value='<?php echo $UserName; ?>' />
-                    <i class='fas fa-save save_icon' title='Save this Username' onclick='editUserName(this, true)'> save</i>
+                    <i class='fa-save save_icon' title='Save this Username' onclick='editUserName(this, true)'> save</i>
                 </div>
             </div>
 
             <div class='editBlock' id='editIntro'>
                 <div class='label'>You Intro</div>
                 <div class='value'><?php echo $Intro ?></div>
-                <i class='fas fa-pen edit_icon' title='Edit your Intro Text' onclick='editIntro(this, false)'></i>
+                <i class='fa-pen edit_icon' title='Edit your Intro Text' onclick='editIntro(this, false)'></i>
                 <div class='editor'>
                     <input type='text' name='Intro' id='Intro' placeholder='You short Intro..' value='<?php echo $Intro; ?>' />
-                    <i class='fas fa-save save_icon' title='Save Your Intro Text..' onclick='editIntro(this, true);'> save</i>
+                    <i class='fa-save save_icon' title='Save Your Intro Text..' onclick='editIntro(this, true);'> save</i>
                 </div>
             </div>
 
