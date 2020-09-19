@@ -82,7 +82,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                 <div class='questionTitle'>
                     <span class='titleText'></span>
                     <span class='clapIcon' title='Claps Count'>
-                        <i class='fas fa-thumbs-up clap_icon inactive' title='Give a Clap to this Post' onclick="clap()"></i>
+                        <i class='fas fa-clap clap_icon inactive' title='Give a Clap to this Post' onclick="clap()"></i>
                         <br>
                         <span class='clapCount'></span>
                     </span>
@@ -93,11 +93,11 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                 <div class='questionInfo'>
                     <div class='tagContainer'></div>
                     <span class='meta' title='Posted by'>
-                        <i class='fas fa-user-astronaut'></i>
+                        <i class='fa-user'></i>
                         <a href='#' class='asker_name' onclick="notify('Getting you to '+this.textContent+' Profile')"></a>
                     </span>
                     <span class='meta' title='First Registered on'>
-                        <i class='fas fa-calendar-week'></i>
+                        <i class='fas fa-calendar'></i>
                         <span class='added_on'></span>
                     </span>
                     <span class='meta' title='Last updated on'>
@@ -125,7 +125,7 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
                             <img src='' alt='' title='' class='avatar' loading='lazy'/>
                         </span>
                         <span class='clapIcon' title='Clpas Count'>
-                            <i class='fas fa-thumbs-up clap_icon inactive' title='Give a Clap to this Post' onclick="clap('params....')"></i>
+                            <i class='fas fa-clap clap_icon inactive' title='Give a Clap to this Post' onclick="clap('params....')"></i>
                             <br>
                             <span class='clapCount'></span>
                         </span>
@@ -202,7 +202,9 @@ if ($handler->getQuestionByUrl($url, $response, $id) == false) { // if request f
         allAnswers = null;
         thisQuestion = null;
 
-        document.getElementById('PostSubmit').parentElement.style.display = 'none'; // hide until editor gains focus
+        if(thisUserId != -1){ // prevent element not found error for aanonomous user
+            document.getElementById('PostSubmit').parentElement.style.display = 'none'; // hide until editor gains focus
+        }
         addEventListener('trix-focus', function() {
             document.getElementById('PostSubmit').parentElement.style.display = 'block';
         });

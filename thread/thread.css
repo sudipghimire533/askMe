@@ -124,24 +124,24 @@
 .Answer .clapIcon{
   float: right;
 }
-.clap_icon{
+.clap_icon:before{
   padding: 10px;
   margin-bottom: 5px;
-  border: 1px solid var(--LightDark);
   border-radius: 50%;
   cursor: pointer;
-  font-size: var(--fontPrimary);
+  font-size: calc(var(--fontPrimary) * 1.3);
   color: var(--White);
   background: var(--Shaft);
-  box-shadow: 5px 5px 10px 2px rgba(141, 141, 141,.1);
+  border: 1px solid var(--Niagara);
+  box-shadow: 5px 5px 5px 3px rgba(141, 141, 141,.1);
   transition-duration: .3s;
-  transition-property: transform, background;
+  transform: rotateZ(-30deg);
 }
-.clap_icon.inactive:hover{
-    transform: rotateZ(-30deg) scale(1.2);
-    background: var(--Niagara);
+.clap_icon:hover:before{
+  transform: rotateZ(-20deg);
+  color: var(--Niagara);
 }
-.clap_icon.active{
+.clap_icon.active:before{
   background: var(--Niagara) !important;
 }
 .meta{

@@ -45,7 +45,6 @@ function fillQuestion() {
     } else {
         clapIcon.setAttribute("onclick", "clap(this, true, 'qn', " + thisQuestion.id + ")");
     }
-    console.log(thisQuestion.isClapped);
     if (thisQuestion.authorId != thisUserId) { // if this is not written by current user. remove edit buttons
         Question.getElementsByClassName('edit_icon')[0].remove();
     } else { // this is question by the user currently active..
