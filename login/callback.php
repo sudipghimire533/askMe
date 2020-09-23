@@ -117,7 +117,7 @@ if($res->num_rows == 0){
   $PictureReal = null;
   $deleteUrl = null;
 
-  $key = IMGBB_ID;
+  $key = 'IMGBB_ID';
   $img = base64_encode(file_get_contents($userProfileUrl));
   $ch = curl_init();
 
