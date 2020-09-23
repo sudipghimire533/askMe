@@ -9,11 +9,6 @@ if(!session_id()){
 
 $thisUserId = -1;
 
-define("HOST_NAME", "localhost");
-define("HOST_ADMIN", "sudip");
-define("HOST_KEY", "password");
-define("HOST_DB", "askme");
-
 function get_connection(){
     $conn = new mysqli(HOST_NAME, HOST_ADMIN, HOST_KEY, HOST_DB) or die("Connect failed: %s\n". $conn->error);    
     return $conn;
@@ -24,8 +19,8 @@ include_once '../login/vendor/autoload.php';
 function getLoginStatus(){
 	global $thisUserId;
 	$fb = new Facebook\Facebook([
-	    'app_id' => '3099077556887981',
-	    'app_secret' => '2b88e75f7b59d0446c45ad2951ee8505',
+	    'app_id' => 'FB_ID',
+	    'app_secret' => 'FB_KEY',
 	    'default_graph_version' => 'v8.0',
 	]);
 	if(!empty(session_id()) &&
