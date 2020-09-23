@@ -1,4 +1,6 @@
-
+# AskMe
+A Expiremental quick toy project for understanding QnA site.
+___
 # What I need
 * A __apache2__ web server
 * __php__ 7.3 or grater
