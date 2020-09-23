@@ -1,5 +1,7 @@
 # AskMe
 A Expiremental quick toy project for understanding QnA site.
+![Demo Video](https://i.ibb.co/zQNTg5Q/download-demo.gif)
+[orginal video at https://streamable.com/cap7wp](https://streamable.com/cap7wp)
 ___
 # What I need
 * A __apache2__ web server
