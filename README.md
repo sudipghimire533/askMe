@@ -71,6 +71,5 @@ a2enmod rewrite
 service apache2 --full-restart
 service mysql restart || service mariadb restart
 ```
-
-# Get to Work
-Sit infront of your computer whole day and keep building.
+# Side Note
+Almost nothing is commented in the code nor I am writing any documentation. If you did that then I will of course love that. Or if you are seriously modifying this program then however you can open an issue to do so.
